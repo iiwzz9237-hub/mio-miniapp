@@ -696,6 +696,7 @@ function viewWithdrawForm(){
       return;
     }
 
+    updateWaitingInfo(res.position, res.wait_text);
     pollWithdrawStatus();
   };
 }
@@ -705,8 +706,20 @@ function viewWithdrawWaiting(){
   panel.innerHTML = `
     <div class="spinner"></div>
     <p class="muted-center">⏳ لطفاً منتظر بمانید…</p>
-    <p class="muted-center">درخواست برداشت شما در حال پردازش است.</p>
+    <p class="muted-center" id="queuePositionText"></p>
+    <p class="muted-center" id="queueWaitText"></p>
   `;
+}
+
+function updateWaitingInfo(position, waitText){
+  const posEl = document.getElementById("queuePositionText");
+  const waitEl = document.getElementById("queueWaitText");
+  if(posEl && position){
+    posEl.innerHTML = `👤 شما نفر <b style="color:var(--gold)">${position}</b> در صف هستید`;
+  }
+  if(waitEl && waitText){
+    waitEl.textContent = `⏱ ${waitText}`;
+  }
 }
 
 async function pollWithdrawStatus(){
@@ -722,6 +735,9 @@ async function pollWithdrawStatus(){
     if(res.status === "failed"){
       viewWithdrawFailed();
       return;
+    }
+    if(res.status === "pending"){
+      updateWaitingInfo(res.position, res.wait_text);
     }
   }
   viewWithdrawFailed();
@@ -749,11 +765,24 @@ function viewWithdrawSuccess(){
       <p class="muted-center">به اکانت زیر پیام بده:</p>
       <div class="link-box">
         <span dir="ltr" style="text-align:center;flex:1;">@Pott5y6jg</span>
+        <button class="copy-btn" id="copyAccountBtn">کپی</button>
       </div>
       <p class="muted-center">و بنویس:</p>
       <p class="muted-center"><b style="color:var(--gold)">رسیدم رو بده ❤️</b></p>
       <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
     `;
+
+    document.getElementById("copyAccountBtn").onclick = async () => {
+      try{
+        await navigator.clipboard.writeText("@Pott5y6jg");
+        const btn = document.getElementById("copyAccountBtn");
+        btn.textContent = "کپی شد ✓";
+        btn.classList.add("copied");
+        setTimeout(()=>{ btn.textContent="کپی"; btn.classList.remove("copied"); }, 1800);
+      }catch(e){
+        console.error("copy failed", e);
+      }
+    };
   };
 
   document.getElementById("receiptNoBtn").onclick = viewWelcome;
