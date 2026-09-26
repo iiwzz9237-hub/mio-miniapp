@@ -86,7 +86,7 @@
     width:8px;
     height:8px;
     border-radius:50%;
-    background:var(--gold);
+    background:var(--danger);
     box-shadow:0 0 0 2px var(--bg-mid);
     display:none;
   }
@@ -437,7 +437,7 @@
     </div>
 
     <div class="panel">
-      <p class="muted-center">🐾 <b>خوش آمدید</b></p>
+      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید</b></p>
       <p class="muted-center">از منوی بالا انتخاب کنید</p>
     </div>
   </div>
@@ -482,6 +482,14 @@ const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
 
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
+
+const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
+const TG_FIRST_NAME = tg?.initDataUnsafe?.user?.first_name || "";
+
+const welcomeEl = document.getElementById("welcomeText");
+if (welcomeEl && TG_FIRST_NAME) {
+  welcomeEl.textContent = `خوش اومدی ${TG_FIRST_NAME}`;
+}
 
 function authHeaders(){
   return {
@@ -578,6 +586,23 @@ function setBalance(v){
 const notifOverlay = document.getElementById("notifOverlay");
 const notifList = document.getElementById("notifList");
 const bellDot = document.getElementById("bellDot");
+const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
+
+function getLastSeenTime(){
+  try{
+    return localStorage.getItem(LAST_SEEN_KEY) || "";
+  }catch(e){
+    return "";
+  }
+}
+
+function setLastSeenTime(t){
+  try{
+    localStorage.setItem(LAST_SEEN_KEY, t || "");
+  }catch(e){
+    // ذخیره نشد؛ مشکلی نیست، فقط این حالت موقتاً کار می‌کند
+  }
+}
 
 function renderNotifications(){
   if(!state.notifications.length){
@@ -593,7 +618,13 @@ function renderNotifications(){
 }
 
 function updateBellDot(){
-  if(state.notifications.length){
+  if(!state.notifications.length){
+    bellDot.classList.remove("show");
+    return;
+  }
+  const newestTime = state.notifications[0].time || "";
+  const lastSeen = getLastSeenTime();
+  if(newestTime && newestTime !== lastSeen){
     bellDot.classList.add("show");
   }else{
     bellDot.classList.remove("show");
@@ -603,6 +634,9 @@ function updateBellDot(){
 document.getElementById("bellBtn").onclick = () => {
   notifOverlay.classList.add("show");
   bellDot.classList.remove("show");
+  if(state.notifications.length){
+    setLastSeenTime(state.notifications[0].time || "");
+  }
 };
 notifOverlay.onclick = (e) => {
   if(e.target === notifOverlay) notifOverlay.classList.remove("show");
