@@ -305,6 +305,62 @@
   }
   @keyframes spin{to{transform:rotate(360deg);}}
 
+  /* ===== Animations ===== */
+  @keyframes appIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes slideInRight{
+    from{opacity:0; transform:translateX(18px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  @keyframes slideInLeft{
+    from{opacity:0; transform:translateX(-18px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  @keyframes popIn{
+    0%{opacity:0; transform:scale(0.97) translateY(6px);}
+    100%{opacity:1; transform:scale(1) translateY(0);}
+  }
+  @keyframes bellPulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.35);}
+    100%{transform:scale(1);}
+  }
+  @keyframes cardRise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .app{
+    animation:appIn .45s cubic-bezier(.2,.85,.4,1) both;
+  }
+  .anim-in-right{animation:slideInRight .32s cubic-bezier(.2,.85,.4,1) both;}
+  .anim-in-left{animation:slideInLeft .32s cubic-bezier(.2,.85,.4,1) both;}
+  .anim-pop{animation:popIn .3s cubic-bezier(.2,.85,.4,1) both;}
+  .balance-card{animation:cardRise .5s .05s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(1){animation:cardRise .5s .12s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(2){animation:cardRise .5s .18s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(3){animation:cardRise .5s .24s cubic-bezier(.2,.85,.4,1) both;}
+  .bell-dot.show{animation:bellPulse .6s ease .1s 2;}
+  .menu-btn{
+    transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
+  }
+  .menu-btn:active{
+    transform:scale(0.95);
+  }
+  .primary-btn, .ghost-btn, .copy-btn, .refresh-btn, .bell-btn{
+    transition:transform .12s ease, background .15s ease, opacity .15s ease;
+  }
+  .primary-btn:active, .copy-btn:active, .refresh-btn:active, .bell-btn:active{
+    transform:scale(0.93);
+  }
+  .notif-item{
+    animation:cardRise .3s cubic-bezier(.2,.85,.4,1) both;
+  }
+  .sheet{
+    animation:popIn .28s cubic-bezier(.2,.85,.4,1) both;
+  }
+
   .result-icon{
     font-size:40px;
     text-align:center;
@@ -570,6 +626,13 @@ let state = {
 };
 
 const panel = document.getElementById("panel");
+
+function paint(html){
+  panel.classList.remove("anim-pop");
+  void panel.offsetWidth; // ری‌فلو اجباری برای ری‌استارت انیمیشن
+  panel.innerHTML = html;
+  panel.classList.add("anim-pop");
+}
 const balanceValueEl = document.getElementById("balanceValue");
 
 function fmt(n){
@@ -649,11 +712,18 @@ const viewSection = document.getElementById("viewSection");
 const pageTitle = document.getElementById("pageTitle");
 const backArrow = document.getElementById("backArrow");
 
+function playEnter(el, cls){
+  el.classList.remove("anim-in-right", "anim-in-left");
+  void el.offsetWidth; // ری‌فلو اجباری برای ری‌استارت انیمیشن
+  el.classList.add(cls);
+}
+
 function showHome(){
   homeSection.style.display = "block";
   viewSection.style.display = "none";
   pageTitle.textContent = "Mio Point";
   backArrow.style.display = "none";
+  playEnter(homeSection, "anim-in-left");
 }
 
 function showView(title){
@@ -661,6 +731,7 @@ function showView(title){
   viewSection.style.display = "block";
   pageTitle.textContent = title;
   backArrow.style.display = "flex";
+  playEnter(viewSection, "anim-in-right");
 }
 
 backArrow.onclick = showHome;
@@ -670,13 +741,13 @@ const viewWelcome = showHome;
 
 async function viewInvite(){
   showView("👥 لینک دعوت");
-  panel.innerHTML = `
+  paint(`
     <p>اگر این لینک را برای دوستتان بفرستید و او با همین لینک ربات را استارت کند، مستقیم ۴۰۰,۰۰۰ میو به حساب شما واریز خواهد شد.</p>
     <div class="link-box">
       <span id="inviteLinkText">در حال دریافت لینک…</span>
       <button class="copy-btn" id="copyBtn">کپی</button>
     </div>
-  `;
+  `);
 
   const link = await MioAPI.getInviteLink();
   const linkEl = document.getElementById("inviteLinkText");
@@ -697,14 +768,14 @@ async function viewInvite(){
 
 function viewWithdrawForm(){
   showView("📤 برداشت");
-  panel.innerHTML = `
+  paint(`
     <p>دوست عزیز، شما در حالت برداشت هستید.</p>
     <p>موجودی قابل برداشت شما: <b style="color:var(--gold)">${fmt(state.balance)} میو</b></p>
     <p>لطفاً آیدی تلگرام خود را در فیلد زیر وارد کنید و سپس روی دکمه تایید بزنید.</p>
     <input class="id-input" id="withdrawIdInput" placeholder="@username" />
     <div class="field-error" id="withdrawError"></div>
     <button class="primary-btn" id="withdrawConfirmBtn">✅ تایید</button>
-  `;
+  `);
 
   document.getElementById("withdrawConfirmBtn").onclick = async () => {
     const input = document.getElementById("withdrawIdInput");
@@ -737,12 +808,12 @@ function viewWithdrawForm(){
 
 function viewWithdrawWaiting(){
   showView("📤 برداشت");
-  panel.innerHTML = `
+  paint(`
     <div class="spinner"></div>
     <p class="muted-center">⏳ لطفاً منتظر بمانید…</p>
     <p class="muted-center" id="queuePositionText"></p>
     <p class="muted-center" id="queueWaitText"></p>
-  `;
+  `);
 }
 
 function updateWaitingInfo(position, waitText){
@@ -779,21 +850,21 @@ async function pollWithdrawStatus(){
 
 function viewWithdrawSuccess(){
   showView("📤 برداشت");
-  panel.innerHTML = `
+  paint(`
     <div class="result-icon">🎉</div>
     <p class="muted-center"><b>میوهای شما با موفقیت واریز شد</b></p>
     <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
     <button class="primary-btn" id="receiptYesBtn">✅ تایید، رسید می‌خواهم</button>
     <button class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
-  `;
+  `);
 
   document.getElementById("receiptYesBtn").onclick = async () => {
-    panel.innerHTML = `
+    paint(`
       <div class="spinner"></div>
       <p class="muted-center">در حال ثبت درخواست…</p>
-    `;
+    `);
     await MioAPI.requestReceipt();
-    panel.innerHTML = `
+    paint(`
       <div class="result-icon">📨</div>
       <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
       <p class="muted-center">به اکانت زیر پیام بده:</p>
@@ -804,7 +875,7 @@ function viewWithdrawSuccess(){
       <p class="muted-center">و بنویس:</p>
       <p class="muted-center"><b style="color:var(--gold)">رسیدم رو بده ❤️</b></p>
       <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
-    `;
+    `);
 
     document.getElementById("copyAccountBtn").onclick = async () => {
       try{
@@ -824,12 +895,12 @@ function viewWithdrawSuccess(){
 
 function viewWithdrawFailed(){
   showView("📤 برداشت");
-  panel.innerHTML = `
+  paint(`
     <div class="result-icon">❌</div>
     <p class="muted-center"><b>برداشت ناموفق بود</b></p>
     <p class="muted-center">لطفاً دوباره تلاش کنید.</p>
     <button class="primary-btn" id="retryBtn">تلاش دوباره</button>
-  `;
+  `);
   document.getElementById("retryBtn").onclick = viewWithdrawForm;
 }
 
@@ -837,19 +908,19 @@ function viewDaily(){
   showView("🎁 میو روزانه");
 
   if(state.daily_enabled){
-    panel.innerHTML = `
+    paint(`
       <div class="toggle-row">
         <span class="status-text on">روشن است ✅</span>
       </div>
       <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
-    `;
+    `);
     return;
   }
 
-  panel.innerHTML = `
+  paint(`
     <p>با روشن کردن این قابلیت، هر روز ۳۴۰,۰۰۰ میو دریافت می‌کنید.</p>
     <button class="primary-btn" id="enableDailyBtn">✅ فعال کن</button>
-  `;
+  `);
 
   document.getElementById("enableDailyBtn").onclick = async () => {
     const res = await MioAPI.enableDaily();
