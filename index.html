@@ -341,6 +341,7 @@
   .grid .menu-btn:nth-child(1){animation:cardRise .5s .12s cubic-bezier(.2,.85,.4,1) both;}
   .grid .menu-btn:nth-child(2){animation:cardRise .5s .18s cubic-bezier(.2,.85,.4,1) both;}
   .grid .menu-btn:nth-child(3){animation:cardRise .5s .24s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(4){animation:cardRise .5s .30s cubic-bezier(.2,.85,.4,1) both;}
   .bell-dot.show{animation:bellPulse .6s ease .1s 2;}
   .menu-btn{
     transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
@@ -487,9 +488,10 @@
     </div>
 
     <div class="grid">
-      <div class="menu-btn" id="btnInvite">لینک دعوت <span class="emoji">👥</span></div>
       <div class="menu-btn" id="btnWithdraw">برداشت <span class="emoji">📤</span></div>
-      <div class="menu-btn" id="btnDaily" style="grid-column:1 / span 2;">میو روزانه <span class="emoji">🎁</span></div>
+      <div class="menu-btn" id="btnInvite">لینک دعوت <span class="emoji">👥</span></div>
+      <div class="menu-btn" id="btnBankWithdraw">برداشت با بانک میویی <span class="emoji">🏦</span></div>
+      <div class="menu-btn" id="btnDaily">میو روزانه <span class="emoji">🎁</span></div>
     </div>
 
     <div class="panel">
@@ -585,6 +587,19 @@ const MioAPI = {
       return await res.json();
     }catch(e){
       console.error("requestWithdraw failed:", e);
+      return { ok:false, error:"network" };
+    }
+  },
+  async requestBankWithdraw(card){
+    try{
+      const res = await fetch(`${API_BASE}/withdraw-bank`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ card })
+      });
+      return await res.json();
+    }catch(e){
+      console.error("requestBankWithdraw failed:", e);
       return { ok:false, error:"network" };
     }
   },
@@ -766,8 +781,20 @@ async function viewInvite(){
   };
 }
 
-function viewWithdrawForm(){
+function viewWithdrawHub(){
   showView("📤 برداشت");
+  paint(`
+    <p>روش برداشت رو انتخاب کن:</p>
+    <button class="primary-btn" id="hubIdBtn">📤 برداشت با آیدی</button>
+    <button class="primary-btn" id="hubBankBtn" style="background:var(--card-strong);color:var(--text);border:1px solid var(--card-border);">🏦 برداشت با بانک میویی</button>
+  `);
+
+  document.getElementById("hubIdBtn").onclick = viewWithdrawForm;
+  document.getElementById("hubBankBtn").onclick = viewBankWithdrawConfirm;
+}
+
+function viewWithdrawForm(){
+  showView("📤 برداشت با آیدی");
   paint(`
     <p>دوست عزیز، شما در حالت برداشت هستید.</p>
     <p>موجودی قابل برداشت شما: <b style="color:var(--gold)">${fmt(state.balance)} میو</b></p>
@@ -775,7 +802,10 @@ function viewWithdrawForm(){
     <input class="id-input" id="withdrawIdInput" placeholder="@username" />
     <div class="field-error" id="withdrawError"></div>
     <button class="primary-btn" id="withdrawConfirmBtn">✅ تایید</button>
+    <button class="ghost-btn" id="withdrawIdBackBtn">🔙 روش دیگه</button>
   `);
+
+  document.getElementById("withdrawIdBackBtn").onclick = viewWithdrawHub;
 
   document.getElementById("withdrawConfirmBtn").onclick = async () => {
     const input = document.getElementById("withdrawIdInput");
@@ -795,6 +825,62 @@ function viewWithdrawForm(){
     viewWithdrawWaiting();
 
     const res = await MioAPI.requestWithdraw(target);
+
+    if(!res.ok){
+      viewWithdrawFailed();
+      return;
+    }
+
+    updateWaitingInfo(res.position, res.wait_text);
+    pollWithdrawStatus();
+  };
+}
+
+/* ===== برداشت با بانک میویی ===== */
+
+function viewBankWithdrawConfirm(){
+  showView("🏦 بانک میویی");
+  paint(`
+    <p>شما می‌تونید <b style="color:var(--gold)">${fmt(state.balance)} میو</b> از موجودیتون رو با بانک میویی برداشت کنید.</p>
+    <p>برای ادامه روی تایید بزنید.</p>
+    <button class="primary-btn" id="bankConfirmBtn">✅ تایید</button>
+    <button class="ghost-btn" id="bankCancelBtn">لغو</button>
+  `);
+
+  document.getElementById("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
+  document.getElementById("bankCancelBtn").onclick = viewWithdrawHub;
+}
+
+function viewBankWithdrawCardInput(){
+  showView("🏦 بانک میویی");
+  paint(`
+    <p>شماره کارت میوییتون رو وارد کنید:</p>
+    <input class="id-input" id="bankCardInput" placeholder="مثلاً 232491826963" inputmode="numeric" />
+    <div class="field-error" id="bankCardError"></div>
+    <button class="primary-btn" id="bankCardConfirmBtn">✅ تایید</button>
+    <button class="ghost-btn" id="bankCardBackBtn">🔙 برگشت</button>
+  `);
+
+  document.getElementById("bankCardBackBtn").onclick = viewBankWithdrawConfirm;
+
+  document.getElementById("bankCardConfirmBtn").onclick = async () => {
+    const input = document.getElementById("bankCardInput");
+    const errEl = document.getElementById("bankCardError");
+    const card = input.value.trim();
+
+    if(!/^[0-9]{10,20}$/.test(card)){
+      errEl.textContent = "❌ شماره کارت میویی باید فقط عدد باشد.";
+      return;
+    }
+    if(state.balance <= 0){
+      errEl.textContent = "❌ موجودی شما صفر است.";
+      return;
+    }
+
+    errEl.textContent = "";
+    viewWithdrawWaiting();
+
+    const res = await MioAPI.requestBankWithdraw(card);
 
     if(!res.ok){
       viewWithdrawFailed();
@@ -935,7 +1021,8 @@ function viewDaily(){
 /* ===================== wiring ===================== */
 
 document.getElementById("btnInvite").onclick = viewInvite;
-document.getElementById("btnWithdraw").onclick = viewWithdrawForm;
+document.getElementById("btnWithdraw").onclick = viewWithdrawHub;
+document.getElementById("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
 document.getElementById("btnDaily").onclick = viewDaily;
 
 /* ===================== refresh ===================== */
