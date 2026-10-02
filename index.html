@@ -305,6 +305,30 @@
   }
   @keyframes spin{to{transform:rotate(360deg);}}
 
+  /* ===== Skeleton loading ===== */
+  @keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+  }
+  .skel{
+    border-radius:var(--radius-lg);
+    background:linear-gradient(90deg,
+      rgba(255,255,255,0.05) 25%,
+      rgba(255,255,255,0.12) 50%,
+      rgba(255,255,255,0.05) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.4s ease-in-out infinite;
+  }
+  .skel-card{height:140px; margin-bottom:20px;}
+  .skel-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .skel-btn{height:68px; border-radius:var(--radius-md);}
+  .skel-panel{height:120px;}
+
   /* ===== Animations ===== */
   @keyframes appIn{
     from{opacity:0; transform:translateY(10px);}
@@ -478,7 +502,18 @@
     <h1 class="title" id="pageTitle">Mio Point</h1>
   </div>
 
-  <div id="homeSection">
+  <div id="skeletonSection">
+    <div class="skel skel-card"></div>
+    <div class="skel-grid">
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+    </div>
+    <div class="skel skel-panel"></div>
+  </div>
+
+  <div id="homeSection" style="display:none;">
     <div class="balance-card">
       <div class="balance-label">💎 موجودی شما</div>
       <div>
@@ -488,7 +523,7 @@
     </div>
 
     <div class="grid">
-      <div class="menu-btn" id="btnWithdraw">برداشت <span class="emoji">📤</span></div>
+      <div class="menu-btn" id="btnWithdraw">برداشت با آیدی <span class="emoji">📤</span></div>
       <div class="menu-btn" id="btnInvite">لینک دعوت <span class="emoji">👥</span></div>
       <div class="menu-btn" id="btnBankWithdraw">برداشت با بانک میویی <span class="emoji">🏦</span></div>
       <div class="menu-btn" id="btnDaily">میو روزانه <span class="emoji">🎁</span></div>
@@ -802,10 +837,7 @@ function viewWithdrawForm(){
     <input class="id-input" id="withdrawIdInput" placeholder="@username" />
     <div class="field-error" id="withdrawError"></div>
     <button class="primary-btn" id="withdrawConfirmBtn">✅ تایید</button>
-    <button class="ghost-btn" id="withdrawIdBackBtn">🔙 روش دیگه</button>
   `);
-
-  document.getElementById("withdrawIdBackBtn").onclick = viewWithdrawHub;
 
   document.getElementById("withdrawConfirmBtn").onclick = async () => {
     const input = document.getElementById("withdrawIdInput");
@@ -848,7 +880,7 @@ function viewBankWithdrawConfirm(){
   `);
 
   document.getElementById("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
-  document.getElementById("bankCancelBtn").onclick = viewWithdrawHub;
+  document.getElementById("bankCancelBtn").onclick = viewWelcome;
 }
 
 function viewBankWithdrawCardInput(){
@@ -1021,7 +1053,7 @@ function viewDaily(){
 /* ===================== wiring ===================== */
 
 document.getElementById("btnInvite").onclick = viewInvite;
-document.getElementById("btnWithdraw").onclick = viewWithdrawHub;
+document.getElementById("btnWithdraw").onclick = viewWithdrawForm;
 document.getElementById("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
 document.getElementById("btnDaily").onclick = viewDaily;
 
@@ -1054,14 +1086,34 @@ refreshBtn.onclick = refreshData;
 
 /* ===================== init ===================== */
 
-async function init(){
-  viewWelcome();
-  const user = await MioAPI.getUser();
+const skeletonSection = document.getElementById("skeletonSection");
+
+function applyUserData(user){
   setBalance(user.balance);
   state.daily_enabled = !!user.daily_enabled;
   state.notifications = user.notifications || [];
   renderNotifications();
   updateBellDot();
+}
+
+async function init(){
+  const MAX_SKELETON_MS = 4000;
+
+  const userPromise = MioAPI.getUser();
+  const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), MAX_SKELETON_MS));
+
+  const firstResult = await Promise.race([userPromise, timeoutPromise]);
+
+  // اسکلتون رو کنار بذار و صفحه‌ی اصلی رو نشون بده (حداکثر بعد از ۴ ثانیه)
+  skeletonSection.style.display = "none";
+  viewWelcome();
+
+  if(firstResult){
+    applyUserData(firstResult);
+  }else{
+    // دیتا هنوز نرسیده؛ وقتی رسید، همون لحظه بدون قطع کردن کاربر آپدیت می‌کنیم
+    userPromise.then(applyUserData);
+  }
 }
 
 init();
