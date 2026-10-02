@@ -1,846 +1,1123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mio Point</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ===== Mio Point / Visual upgrade ===== */
-  :root {
-    --bg-mid: #0d1016;
-    --card: rgba(255,255,255,.045);
-    --card-border: rgba(255,255,255,.085);
-    --card-strong: rgba(255,255,255,.10);
-    --gold: #f4cf77;
-    --text: #f5f5f7;
-    --text-dim: #9da5b5;
-    --radius-lg: 28px;
-    --radius-md: 22px;
-    --ease-out: cubic-bezier(.22,1,.36,1);
-  }
-
-  html {
-    background: #0d1016;
-    color-scheme: dark;
-  }
-
-  body {
-    background: #0d1016;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body::before {
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse at 90% 0%, rgba(244,207,119,.09), transparent 48%),
-      radial-gradient(ellipse at 0% 65%, rgba(109,137,202,.055), transparent 50%),
-      linear-gradient(165deg, #10131b, #0b0e14 65%, #11151d);
-  }
-
-  button, input {
-    font-family: inherit;
-  }
-
-  button {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-
-  button:focus-visible,
-  input:focus-visible,
-  [tabindex]:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 4px;
-  }
-
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 480px;
-    padding: 20px 20px 44px;
-    animation: mio-app-in .65s var(--ease-out) backwards;
-  }
-
-  .topbar {
-    padding: 4px 0 12px;
-  }
-
-  .brand {
-    font-size: 13px;
-    font-weight: 700;
-    color: #c4c9d3;
-    letter-spacing: .6px;
-  }
-
-  .bell-btn,
-  .refresh-btn,
-  .back-arrow {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    border-radius: 15px;
-    background: rgba(255,255,255,.035);
-    border: 1px solid var(--card-border);
-    color: #d8dce5;
-  }
-
-  .bell-dot {
-    top: 8px;
-    left: 9px;
-    width: 7px;
-    height: 7px;
-    background: #f4cf77;
-    box-shadow: 0 0 0 3px #14171e;
-  }
-
-  .bell-dot.show {
-    animation: mio-dot-in .4s var(--ease-out) backwards;
-  }
-
-  .title-row {
-    margin: 24px 0 28px;
-    min-height: 46px;
-  }
-
-  .title-row h1.title {
-    font-size: clamp(24px, 7vw, 34px);
-    font-weight: 800;
-    letter-spacing: -.8px;
-  }
-
-  /* فضای لازم برای دکمهٔ برگشت در صفحه‌های داخلی */
-  .view-active .title-row {
-    padding-inline: 48px;
-  }
-
-  .view-active .title-row h1.title {
-    font-size: clamp(20px, 5.8vw, 28px);
-  }
-
-  .back-arrow {
-    font-size: 23px;
-  }
-
-  .balance-card {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: 32px 20px 36px;
-    margin-bottom: 22px;
-    border: 1px solid rgba(244,207,119,.22);
-    background:
-      radial-gradient(ellipse at 50% 0%, rgba(244,207,119,.13), transparent 75%),
-      linear-gradient(135deg, #202027, #14171f);
-    box-shadow:
-      0 18px 44px rgba(0,0,0,.20),
-      inset 0 1px 0 rgba(255,255,255,.05);
-    animation: mio-rise .7s .04s var(--ease-out) backwards;
-  }
-
-  .balance-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 18% auto;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #f4cf77, transparent);
-    opacity: .8;
-    pointer-events: none;
-  }
-
-  .balance-card::after {
-    content: "";
-    position: absolute;
-    width: 170px;
-    height: 170px;
-    border: 1px solid rgba(244,207,119,.065);
-    border-radius: 50%;
-    left: -95px;
-    bottom: -105px;
-    box-shadow:
-      0 0 0 22px rgba(244,207,119,.025),
-      0 0 0 44px rgba(244,207,119,.018);
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .balance-label {
-    color: #c4bba7;
-    font-size: 13px;
-    margin-bottom: 18px;
-  }
-
-  .balance-value {
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    font-size: clamp(30px, 9vw, 46px);
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -1.5px;
-    color: #f6d58a;
-    text-shadow: 0 3px 24px rgba(244,207,119,.10);
-  }
-
-  .balance-unit {
-    font-size: 17px;
-    color: #d4b46e;
-  }
-
-  .grid {
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .menu-btn {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 13px;
-    min-width: 0;
-    min-height: 132px;
-    padding: 22px 10px;
-    line-height: 1.7;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.025));
-    border: 1px solid var(--card-border);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-    transition:
-      transform .25s var(--ease-out),
-      border-color .25s ease,
-      background .25s ease,
-      box-shadow .25s ease;
-  }
-
-  .menu-btn .emoji {
-    order: -1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    margin: 0;
-    border-radius: 16px;
-    background: rgba(244,207,119,.09);
-    color: #f4cf77;
-    transition: transform .3s var(--ease-out);
-  }
-
-  #btnInvite .emoji {
-    background: rgba(141,174,246,.10);
-    color: #9ebbf6;
-  }
-
-  #btnBankWithdraw .emoji {
-    background: rgba(136,213,181,.10);
-    color: #93d8ba;
-  }
-
-  #btnDaily .emoji {
-    background: rgba(192,156,238,.10);
-    color: #c8abef;
-  }
-
-  .grid .menu-btn:nth-child(1) { --enter-delay: .10s; }
-  .grid .menu-btn:nth-child(2) { --enter-delay: .16s; }
-  .grid .menu-btn:nth-child(3) { --enter-delay: .22s; }
-  .grid .menu-btn:nth-child(4) { --enter-delay: .28s; }
-
-  .grid .menu-btn:nth-child(n) {
-    animation: mio-rise .65s var(--enter-delay) var(--ease-out) backwards;
-  }
-
-  .panel {
-    padding: 25px 21px;
-    background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-  }
-
-  #homeSection > .panel {
-    animation: mio-rise .65s .34s var(--ease-out) backwards;
-  }
-
-  .panel p {
-    font-size: 14px;
-    line-height: 2;
-  }
-
-  .panel .muted-center {
-    font-size: 14px;
-  }
-
-  .panel .muted-center b {
-    color: #e9ecf2;
-  }
-
-  .link-box,
-  .toggle-row {
-    border-radius: 17px;
-    background: rgba(0,0,0,.17);
-  }
-
-  .link-box span {
-    min-width: 0;
-  }
-
-  input.id-input {
-    border-radius: 17px;
-    background: rgba(0,0,0,.18);
-    padding: 16px;
-    transition:
-      border-color .2s ease,
-      background .2s ease,
-      box-shadow .2s ease;
-  }
-
-  input.id-input:focus {
-    outline: none;
-    border-color: rgba(244,207,119,.55);
-    background: rgba(244,207,119,.025);
-    box-shadow: 0 0 0 4px rgba(244,207,119,.07);
-  }
-
-  .primary-btn,
-  .copy-btn {
-    position: relative;
-    overflow: hidden;
-    color: #252014;
-    background: linear-gradient(115deg, #f6d98f, #e8bd5e);
-    box-shadow: 0 6px 18px rgba(232,189,94,.10);
-  }
-
-  .primary-btn {
-    padding: 16px;
-    border-radius: 17px;
-    font-size: 15px;
-  }
-
-  .ghost-btn {
-    border-radius: 17px;
-    background: rgba(255,255,255,.02);
-  }
-
-  .copy-btn.copied {
-    background: #92d7ad;
-    color: #143322;
-  }
-
-  .primary-btn,
-  .ghost-btn,
-  .copy-btn,
-  .refresh-btn,
-  .bell-btn,
-  .back-arrow {
-    transition:
-      transform .2s var(--ease-out),
-      background .2s ease,
-      border-color .2s ease,
-      opacity .2s ease;
-  }
-
-  .menu-btn:active,
-  .primary-btn:active,
-  .ghost-btn:active,
-  .copy-btn:active,
-  .refresh-btn:active,
-  .bell-btn:active,
-  .back-arrow:active {
-    transform: scale(.965);
-  }
-
-  button:disabled {
-    cursor: not-allowed;
-  }
-
-  .spinner {
-    width: 38px;
-    height: 38px;
-    border-width: 2px;
-    border-color: rgba(244,207,119,.12);
-    border-top-color: var(--gold);
-  }
-
-  .refresh-btn.spinning {
-    animation: none;
-  }
-
-  .refresh-btn.spinning svg {
-    animation: spin .85s linear infinite;
-  }
-
-  .result-icon {
-    margin: 4px 0 18px;
-    animation: mio-result .6s var(--ease-out) backwards;
-  }
-
-  .skel {
-    background: linear-gradient(
-      100deg,
-      rgba(255,255,255,.035) 30%,
-      rgba(255,255,255,.085) 50%,
-      rgba(255,255,255,.035) 70%
-    );
-    background-size: 220% 100%;
-    animation-duration: 1.8s;
-  }
-
-  .skel-card { height: 176px; }
-  .skel-btn { height: 132px; }
-  .skel-grid { gap: 12px; }
-
-  /* اعلان‌ها: انیمیشن هنگام بازشدن و بسته‌شدن */
-  .sheet-overlay {
-    display: flex;
-    padding:
-      calc(env(safe-area-inset-top, 0px) + 76px)
-      16px
-      calc(env(safe-area-inset-bottom, 0px) + 20px);
-    background: rgba(3,6,11,.66);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity .25s ease, visibility .25s;
-  }
-
-  .sheet-overlay.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .sheet {
-    width: min(420px, 100%);
-    max-height: 70vh;
-    max-height: 70dvh;
-    padding: 18px;
-    border-radius: 26px;
-    background: linear-gradient(145deg, #20242d, #141820);
-    border-color: rgba(255,255,255,.11);
-    box-shadow: 0 30px 90px rgba(0,0,0,.4);
-    overscroll-behavior: contain;
-    animation: none;
-    transform: translateY(-14px) scale(.975);
-    transition: transform .35s var(--ease-out);
-  }
-
-  .sheet-overlay.show .sheet {
-    transform: translateY(0) scale(1);
-  }
-
-  .sheet h3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .mio-close {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border: 1px solid var(--card-border);
-    border-radius: 11px;
-    color: var(--text-dim);
-    background: rgba(255,255,255,.04);
-    cursor: pointer;
-    font-size: 24px;
-  }
-
-  .notif-item {
-    border: 1px solid rgba(255,255,255,.045);
-    background: rgba(255,255,255,.035);
-    animation: mio-rise .4s var(--ease-out) backwards;
-  }
-
-  .anim-in-right {
-    animation: mio-forward .4s var(--ease-out) backwards;
-  }
-
-  .anim-in-left {
-    animation: mio-back .4s var(--ease-out) backwards;
-  }
-
-  .anim-pop {
-    animation: mio-panel .35s var(--ease-out) backwards;
-  }
-
-  .mio-icon {
-    display: block;
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-  }
-
-  .mio-ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0;
-    pointer-events: none;
-    animation: mio-ripple .6s var(--ease-out) forwards;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .menu-btn:hover {
-      transform: translateY(-4px);
-      border-color: rgba(244,207,119,.23);
-      box-shadow: 0 12px 28px rgba(0,0,0,.16);
-    }
-
-    .menu-btn:hover .emoji {
-      transform: translateY(-2px) rotate(-5deg);
-    }
-
-    .primary-btn:hover,
-    .copy-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .ghost-btn:hover,
-    .bell-btn:hover,
-    .refresh-btn:hover {
-      background: rgba(255,255,255,.08);
-    }
-  }
-
-  @media (max-width: 360px) {
-    .app { padding-inline: 14px; }
-    .menu-btn { font-size: 13px; padding-inline: 7px; }
-    .panel { padding-inline: 16px; }
-  }
-
-  @keyframes mio-app-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes mio-rise {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes mio-forward {
-    from { opacity: 0; transform: translateX(14px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes mio-back {
-    from { opacity: 0; transform: translateX(-14px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes mio-panel {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes mio-result {
-    from { opacity: 0; transform: scale(.8) translateY(8px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes mio-dot-in {
-    from { opacity: 0; transform: scale(.4); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes mio-ripple {
-    from { opacity: .14; transform: scale(0); }
-    to { opacity: 0; transform: scale(1); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation: none !important;
-      transition: none !important;
-      scroll-behavior: auto !important;
-    }
+  :root{
+    --bg-top:#050505;
+    --bg-mid:#141414;
+    --bg-bottom:#1f1f1f;
+    --card:rgba(255,255,255,0.06);
+    --card-border:rgba(255,255,255,0.10);
+    --card-strong:rgba(255,255,255,0.14);
+    --gold:#f6c94a;
+    --text:#f3eefc;
+    --text-dim:#c9bfe0;
+    --danger:#ff6b6b;
+    --success:#5fd98a;
+    --radius-lg:26px;
+    --radius-md:18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+  html{
+    background:var(--bg-mid);
+  }
+  body{
+    font-family:'Vazirmatn',sans-serif;
+    background:var(--bg-mid);
+    color:var(--text);
+    min-height:100%;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overscroll-behavior:none;
+    position:relative;
+  }
+  /* پس‌زمینه به‌صورت ثابت نسبت به viewport، مستقل از تغییر ارتفاع صفحه
+     هنگام باز شدن کیبورد — از ایجاد خط/نوار رنگی هنگام تغییر اندازه جلوگیری می‌کند */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-mid) 48%,var(--bg-bottom) 100%);
+    z-index:-1;
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    padding:18px 18px 40px;
+    min-height:100%;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:6px 2px 10px;
+  }
+  .bell-btn{
+    position:relative;
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+    cursor:pointer;
+  }
+  .bell-dot{
+    position:absolute;
+    top:7px;
+    left:9px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--danger);
+    box-shadow:0 0 0 2px var(--bg-mid);
+    display:none;
+  }
+  .bell-dot.show{display:block;}
+  .topbar-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .refresh-btn{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    cursor:pointer;
+    color:var(--text);
+    transition:transform .4s ease;
+  }
+  .refresh-btn.spinning{
+    animation:spin 0.8s linear;
+  }
+  .brand{
+    font-size:15px;
+    color:var(--text-dim);
+    letter-spacing:.3px;
+  }
+
+  h1.title{
+    text-align:center;
+    font-size:34px;
+    font-weight:800;
+    margin:18px 0 22px;
+    letter-spacing:.5px;
+  }
+
+  /* ===== Balance card ===== */
+  .balance-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);
+    padding:30px 20px 34px;
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .balance-label{
+    font-size:15px;
+    color:var(--text-dim);
+    margin-bottom:14px;
+  }
+  .balance-value{
+    font-size:44px;
+    font-weight:800;
+    color:var(--gold);
+    line-height:1.2;
+    direction:ltr;
+    display:inline-block;
+  }
+  .balance-unit{
+    font-size:22px;
+    font-weight:700;
+    color:var(--gold);
+    margin-inline-start:6px;
+  }
+
+  /* ===== Menu grid ===== */
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .menu-btn{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-md);
+    padding:20px 10px;
+    text-align:center;
+    font-size:16px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    transition:background .15s ease, transform .08s ease;
+  }
+  .menu-btn:active{
+    transform:scale(0.97);
+    background:var(--card-strong);
+  }
+  .menu-btn .emoji{
+    font-size:20px;
+    margin-inline-start:6px;
+  }
+
+  /* ===== Info / content panel ===== */
+  .panel{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);
+    padding:26px 20px;
+    min-height:140px;
+  }
+  .panel h2{
+    margin:0 0 12px;
+    font-size:19px;
+    font-weight:700;
+  }
+  .panel p{
+    margin:0 0 10px;
+    color:var(--text-dim);
+    font-size:15px;
+    line-height:1.9;
+  }
+  .panel .muted-center{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:15px;
+    line-height:1.9;
+    padding:10px 0 4px;
+  }
+  .panel .muted-center b{color:var(--text);}
+
+  .link-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(0,0,0,0.22);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:12px 14px;
+    margin:14px 0 18px;
+  }
+  .link-box span{
+    flex:1;
+    direction:ltr;
+    text-align:left;
+    font-size:13px;
+    color:var(--text);
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .copy-btn{
+    background:var(--gold);
+    color:#141414;
+    border:none;
+    border-radius:10px;
+    padding:9px 14px;
+    font-family:inherit;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .copy-btn.copied{background:var(--success);color:#0d2b17;}
+
+  input.id-input{
+    width:100%;
+    background:rgba(0,0,0,0.22);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:14px 16px;
+    font-family:inherit;
+    font-size:16px;
+    color:var(--text);
+    direction:ltr;
+    text-align:left;
+    margin:12px 0 6px;
+  }
+  input.id-input::placeholder{color:rgba(255,255,255,0.35);}
+  .field-error{
+    color:var(--danger);
+    font-size:13px;
+    min-height:18px;
+    margin-bottom:6px;
+  }
+
+  .primary-btn{
+    width:100%;
+    background:var(--gold);
+    color:#141414;
+    border:none;
+    border-radius:14px;
+    padding:15px;
+    font-family:inherit;
+    font-weight:800;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .primary-btn:active{transform:scale(0.985);}
+  .primary-btn:disabled{opacity:.5;}
+  .ghost-btn{
+    width:100%;
+    background:transparent;
+    color:var(--text-dim);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:13px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+
+  .spinner{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,0.15);
+    border-top-color:var(--gold);
+    margin:8px auto 16px;
+    animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ===== Skeleton loading ===== */
+  @keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+  }
+  .skel{
+    border-radius:var(--radius-lg);
+    background:linear-gradient(90deg,
+      rgba(255,255,255,0.05) 25%,
+      rgba(255,255,255,0.12) 50%,
+      rgba(255,255,255,0.05) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.4s ease-in-out infinite;
+  }
+  .skel-card{height:140px; margin-bottom:20px;}
+  .skel-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .skel-btn{height:68px; border-radius:var(--radius-md);}
+  .skel-panel{height:120px;}
+
+  /* ===== Animations ===== */
+  @keyframes appIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes slideInRight{
+    from{opacity:0; transform:translateX(18px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  @keyframes slideInLeft{
+    from{opacity:0; transform:translateX(-18px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  @keyframes popIn{
+    0%{opacity:0; transform:scale(0.97) translateY(6px);}
+    100%{opacity:1; transform:scale(1) translateY(0);}
+  }
+  @keyframes bellPulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.35);}
+    100%{transform:scale(1);}
+  }
+  @keyframes cardRise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .app{
+    animation:appIn .45s cubic-bezier(.2,.85,.4,1) both;
+  }
+  .anim-in-right{animation:slideInRight .32s cubic-bezier(.2,.85,.4,1) both;}
+  .anim-in-left{animation:slideInLeft .32s cubic-bezier(.2,.85,.4,1) both;}
+  .anim-pop{animation:popIn .3s cubic-bezier(.2,.85,.4,1) both;}
+  .balance-card{animation:cardRise .5s .05s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(1){animation:cardRise .5s .12s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(2){animation:cardRise .5s .18s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(3){animation:cardRise .5s .24s cubic-bezier(.2,.85,.4,1) both;}
+  .grid .menu-btn:nth-child(4){animation:cardRise .5s .30s cubic-bezier(.2,.85,.4,1) both;}
+  .bell-dot.show{animation:bellPulse .6s ease .1s 2;}
+  .menu-btn{
+    transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
+  }
+  .menu-btn:active{
+    transform:scale(0.95);
+  }
+  .primary-btn, .ghost-btn, .copy-btn, .refresh-btn, .bell-btn{
+    transition:transform .12s ease, background .15s ease, opacity .15s ease;
+  }
+  .primary-btn:active, .copy-btn:active, .refresh-btn:active, .bell-btn:active{
+    transform:scale(0.93);
+  }
+  .notif-item{
+    animation:cardRise .3s cubic-bezier(.2,.85,.4,1) both;
+  }
+  .sheet{
+    animation:popIn .28s cubic-bezier(.2,.85,.4,1) both;
+  }
+
+  .result-icon{
+    font-size:40px;
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  .toggle-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(0,0,0,0.2);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:14px 16px;
+    margin:16px 0 4px;
+  }
+  .toggle-row .status-text{font-weight:700;font-size:15px;}
+  .toggle-row .status-text.on{color:var(--success);}
+  .toggle-row .status-text.off{color:var(--text-dim);}
+
+  .back-link{
+    display:block;
+    text-align:center;
+    color:var(--text-dim);
+    font-size:14px;
+    margin-top:16px;
+    cursor:pointer;
+  }
+
+  .title-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:18px 0 22px;
+    position:relative;
+  }
+  .title-row h1.title{margin:0;}
+  .back-arrow{
+    position:absolute;
+    right:0;
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    cursor:pointer;
+    color:var(--text);
+  }
+
+  /* ===== Notifications sheet ===== */
+  .sheet-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(8,4,20,0.55);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    z-index:50;
+    padding-top:calc(env(safe-area-inset-top,0px) + 70px);
+  }
+  .sheet-overlay.show{display:flex;}
+  .sheet{
+    width:min(420px,92vw);
+    background:#141414;
+    border:1px solid var(--card-border);
+    border-radius:20px;
+    padding:16px;
+    max-height:70vh;
+    overflow-y:auto;
+  }
+  .sheet h3{
+    margin:2px 6px 12px;
+    font-size:16px;
+  }
+  .notif-item{
+    background:rgba(255,255,255,0.06);
+    border-radius:14px;
+    padding:12px 14px;
+    margin-bottom:8px;
+    font-size:14px;
+    line-height:1.8;
+  }
+  .notif-item.success{border-inline-start:3px solid var(--success);}
+  .notif-item.fail{border-inline-start:3px solid var(--danger);}
+  .notif-item .t{font-size:11px;color:var(--text-dim);margin-top:4px;direction:ltr;text-align:right;}
+  .notif-empty{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:14px;
+    padding:20px 0;
   }
 </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+    <button class="bell-btn" id="bellBtn" aria-label="اعلان‌ها">
+      🔔
+      <span class="bell-dot" id="bellDot"></span>
+    </button>
+    <span class="brand">🐾 Mio Point</span>
+    <button class="refresh-btn" id="refreshBtn" aria-label="بروزرسانی">🔄</button>
+  </div>
+
+  <div class="title-row">
+    <span class="back-arrow" id="backArrow">←</span>
+    <h1 class="title" id="pageTitle">Mio Point</h1>
+  </div>
+
+  <div id="skeletonSection">
+    <div class="skel skel-card"></div>
+    <div class="skel-grid">
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+    </div>
+    <div class="skel skel-panel"></div>
+  </div>
+
+  <div id="homeSection" style="display:none;">
+    <div class="balance-card">
+      <div class="balance-label">💎 موجودی شما</div>
+      <div>
+        <span class="balance-value" id="balanceValue">…</span>
+        <span class="balance-unit">میو</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="menu-btn" id="btnWithdraw">برداشت با آیدی <span class="emoji">📤</span></div>
+      <div class="menu-btn" id="btnInvite">لینک دعوت <span class="emoji">👥</span></div>
+      <div class="menu-btn" id="btnBankWithdraw">برداشت با بانک میویی <span class="emoji">🏦</span></div>
+      <div class="menu-btn" id="btnDaily">میو روزانه <span class="emoji">🎁</span></div>
+    </div>
+
+    <div class="panel">
+      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید</b></p>
+      <p class="muted-center">از منوی بالا انتخاب کنید</p>
+    </div>
+  </div>
+
+  <div id="viewSection" style="display:none;">
+    <div class="panel" id="panel">
+      <!-- محتوای هر صفحه با جاوااسکریپت اینجا قرار می‌گیرد -->
+    </div>
+  </div>
+
+</div>
+
+<div class="sheet-overlay" id="notifOverlay">
+  <div class="sheet">
+    <h3>🔔 اعلان‌ها</h3>
+    <div id="notifList"></div>
+  </div>
+</div>
 
 <script>
-(() => {
-  "use strict";
+/* =========================================================
+   MIO POINT — Mini App Frontend
+   -----------------------------------------------------------
+   این فایل فرانت‌اند مستقل است و از طریق MioAPI (پایین همین فایل)
+   با بک‌اندی که روی Render اجرا می‌شود صحبت می‌کند.
 
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
+   قبل از دیپلوی نهایی:
+   1) مقدار API_BASE را به آدرس واقعی بک‌اند روی Render تغییر بده.
+   2) اندپوینت‌های زیر باید در بک‌اند پیاده‌سازی شوند:
+        GET  /api/user            -> { balance, daily_enabled, notifications:[...] }
+        GET  /api/invite-link     -> { link }
+        POST /api/withdraw        -> { ok, error? }              body:{ target }
+        GET  /api/withdraw-status -> { status: pending|success|failed }
+        POST /api/receipt         -> { ok }
+        POST /api/daily/enable    -> { ok, balance }
+   احراز هویت کاربر با initData تلگرام (Telegram.WebApp.initData)
+   در هدر Authorization به بک‌اند فرستاده می‌شود؛ بک‌اند باید آن را
+   با BOT_TOKEN اعتبارسنجی کند.
+   ========================================================= */
 
-  const app = document.querySelector(".app");
+const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
 
-  /* آیکون‌های سبک و یکدست، بدون کتابخانهٔ خارجی */
-  const paths = {
-    withdraw:
-      '<path d="M12 16V3m-5 5 5-5 5 5"/>' +
-      '<path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
 
-    invite:
-      '<circle cx="9" cy="8" r="3"/>' +
-      '<path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/>',
+const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
+const TG_FIRST_NAME = tg?.initDataUnsafe?.user?.first_name || "";
 
-    bank:
-      '<path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/>',
+const welcomeEl = document.getElementById("welcomeText");
+if (welcomeEl && TG_FIRST_NAME) {
+  welcomeEl.textContent = `خوش اومدی ${TG_FIRST_NAME}`;
+}
 
-    gift:
-      '<rect x="3" y="8" width="18" height="4" rx="1"/>' +
-      '<path d="M5 12v9h14v-9M12 8v13"/>' +
-      '<path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>',
-
-    bell:
-      '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
-
-    refresh:
-      '<path d="M20 7v5h-5M4 17v-5h5"/>' +
-      '<path d="M6.1 6a8 8 0 0 1 13.3 3M4.6 15A8 8 0 0 0 17.9 18"/>'
+function authHeaders(){
+  return {
+    "Content-Type": "application/json",
+    "Authorization": "tma " + (tg?.initData || "")
   };
+}
 
-  function icon(name) {
-    return `<svg class="mio-icon" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" stroke-width="1.65"
-      stroke-linecap="round" stroke-linejoin="round"
-      aria-hidden="true">${paths[name]}</svg>`;
+const MioAPI = {
+  async getUser(){
+    try{
+      const res = await fetch(`${API_BASE}/user`, { headers: authHeaders() });
+      if(!res.ok) throw new Error("bad response");
+      return await res.json();
+    }catch(e){
+      console.error("getUser failed:", e);
+      return { balance: 0, daily_enabled: false, notifications: [] };
+    }
+  },
+  async getInviteLink(){
+    try{
+      const res = await fetch(`${API_BASE}/invite-link`, { headers: authHeaders() });
+      const data = await res.json();
+      return data.link || "";
+    }catch(e){
+      console.error("getInviteLink failed:", e);
+      return "";
+    }
+  },
+  async requestWithdraw(target){
+    try{
+      const res = await fetch(`${API_BASE}/withdraw`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ target })
+      });
+      return await res.json();
+    }catch(e){
+      console.error("requestWithdraw failed:", e);
+      return { ok:false, error:"network" };
+    }
+  },
+  async requestBankWithdraw(card){
+    try{
+      const res = await fetch(`${API_BASE}/withdraw-bank`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ card })
+      });
+      return await res.json();
+    }catch(e){
+      console.error("requestBankWithdraw failed:", e);
+      return { ok:false, error:"network" };
+    }
+  },
+  async getWithdrawStatus(){
+    try{
+      const res = await fetch(`${API_BASE}/withdraw-status`, { headers: authHeaders() });
+      return await res.json();
+    }catch(e){
+      console.error("getWithdrawStatus failed:", e);
+      return { status: "failed" };
+    }
+  },
+  async requestReceipt(){
+    try{
+      const res = await fetch(`${API_BASE}/receipt`, { method:"POST", headers: authHeaders() });
+      return await res.json();
+    }catch(e){
+      console.error("requestReceipt failed:", e);
+      return { ok:false };
+    }
+  },
+  async enableDaily(){
+    try{
+      const res = await fetch(`${API_BASE}/daily/enable`, { method:"POST", headers: authHeaders() });
+      return await res.json();
+    }catch(e){
+      console.error("enableDaily failed:", e);
+      return { ok:false };
+    }
   }
+};
 
-  const menuIcons = {
-    btnWithdraw: "withdraw",
-    btnInvite: "invite",
-    btnBankWithdraw: "bank",
-    btnDaily: "gift"
+/* ===================== state ===================== */
+
+let state = {
+  balance: 0,
+  daily_enabled: false,
+  notifications: []
+};
+
+const panel = document.getElementById("panel");
+
+function paint(html){
+  panel.classList.remove("anim-pop");
+  void panel.offsetWidth; // ری‌فلو اجباری برای ری‌استارت انیمیشن
+  panel.innerHTML = html;
+  panel.classList.add("anim-pop");
+}
+const balanceValueEl = document.getElementById("balanceValue");
+
+function fmt(n){
+  return Number(n || 0).toLocaleString("en-US");
+}
+
+function setBalance(v){
+  state.balance = v;
+  balanceValueEl.textContent = fmt(v);
+}
+
+/* ===================== notifications ===================== */
+
+const notifOverlay = document.getElementById("notifOverlay");
+const notifList = document.getElementById("notifList");
+const bellDot = document.getElementById("bellDot");
+const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
+
+function getLastSeenTime(){
+  try{
+    return localStorage.getItem(LAST_SEEN_KEY) || "";
+  }catch(e){
+    return "";
+  }
+}
+
+function setLastSeenTime(t){
+  try{
+    localStorage.setItem(LAST_SEEN_KEY, t || "");
+  }catch(e){
+    // ذخیره نشد؛ مشکلی نیست، فقط این حالت موقتاً کار می‌کند
+  }
+}
+
+function renderNotifications(){
+  if(!state.notifications.length){
+    notifList.innerHTML = `<div class="notif-empty">هنوز اعلانی نداری</div>`;
+    return;
+  }
+  notifList.innerHTML = state.notifications.map(n => `
+    <div class="notif-item ${n.type === 'fail' ? 'fail' : 'success'}">
+      ${n.text}
+      <div class="t">${n.time || ""}</div>
+    </div>
+  `).join("");
+}
+
+function updateBellDot(){
+  if(!state.notifications.length){
+    bellDot.classList.remove("show");
+    return;
+  }
+  const newestTime = state.notifications[0].time || "";
+  const lastSeen = getLastSeenTime();
+  if(newestTime && newestTime !== lastSeen){
+    bellDot.classList.add("show");
+  }else{
+    bellDot.classList.remove("show");
+  }
+}
+
+document.getElementById("bellBtn").onclick = () => {
+  notifOverlay.classList.add("show");
+  bellDot.classList.remove("show");
+  if(state.notifications.length){
+    setLastSeenTime(state.notifications[0].time || "");
+  }
+};
+notifOverlay.onclick = (e) => {
+  if(e.target === notifOverlay) notifOverlay.classList.remove("show");
+};
+
+/* ===================== navigation ===================== */
+
+const homeSection = document.getElementById("homeSection");
+const viewSection = document.getElementById("viewSection");
+const pageTitle = document.getElementById("pageTitle");
+const backArrow = document.getElementById("backArrow");
+
+function playEnter(el, cls){
+  el.classList.remove("anim-in-right", "anim-in-left");
+  void el.offsetWidth; // ری‌فلو اجباری برای ری‌استارت انیمیشن
+  el.classList.add(cls);
+}
+
+function showHome(){
+  homeSection.style.display = "block";
+  viewSection.style.display = "none";
+  pageTitle.textContent = "Mio Point";
+  backArrow.style.display = "none";
+  playEnter(homeSection, "anim-in-left");
+}
+
+function showView(title){
+  homeSection.style.display = "none";
+  viewSection.style.display = "block";
+  pageTitle.textContent = title;
+  backArrow.style.display = "flex";
+  playEnter(viewSection, "anim-in-right");
+}
+
+backArrow.onclick = showHome;
+const viewWelcome = showHome;
+
+/* ===================== views ===================== */
+
+async function viewInvite(){
+  showView("👥 لینک دعوت");
+  paint(`
+    <p>اگر این لینک را برای دوستتان بفرستید و او با همین لینک ربات را استارت کند، مستقیم ۴۰۰,۰۰۰ میو به حساب شما واریز خواهد شد.</p>
+    <div class="link-box">
+      <span id="inviteLinkText">در حال دریافت لینک…</span>
+      <button class="copy-btn" id="copyBtn">کپی</button>
+    </div>
+  `);
+
+  const link = await MioAPI.getInviteLink();
+  const linkEl = document.getElementById("inviteLinkText");
+  linkEl.textContent = link || "خطا در دریافت لینک";
+
+  document.getElementById("copyBtn").onclick = async () => {
+    try{
+      await navigator.clipboard.writeText(link);
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "کپی شد ✓";
+      btn.classList.add("copied");
+      setTimeout(()=>{ btn.textContent="کپی"; btn.classList.remove("copied"); }, 1800);
+    }catch(e){
+      console.error("copy failed", e);
+    }
   };
+}
 
-  Object.entries(menuIcons).forEach(([id, name]) => {
-    const holder = document.querySelector(`#${id} .emoji`);
-    if (holder) {
-      holder.innerHTML = icon(name);
-      holder.setAttribute("aria-hidden", "true");
+function viewWithdrawHub(){
+  showView("📤 برداشت");
+  paint(`
+    <p>روش برداشت رو انتخاب کن:</p>
+    <button class="primary-btn" id="hubIdBtn">📤 برداشت با آیدی</button>
+    <button class="primary-btn" id="hubBankBtn" style="background:var(--card-strong);color:var(--text);border:1px solid var(--card-border);">🏦 برداشت با بانک میویی</button>
+  `);
+
+  document.getElementById("hubIdBtn").onclick = viewWithdrawForm;
+  document.getElementById("hubBankBtn").onclick = viewBankWithdrawConfirm;
+}
+
+function viewWithdrawForm(){
+  showView("📤 برداشت با آیدی");
+  paint(`
+    <p>دوست عزیز، شما در حالت برداشت هستید.</p>
+    <p>موجودی قابل برداشت شما: <b style="color:var(--gold)">${fmt(state.balance)} میو</b></p>
+    <p>لطفاً آیدی تلگرام خود را در فیلد زیر وارد کنید و سپس روی دکمه تایید بزنید.</p>
+    <input class="id-input" id="withdrawIdInput" placeholder="@username" />
+    <div class="field-error" id="withdrawError"></div>
+    <button class="primary-btn" id="withdrawConfirmBtn">✅ تایید</button>
+  `);
+
+  document.getElementById("withdrawConfirmBtn").onclick = async () => {
+    const input = document.getElementById("withdrawIdInput");
+    const errEl = document.getElementById("withdrawError");
+    const target = input.value.trim();
+
+    if(!target.startsWith("@") || target.length < 2){
+      errEl.textContent = "❌ آیدی باید با @ شروع شود.";
+      return;
     }
-  });
-
-  const bell = document.getElementById("bellBtn");
-  const dot = document.getElementById("bellDot");
-
-  bell.innerHTML = icon("bell");
-  bell.appendChild(dot);
-
-  document.getElementById("refreshBtn").innerHTML = icon("refresh");
-
-  /* تبدیل کنترل‌ها به دکمهٔ واقعی با حفظ رویدادهای موجود */
-  document.querySelectorAll(".menu-btn, .back-arrow").forEach(old => {
-    if (old.tagName === "BUTTON") return;
-
-    const button = document.createElement("button");
-
-    for (const attribute of old.attributes) {
-      button.setAttribute(attribute.name, attribute.value);
-    }
-
-    button.type = "button";
-    button.innerHTML = old.innerHTML;
-    button.onclick = old.onclick;
-
-    if (button.classList.contains("back-arrow")) {
-      button.setAttribute("aria-label", "بازگشت به خانه");
-    }
-
-    old.replaceWith(button);
-  });
-
-  /*
-   * کد اصلی یک ارجاع به backArrow نگه داشته است.
-   * نمایش دکمهٔ جدید را با وضعیت صفحه هماهنگ می‌کنیم.
-   */
-  const home = document.getElementById("homeSection");
-  const back = document.getElementById("backArrow");
-  const view = document.getElementById("viewSection");
-
-  function syncNavigation() {
-    const isView = view.style.display !== "none";
-    back.style.display = isView ? "flex" : "none";
-    app.classList.toggle("view-active", isView);
-  }
-
-  new MutationObserver(syncNavigation).observe(view, {
-    attributes: true,
-    attributeFilter: ["style"]
-  });
-
-  syncNavigation();
-
-  /* تغییر تدریجی عدد موجودی */
-  const originalSetBalance = setBalance;
-  const balanceElement = document.getElementById("balanceValue");
-
-  let balanceFrame = 0;
-  let displayedBalance = Number(state.balance) || 0;
-
-  setBalance = function(value) {
-    cancelAnimationFrame(balanceFrame);
-
-    originalSetBalance(value);
-
-    const target = Number(value);
-
-    if (!Number.isFinite(target)) return;
-
-    const from = displayedBalance;
-
-    if (reduceMotion.matches || from === target) {
-      displayedBalance = target;
+    if(state.balance <= 0){
+      errEl.textContent = "❌ موجودی شما صفر است.";
       return;
     }
 
-    const start = performance.now();
-    const duration = 850;
+    errEl.textContent = "";
+    viewWithdrawWaiting();
 
-    balanceElement.textContent = fmt(Math.round(from));
+    const res = await MioAPI.requestWithdraw(target);
 
-    function tick(now) {
-      if (reduceMotion.matches) {
-        displayedBalance = target;
-        balanceElement.textContent = fmt(target);
-        return;
-      }
-
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-
-      displayedBalance = from + (target - from) * eased;
-
-      balanceElement.textContent = fmt(
-        progress === 1 ? target : Math.round(displayedBalance)
-      );
-
-      if (progress < 1) {
-        balanceFrame = requestAnimationFrame(tick);
-      }
-    }
-
-    balanceFrame = requestAnimationFrame(tick);
-  };
-
-  /* افکت لمس برای دکمه‌های ثابت و دکمه‌های ساخته‌شده با JS */
-  document.addEventListener("click", event => {
-    const button = event.target.closest(
-      ".menu-btn, .primary-btn, .copy-btn"
-    );
-
-    if (!button || button.disabled || reduceMotion.matches) return;
-
-    const rect = button.getBoundingClientRect();
-    const size = Math.hypot(rect.width, rect.height) * 2;
-
-    const x = event.detail === 0
-      ? rect.width / 2
-      : event.clientX - rect.left;
-
-    const y = event.detail === 0
-      ? rect.height / 2
-      : event.clientY - rect.top;
-
-    const ripple = document.createElement("span");
-    ripple.className = "mio-ripple";
-    ripple.setAttribute("aria-hidden", "true");
-
-    Object.assign(ripple.style, {
-      width: `${size}px`,
-      height: `${size}px`,
-      left: `${x - size / 2}px`,
-      top: `${y - size / 2}px`
-    });
-
-    button.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 650);
-  });
-
-  /* مدیریت پنجرهٔ اعلان‌ها و فوکوس کیبورد */
-  const overlay = document.getElementById("notifOverlay");
-  const sheet = overlay.querySelector(".sheet");
-  const heading = sheet.querySelector("h3");
-
-  heading.id = "mioNotificationTitle";
-  sheet.setAttribute("role", "dialog");
-  sheet.setAttribute("aria-modal", "true");
-  sheet.setAttribute("aria-labelledby", heading.id);
-
-  const closeButton = document.createElement("button");
-  closeButton.type = "button";
-  closeButton.className = "mio-close";
-  closeButton.textContent = "×";
-  closeButton.setAttribute("aria-label", "بستن اعلان‌ها");
-
-  closeButton.onclick = () => overlay.classList.remove("show");
-  heading.appendChild(closeButton);
-
-  bell.setAttribute("aria-haspopup", "dialog");
-  bell.setAttribute("aria-controls", "notifOverlay");
-
-  let wasOpen = false;
-  let previousFocus = null;
-  let previousOverflow = "";
-  let previousInert = false;
-
-  function syncSheet() {
-    const isOpen = overlay.classList.contains("show");
-
-    overlay.setAttribute("aria-hidden", String(!isOpen));
-    overlay.inert = !isOpen;
-    bell.setAttribute("aria-expanded", String(isOpen));
-
-    if (isOpen === wasOpen) return;
-    wasOpen = isOpen;
-
-    if (isOpen) {
-      previousFocus = document.activeElement;
-      previousOverflow = document.body.style.overflow;
-      previousInert = app.inert;
-
-      document.body.style.overflow = "hidden";
-      closeButton.focus({ preventScroll: true });
-      app.inert = true;
-    } else {
-      app.inert = previousInert;
-      document.body.style.overflow = previousOverflow;
-
-      if (previousFocus?.isConnected) {
-        previousFocus.focus({ preventScroll: true });
-      }
-    }
-  }
-
-  new MutationObserver(syncSheet).observe(overlay, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-
-  syncSheet();
-
-  sheet.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      overlay.classList.remove("show");
+    if(!res.ok){
+      viewWithdrawFailed();
       return;
     }
 
-    if (event.key !== "Tab") return;
+    updateWaitingInfo(res.position, res.wait_text);
+    pollWithdrawStatus();
+  };
+}
 
-    const focusable = [...sheet.querySelectorAll(
-      'button:not(:disabled), a[href], input:not(:disabled), ' +
-      'select:not(:disabled), textarea:not(:disabled), ' +
-      '[tabindex]:not([tabindex="-1"])'
-    )].filter(element => element.getClientRects().length);
+/* ===== برداشت با بانک میویی ===== */
 
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
+function viewBankWithdrawConfirm(){
+  showView("🏦 بانک میویی");
+  paint(`
+    <p>شما می‌تونید <b style="color:var(--gold)">${fmt(state.balance)} میو</b> از موجودیتون رو با بانک میویی برداشت کنید.</p>
+    <p>برای ادامه روی تایید بزنید.</p>
+    <button class="primary-btn" id="bankConfirmBtn">✅ تایید</button>
+    <button class="ghost-btn" id="bankCancelBtn">لغو</button>
+  `);
 
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
+  document.getElementById("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
+  document.getElementById("bankCancelBtn").onclick = viewWelcome;
+}
+
+function viewBankWithdrawCardInput(){
+  showView("🏦 بانک میویی");
+  paint(`
+    <p>شماره کارت میوییتون رو وارد کنید:</p>
+    <input class="id-input" id="bankCardInput" placeholder="مثلاً 232491826963" inputmode="numeric" />
+    <div class="field-error" id="bankCardError"></div>
+    <button class="primary-btn" id="bankCardConfirmBtn">✅ تایید</button>
+    <button class="ghost-btn" id="bankCardBackBtn">🔙 برگشت</button>
+  `);
+
+  document.getElementById("bankCardBackBtn").onclick = viewBankWithdrawConfirm;
+
+  document.getElementById("bankCardConfirmBtn").onclick = async () => {
+    const input = document.getElementById("bankCardInput");
+    const errEl = document.getElementById("bankCardError");
+    const card = input.value.trim();
+
+    if(!/^[0-9]{10,20}$/.test(card)){
+      errEl.textContent = "❌ شماره کارت میویی باید فقط عدد باشد.";
+      return;
     }
-  });
-})();
+    if(state.balance <= 0){
+      errEl.textContent = "❌ موجودی شما صفر است.";
+      return;
+    }
+
+    errEl.textContent = "";
+    viewWithdrawWaiting();
+
+    const res = await MioAPI.requestBankWithdraw(card);
+
+    if(!res.ok){
+      viewWithdrawFailed();
+      return;
+    }
+
+    updateWaitingInfo(res.position, res.wait_text);
+    pollWithdrawStatus();
+  };
+}
+
+function viewWithdrawWaiting(){
+  showView("📤 برداشت");
+  paint(`
+    <div class="spinner"></div>
+    <p class="muted-center">⏳ لطفاً منتظر بمانید…</p>
+    <p class="muted-center" id="queuePositionText"></p>
+    <p class="muted-center" id="queueWaitText"></p>
+  `);
+}
+
+function updateWaitingInfo(position, waitText){
+  const posEl = document.getElementById("queuePositionText");
+  const waitEl = document.getElementById("queueWaitText");
+  if(posEl && position){
+    posEl.innerHTML = `👤 شما نفر <b style="color:var(--gold)">${position}</b> در صف هستید`;
+  }
+  if(waitEl && waitText){
+    waitEl.textContent = `⏱ ${waitText}`;
+  }
+}
+
+async function pollWithdrawStatus(){
+  const maxTries = 40; // ~ 2 دقیقه با فاصله ۳ ثانیه
+  for(let i=0;i<maxTries;i++){
+    await new Promise(r => setTimeout(r, 3000));
+    const res = await MioAPI.getWithdrawStatus();
+    if(res.status === "success"){
+      setBalance(0);
+      viewWithdrawSuccess();
+      return;
+    }
+    if(res.status === "failed"){
+      viewWithdrawFailed();
+      return;
+    }
+    if(res.status === "pending"){
+      updateWaitingInfo(res.position, res.wait_text);
+    }
+  }
+  viewWithdrawFailed();
+}
+
+function viewWithdrawSuccess(){
+  showView("📤 برداشت");
+  paint(`
+    <div class="result-icon">🎉</div>
+    <p class="muted-center"><b>میوهای شما با موفقیت واریز شد</b></p>
+    <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
+    <button class="primary-btn" id="receiptYesBtn">✅ تایید، رسید می‌خواهم</button>
+    <button class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
+  `);
+
+  document.getElementById("receiptYesBtn").onclick = async () => {
+    paint(`
+      <div class="spinner"></div>
+      <p class="muted-center">در حال ثبت درخواست…</p>
+    `);
+    await MioAPI.requestReceipt();
+    paint(`
+      <div class="result-icon">📨</div>
+      <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
+      <p class="muted-center">به اکانت زیر پیام بده:</p>
+      <div class="link-box">
+        <span dir="ltr" style="text-align:center;flex:1;">@Pott5y6jg</span>
+        <button class="copy-btn" id="copyAccountBtn">کپی</button>
+      </div>
+      <p class="muted-center">و بنویس:</p>
+      <p class="muted-center"><b style="color:var(--gold)">رسیدم رو بده ❤️</b></p>
+      <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
+    `);
+
+    document.getElementById("copyAccountBtn").onclick = async () => {
+      try{
+        await navigator.clipboard.writeText("@Pott5y6jg");
+        const btn = document.getElementById("copyAccountBtn");
+        btn.textContent = "کپی شد ✓";
+        btn.classList.add("copied");
+        setTimeout(()=>{ btn.textContent="کپی"; btn.classList.remove("copied"); }, 1800);
+      }catch(e){
+        console.error("copy failed", e);
+      }
+    };
+  };
+
+  document.getElementById("receiptNoBtn").onclick = viewWelcome;
+}
+
+function viewWithdrawFailed(){
+  showView("📤 برداشت");
+  paint(`
+    <div class="result-icon">❌</div>
+    <p class="muted-center"><b>برداشت ناموفق بود</b></p>
+    <p class="muted-center">لطفاً دوباره تلاش کنید.</p>
+    <button class="primary-btn" id="retryBtn">تلاش دوباره</button>
+  `);
+  document.getElementById("retryBtn").onclick = viewWithdrawForm;
+}
+
+function viewDaily(){
+  showView("🎁 میو روزانه");
+
+  if(state.daily_enabled){
+    paint(`
+      <div class="toggle-row">
+        <span class="status-text on">روشن است ✅</span>
+      </div>
+      <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
+    `);
+    return;
+  }
+
+  paint(`
+    <p>با روشن کردن این قابلیت، هر روز ۳۴۰,۰۰۰ میو دریافت می‌کنید.</p>
+    <button class="primary-btn" id="enableDailyBtn">✅ فعال کن</button>
+  `);
+
+  document.getElementById("enableDailyBtn").onclick = async () => {
+    const res = await MioAPI.enableDaily();
+    if(res.ok){
+      state.daily_enabled = true;
+      if(typeof res.balance === "number") setBalance(res.balance);
+      viewDaily();
+    }
+  };
+}
+
+/* ===================== wiring ===================== */
+
+document.getElementById("btnInvite").onclick = viewInvite;
+document.getElementById("btnWithdraw").onclick = viewWithdrawForm;
+document.getElementById("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
+document.getElementById("btnDaily").onclick = viewDaily;
+
+/* ===================== refresh ===================== */
+
+const refreshBtn = document.getElementById("refreshBtn");
+
+async function refreshData(){
+  refreshBtn.classList.add("spinning");
+  try{
+    const user = await MioAPI.getUser();
+    setBalance(user.balance);
+    state.daily_enabled = !!user.daily_enabled;
+    state.notifications = user.notifications || [];
+    renderNotifications();
+    updateBellDot();
+
+    // اگه کاربر تو صفحه‌ی میو روزانه یا برداشت هست، محتوای همون صفحه هم بروز بشه
+    if(pageTitle.textContent === "🎁 میو روزانه"){
+      viewDaily();
+    }else if(pageTitle.textContent === "📤 برداشت" && !document.getElementById("withdrawIdInput")){
+      // در حالت فرم برداشت که هنوز نتیجه‌ای نگرفته، دست نمی‌زنیم
+    }
+  }finally{
+    setTimeout(() => refreshBtn.classList.remove("spinning"), 800);
+  }
+}
+
+refreshBtn.onclick = refreshData;
+
+/* ===================== init ===================== */
+
+const skeletonSection = document.getElementById("skeletonSection");
+
+function applyUserData(user){
+  setBalance(user.balance);
+  state.daily_enabled = !!user.daily_enabled;
+  state.notifications = user.notifications || [];
+  renderNotifications();
+  updateBellDot();
+}
+
+async function init(){
+  const MAX_SKELETON_MS = 4000;
+
+  const userPromise = MioAPI.getUser();
+  const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), MAX_SKELETON_MS));
+
+  const firstResult = await Promise.race([userPromise, timeoutPromise]);
+
+  // اسکلتون رو کنار بذار و صفحه‌ی اصلی رو نشون بده (حداکثر بعد از ۴ ثانیه)
+  skeletonSection.style.display = "none";
+  viewWelcome();
+
+  if(firstResult){
+    applyUserData(firstResult);
+  }else{
+    // دیتا هنوز نرسیده؛ وقتی رسید، همون لحظه بدون قطع کردن کاربر آپدیت می‌کنیم
+    userPromise.then(applyUserData);
+  }
+}
+
+init();
 </script>
+
+</body>
+</html>
