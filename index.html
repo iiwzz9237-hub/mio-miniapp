@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
+:root{
   --bg:#0b3d91;
   --card:rgba(255,255,255,.06);
   --border:rgba(255,255,255,.10);
@@ -172,7 +172,6 @@ button:focus-visible,input:focus-visible{
 }
 
 .back-arrow{position:absolute;right:0;display:none}
-
 .view-active .title-row{padding-inline:49px}
 .view-active .title{font-size:clamp(19px,5.8vw,28px);line-height:1.6}
 
@@ -325,7 +324,6 @@ button:focus-visible,input:focus-visible{
 }
 
 #homeSection>.panel{animation:rise .65s .4s var(--ease) backwards}
-
 .panel h2{margin:0 0 12px;font-size:19px}
 .panel p{margin:0 0 10px;color:var(--dim);font-size:14px;line-height:2}
 .muted-center{text-align:center;padding:10px 0 4px}
@@ -509,7 +507,6 @@ button:focus-visible,input:focus-visible{
 }
 
 .slot-machine:disabled{opacity:1}
-
 .slot-machine:not(:disabled):active{transform:scale(.985)}
 
 .slot-heading{
@@ -625,11 +622,7 @@ button:focus-visible,input:focus-visible{
   font-weight:700;
 }
 
-.prize-table th,.prize-table td{
-  padding:11px 4px;
-  border-bottom:1px solid rgba(255,255,255,.12);
-}
-
+.prize-table th,.prize-table td{padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.12)}
 .prize-table th{color:var(--dim);font-size:11px;font-weight:500}
 .prize-table td:first-child{font-size:21px}
 .game-note{margin-top:14px!important;font-size:11px!important}
@@ -766,10 +759,15 @@ button:focus-visible,input:focus-visible{
 @keyframes reel-shake{0%{transform:translateY(-5px)}100%{transform:translateY(5px)}}
 
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  *,*::before,*::after{
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
 }
 
-/* ===== Custom bottom navigation + appearance settings ===== */
+/* ===== Bottom navigation / appearance ===== */
+
 :root{
   --user-bg:#0d1016;
   --user-card:#202027;
@@ -777,23 +775,28 @@ button:focus-visible,input:focus-visible{
 }
 
 html{background:var(--user-bg)!important}
+
 body{
   padding-bottom:calc(env(safe-area-inset-bottom,0px) + 94px)!important;
   background:var(--user-bg)!important;
 }
+
 body::before{
   background:
     radial-gradient(ellipse at 88% 0%,rgba(255,255,255,.065),transparent 46%),
     radial-gradient(ellipse at 0% 68%,rgba(91,135,220,.075),transparent 50%),
     linear-gradient(165deg,var(--user-bg),var(--user-bg))!important;
 }
+
 .app{padding-bottom:122px!important}
+
 .balance-card{
   border-color:rgba(255,255,255,.12)!important;
   background:
     radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.075),transparent 72%),
     linear-gradient(135deg,var(--user-card),var(--user-bg))!important;
 }
+
 .balance-card::before{background:linear-gradient(90deg,transparent,var(--user-accent),transparent)!important}
 .balance-value,.balance-unit,.gold-text{color:var(--user-accent)!important}
 .menu-btn,.panel{background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.022))!important}
@@ -818,6 +821,7 @@ body::before{
   backdrop-filter:blur(18px);
   box-shadow:0 18px 55px rgba(0,0,0,.34);
 }
+
 .bottom-nav button{
   min-width:0;
   min-height:58px;
@@ -834,6 +838,7 @@ body::before{
   font-size:10px;
   font-weight:700;
 }
+
 .bottom-nav button.active{background:rgba(255,255,255,.075);color:var(--text)}
 .bottom-nav button.active .nav-svg{color:var(--user-accent)}
 .nav-svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -844,6 +849,7 @@ body::before{
 .settings-card h3{margin:0 0 7px;font-size:14px}
 .settings-card p{margin:0;color:var(--dim);font-size:12px;line-height:1.9}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+
 .switch{position:relative;width:50px;height:28px;flex:0 0 50px}
 .switch input{position:absolute;opacity:0;pointer-events:none}
 .switch-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.12);transition:.2s}
@@ -881,20 +887,28 @@ body.theme-light{
   color-scheme:light;
   background:#eef3f8!important;
 }
+
 body.theme-light::before{background:linear-gradient(165deg,#f1f5fa,#e9eff6)!important}
 body.theme-light .bottom-nav{background:rgba(250,252,255,.94)}
+
 body.theme-light .icon-btn,
 body.theme-light .menu-btn,
 body.theme-light .panel,
 body.theme-light .settings-card,
 body.theme-light .profile-box,
-body.theme-light .profile-row{background:rgba(255,255,255,.72)!important}
+body.theme-light .profile-row{
+  background:rgba(255,255,255,.72)!important;
+}
+
 body.theme-light .balance-card{background:linear-gradient(145deg,#ffffff,#e7edf5)!important}
+
 body.theme-light .balance-value,
 body.theme-light .title,
 body.theme-light .brand,
 body.theme-light .panel b,
-body.theme-light .profile-box strong{color:#162238!important}
+body.theme-light .profile-box strong{
+  color:#162238!important;
+}
 
 body.layout-compact .app{padding-inline:13px!important}
 body.layout-compact .grid{gap:8px!important}
@@ -902,17 +916,29 @@ body.layout-compact .menu-btn{min-height:108px!important;padding:16px 8px!import
 body.layout-compact .balance-card{padding:25px 16px 28px!important}
 
 body.layout-list .grid{grid-template-columns:1fr!important}
-body.layout-list .menu-btn{min-height:84px!important;flex-direction:row!important;justify-content:flex-start!important;padding:14px 16px!important;text-align:right!important}
+
+body.layout-list .menu-btn{
+  min-height:84px!important;
+  flex-direction:row!important;
+  justify-content:flex-start!important;
+  padding:14px 16px!important;
+  text-align:right!important;
+}
+
 body.layout-list .menu-btn.game-menu{grid-column:auto!important}
+
 body.layout-list .menu-icon,
-body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!important;flex:0 0 46px!important}
+body.layout-list .game-menu .menu-icon{
+  width:46px!important;
+  height:46px!important;
+  flex:0 0 46px!important;
+}
 
 @media(max-width:350px){
   .bottom-nav{width:calc(100vw - 14px)}
   .bottom-nav button{font-size:9px}
   .color-controls{grid-template-columns:1fr}
 }
-
 </style>
 </head>
 
@@ -922,30 +948,62 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
   <symbol id="i-bell" viewBox="0 0 24 24">
     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>
   </symbol>
+
   <symbol id="i-refresh" viewBox="0 0 24 24">
     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
     <path d="M21 3v5h-5"/>
     <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
     <path d="M8 16H3v5"/>
   </symbol>
-  <symbol id="i-back" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7M16 12H4"/></symbol>
-  <symbol id="i-withdraw" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></symbol>
-  <symbol id="i-invite" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/></symbol>
-  <symbol id="i-bank" viewBox="0 0 24 24"><path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/></symbol>
-  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/><path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
-  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <path d="m9 5 7 7-7 7M16 12H4"/>
+  </symbol>
+
+  <symbol id="i-withdraw" viewBox="0 0 24 24">
+    <path d="M12 16V3m-5 5 5-5 5 5"/>
+    <path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
+  </symbol>
+
+  <symbol id="i-invite" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"/>
+    <path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/>
+  </symbol>
+
+  <symbol id="i-bank" viewBox="0 0 24 24">
+    <path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/>
+  </symbol>
+
+  <symbol id="i-gift" viewBox="0 0 24 24">
+    <rect x="3" y="8" width="18" height="4" rx="1"/>
+    <path d="M5 12v9h14v-9M12 8v13"/>
+    <path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>
+  </symbol>
+
+  <symbol id="i-check" viewBox="0 0 24 24">
+    <path d="m5 12 4 4L19 6"/>
+  </symbol>
+
+  <symbol id="i-close" viewBox="0 0 24 24">
+    <path d="m6 6 12 12M18 6 6 18"/>
+  </symbol>
+
+  <symbol id="i-chevron" viewBox="0 0 24 24">
+    <path d="m14 6-6 6 6 6"/>
+  </symbol>
+
   <symbol id="i-home" viewBox="0 0 24 24">
     <path d="m3 11 9-8 9 8"/>
     <path d="M5 10v10h14V10M9 20v-6h6v6"/>
   </symbol>
+
   <symbol id="i-palette" viewBox="0 0 24 24">
     <path d="M12 3a9 9 0 1 0 0 18h1.5a2.5 2.5 0 0 0 0-5H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-9h-3Z"/>
     <circle cx="7.5" cy="10" r=".7"/>
     <circle cx="9" cy="6.5" r=".7"/>
     <circle cx="13" cy="6" r=".7"/>
   </symbol>
+
   <symbol id="i-user" viewBox="0 0 24 24">
     <circle cx="12" cy="8" r="4"/>
     <path d="M4 21a8 8 0 0 1 16 0"/>
@@ -954,25 +1012,52 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
 
 <div class="app" id="app">
   <div class="topbar">
-    <button type="button" class="icon-btn" id="bellBtn" aria-label="اعلان‌ها" aria-haspopup="dialog" aria-controls="notifOverlay" aria-expanded="false">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"></use></svg>
+    <button
+      type="button"
+      class="icon-btn"
+      id="bellBtn"
+      aria-label="اعلان‌ها"
+      aria-haspopup="dialog"
+      aria-controls="notifOverlay"
+      aria-expanded="false"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <use href="#i-bell"></use>
+      </svg>
       <span class="bell-dot" id="bellDot" aria-hidden="true"></span>
     </button>
+
     <span class="brand" id="topWelcome">خوش آمدید عزیز</span>
-    <button type="button" class="icon-btn refresh-btn" id="refreshBtn" aria-label="بروزرسانی">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg>
+
+    <button
+      type="button"
+      class="icon-btn refresh-btn"
+      id="refreshBtn"
+      aria-label="بروزرسانی"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <use href="#i-refresh"></use>
+      </svg>
     </button>
   </div>
 
   <div class="title-row">
-    <button type="button" class="icon-btn back-arrow" id="backArrow" aria-label="بازگشت به خانه">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"></use></svg>
+    <button
+      type="button"
+      class="icon-btn back-arrow"
+      id="backArrow"
+      aria-label="بازگشت به خانه"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <use href="#i-back"></use>
+      </svg>
     </button>
     <h1 class="title" id="pageTitle">Mio Point</h1>
   </div>
 
   <div id="skeletonSection" aria-label="در حال دریافت اطلاعات">
     <div class="skel skel-card"></div>
+
     <div class="skel-grid">
       <div class="skel skel-btn"></div>
       <div class="skel skel-btn"></div>
@@ -980,6 +1065,7 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
       <div class="skel skel-btn"></div>
       <div class="skel skel-game"></div>
     </div>
+
     <div class="skel skel-panel"></div>
   </div>
 
@@ -994,22 +1080,38 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
 
     <div class="grid">
       <button type="button" class="menu-btn" id="btnWithdraw">
-        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-withdraw"></use></svg></span>
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24">
+            <use href="#i-withdraw"></use>
+          </svg>
+        </span>
         <span>برداشت با آیدی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnInvite">
-        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-invite"></use></svg></span>
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24">
+            <use href="#i-invite"></use>
+          </svg>
+        </span>
         <span>لینک دعوت</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnBankWithdraw">
-        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-bank"></use></svg></span>
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24">
+            <use href="#i-bank"></use>
+          </svg>
+        </span>
         <span>برداشت با بانک میویی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnDaily">
-        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-gift"></use></svg></span>
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24">
+            <use href="#i-gift"></use>
+          </svg>
+        </span>
         <span>میو روزانه</span>
       </button>
 
@@ -1019,12 +1121,16 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
           <strong>بازی میویی</strong>
           <small>بازی کن و پوینت جایزه بگیر!!</small>
         </span>
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"></use></svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <use href="#i-chevron"></use>
+        </svg>
       </button>
     </div>
 
     <div class="panel">
-      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید عزیز</b></p>
+      <p class="muted-center">
+        🐾 <b id="welcomeText">خوش آمدید عزیز</b>
+      </p>
       <p class="muted-center">از منوی بالا انتخاب کنید</p>
     </div>
   </div>
@@ -1035,13 +1141,27 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
 </div>
 
 <div class="sheet-overlay" id="notifOverlay" aria-hidden="true" inert>
-  <div class="sheet" id="notifSheet" role="dialog" aria-modal="true" aria-labelledby="notificationTitle">
+  <div
+    class="sheet"
+    id="notifSheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="notificationTitle"
+  >
     <div class="sheet-header">
       <h3 id="notificationTitle">🔔 اعلان‌ها</h3>
-      <button type="button" class="icon-btn close-btn" id="closeNotifBtn" aria-label="بستن اعلان‌ها">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"></use></svg>
+      <button
+        type="button"
+        class="icon-btn close-btn"
+        id="closeNotifBtn"
+        aria-label="بستن اعلان‌ها"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <use href="#i-close"></use>
+        </svg>
       </button>
     </div>
+
     <div id="notifList"></div>
   </div>
 </div>
@@ -1050,23 +1170,31 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
 
 <nav class="bottom-nav" id="bottomNav" aria-label="منوی اصلی">
   <button type="button" id="navHome" class="active">
-    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-home"></use></svg>
+    <svg class="nav-svg" viewBox="0 0 24 24">
+      <use href="#i-home"></use>
+    </svg>
     <span>خانه</span>
   </button>
+
   <button type="button" id="navTheme">
-    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-palette"></use></svg>
+    <svg class="nav-svg" viewBox="0 0 24 24">
+      <use href="#i-palette"></use>
+    </svg>
     <span>تنظیمات رنگ</span>
   </button>
+
   <button type="button" id="navGame">
     <span class="nav-game-icon">🎰</span>
     <span>بازی میویی</span>
   </button>
+
   <button type="button" id="navProfile">
-    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-user"></use></svg>
+    <svg class="nav-svg" viewBox="0 0 24 24">
+      <use href="#i-user"></use>
+    </svg>
     <span>پروفایل</span>
   </button>
 </nav>
-
 
 <script>
 (function(){
@@ -1084,6 +1212,8 @@ body.layout-list .game-menu .menu-icon{width:46px!important;height:46px!importan
 
 <script>
 "use strict";
+
+/* ================= CONFIG ================= */
 
 const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
 const tg = window.Telegram?.WebApp;
@@ -1104,6 +1234,7 @@ document.getElementById("topWelcome").textContent = greeting;
 document.getElementById("welcomeText").textContent = greeting;
 
 const $ = id => document.getElementById(id);
+
 const reduceMotion = window.matchMedia
   ? window.matchMedia("(prefers-reduced-motion: reduce)")
   : { matches:false };
@@ -1157,6 +1288,8 @@ const DEFAULT_PAYOUTS = {
   lemon: [0, 10000, 20000, 30000],
   blank: [0, 0, 0, 0]
 };
+
+/* ================= API ================= */
 
 async function api(path, options = {}) {
   const controller = new AbortController();
@@ -1221,6 +1354,8 @@ function errorText(code) {
   }[code] || "عملیات انجام نشد؛ دوباره تلاش کن.";
 }
 
+/* ================= HELPERS ================= */
+
 function fmt(value) {
   return Number(value || 0).toLocaleString("en-US");
 }
@@ -1232,7 +1367,10 @@ function icon(name) {
 }
 
 function confirmLabel(text = "تأیید") {
-  return `<span class="btn-label">${icon("check")}<span>${text}</span></span>`;
+  return `<span class="btn-label">
+    ${icon("check")}
+    <span>${text}</span>
+  </span>`;
 }
 
 function englishDigits(value) {
@@ -1259,6 +1397,7 @@ let toastTimer;
 
 function showToast(message) {
   clearTimeout(toastTimer);
+
   $("toast").textContent = message;
   $("toast").classList.add("show");
 
@@ -1288,8 +1427,8 @@ async function copyText(text, button) {
   }
 }
 
+/* ================= APPEARANCE / NAV / PROFILE ================= */
 
-/* Bottom nav + appearance settings + profile */
 const THEME_KEY = `mio_theme_${TG_USER_ID}`;
 
 function readTheme() {
@@ -1302,11 +1441,15 @@ function readTheme() {
 }
 
 function writeTheme(data) {
-  try { localStorage.setItem(THEME_KEY, JSON.stringify(data)); } catch (e) {}
+  try {
+    localStorage.setItem(THEME_KEY, JSON.stringify(data));
+  } catch (e) {}
 }
 
 function validHex(value, fallback) {
-  return /^#[0-9a-f]{6}$/i.test(String(value || "")) ? value : fallback;
+  return /^#[0-9a-f]{6}$/i.test(String(value || ""))
+    ? value
+    : fallback;
 }
 
 function applyTheme(data) {
@@ -1317,7 +1460,8 @@ function applyTheme(data) {
   const bg = validHex(data.bg, "#0d1016");
   const card = validHex(data.card, "#202027");
   const accent = validHex(data.accent, "#4f8cff");
-  const layout = ["normal","compact","list"].includes(data.layout)
+
+  const layout = ["normal", "compact", "list"].includes(data.layout)
     ? data.layout
     : "normal";
 
@@ -1331,37 +1475,46 @@ function applyTheme(data) {
   document.body.classList.toggle("layout-list", layout === "list");
 
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", dark ? bg : "#eef3f8");
+
+  if (meta) {
+    meta.setAttribute("content", dark ? bg : "#eef3f8");
+  }
 }
 
 function setActiveNav(name) {
   const map = {
-    home:"navHome",
-    theme:"navTheme",
-    game:"navGame",
-    profile:"navProfile"
+    home: "navHome",
+    theme: "navTheme",
+    game: "navGame",
+    profile: "navProfile"
   };
 
-  ["navHome","navTheme","navGame","navProfile"].forEach(id => {
+  ["navHome", "navTheme", "navGame", "navProfile"].forEach(id => {
     const element = $(id);
-    if (element) element.classList.toggle("active", id === map[name]);
+
+    if (element) {
+      element.classList.toggle("active", id === map[name]);
+    }
   });
 }
 
 function tinyHaptic(type) {
-  try { tg?.HapticFeedback?.impactOccurred?.(type || "light"); } catch (e) {}
+  try {
+    tg?.HapticFeedback?.impactOccurred?.(type || "light");
+  } catch (e) {}
 }
 
 function escapeText(value) {
   const map = {
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
   };
 
-  return String(value == null ? "" : value).replace(/[&<>"']/g, ch => map[ch]);
+  return String(value == null ? "" : value)
+    .replace(/[&<>"']/g, ch => map[ch]);
 }
 
 function viewThemeSettings() {
@@ -1370,7 +1523,8 @@ function viewThemeSettings() {
   const bg = validHex(settings.bg, "#0d1016");
   const card = validHex(settings.card, "#202027");
   const accent = validHex(settings.accent, "#4f8cff");
-  const layout = ["compact","list"].includes(settings.layout)
+
+  const layout = ["compact", "list"].includes(settings.layout)
     ? settings.layout
     : "normal";
 
@@ -1386,7 +1540,8 @@ function viewThemeSettings() {
             <p>روشن باشد: حالت تیره. خاموش باشد: حالت روشن.</p>
           </div>
           <label class="switch">
-            <input type="checkbox" id="darkModeToggle" ${mode === "dark" ? "checked" : ""}>
+            <input type="checkbox" id="darkModeToggle"
+              ${mode === "dark" ? "checked" : ""}>
             <span class="switch-track"></span>
           </label>
         </div>
@@ -1395,56 +1550,88 @@ function viewThemeSettings() {
       <div class="settings-card">
         <h3>رنگ دلخواه</h3>
         <p>پس‌زمینه، کارت‌ها و رنگ اصلی را خودت انتخاب کن.</p>
+
         <div class="color-controls">
-          <label class="color-field">پس‌زمینه<input id="bgPicker" type="color" value="${bg}"></label>
-          <label class="color-field">کارت‌ها<input id="cardPicker" type="color" value="${card}"></label>
-          <label class="color-field">رنگ اصلی<input id="accentPicker" type="color" value="${accent}"></label>
+          <label class="color-field">
+            پس‌زمینه
+            <input id="bgPicker" type="color" value="${bg}">
+          </label>
+
+          <label class="color-field">
+            کارت‌ها
+            <input id="cardPicker" type="color" value="${card}">
+          </label>
+
+          <label class="color-field">
+            رنگ اصلی
+            <input id="accentPicker" type="color" value="${accent}">
+          </label>
         </div>
       </div>
 
       <div class="settings-card">
         <h3>چیدمان صفحه اصلی</h3>
         <p>نمای کارت‌ها را هرطور راحت‌تری انتخاب کن.</p>
+
         <div class="layout-choices">
-          <button type="button" class="layout-choice ${layout === "normal" ? "active" : ""}" data-layout="normal">عادی</button>
-          <button type="button" class="layout-choice ${layout === "compact" ? "active" : ""}" data-layout="compact">فشرده</button>
-          <button type="button" class="layout-choice ${layout === "list" ? "active" : ""}" data-layout="list">لیستی</button>
+          <button type="button"
+            class="layout-choice ${layout === "normal" ? "active" : ""}"
+            data-layout="normal">عادی</button>
+
+          <button type="button"
+            class="layout-choice ${layout === "compact" ? "active" : ""}"
+            data-layout="compact">فشرده</button>
+
+          <button type="button"
+            class="layout-choice ${layout === "list" ? "active" : ""}"
+            data-layout="list">لیستی</button>
         </div>
       </div>
 
       <div class="theme-preview">
         <strong>پیش‌نمایش</strong>
-        <small>هر تغییر همان لحظه روی مینی‌اپ اعمال و روی همین دستگاه ذخیره می‌شود.</small>
+        <small>
+          هر تغییر همان لحظه روی مینی‌اپ اعمال و روی همین دستگاه ذخیره می‌شود.
+        </small>
         <span class="preview-accent">Mio Point</span>
       </div>
 
-      <button type="button" class="ghost-btn" id="resetThemeBtn">بازنشانی ظاهر</button>
+      <button type="button" class="ghost-btn" id="resetThemeBtn">
+        بازنشانی ظاهر
+      </button>
     </div>
   `);
 
   $("darkModeToggle").onchange = event => {
     const next = readTheme();
     next.mode = event.target.checked ? "dark" : "light";
+
     writeTheme(next);
     applyTheme(next);
     tinyHaptic("light");
   };
 
-  [["bgPicker","bg"],["cardPicker","card"],["accentPicker","accent"]]
-    .forEach(pair => {
-      const input = $(pair[0]);
-      input.oninput = event => {
-        const next = readTheme();
-        next[pair[1]] = event.target.value;
-        writeTheme(next);
-        applyTheme(next);
-      };
-    });
+  [
+    ["bgPicker", "bg"],
+    ["cardPicker", "card"],
+    ["accentPicker", "accent"]
+  ].forEach(pair => {
+    const input = $(pair[0]);
+
+    input.oninput = event => {
+      const next = readTheme();
+      next[pair[1]] = event.target.value;
+
+      writeTheme(next);
+      applyTheme(next);
+    };
+  });
 
   document.querySelectorAll(".layout-choice").forEach(button => {
     button.onclick = () => {
       const next = readTheme();
       next.layout = button.dataset.layout;
+
       writeTheme(next);
       applyTheme(next);
       tinyHaptic("light");
@@ -1453,7 +1640,10 @@ function viewThemeSettings() {
   });
 
   $("resetThemeBtn").onclick = () => {
-    try { localStorage.removeItem(THEME_KEY); } catch (e) {}
+    try {
+      localStorage.removeItem(THEME_KEY);
+    } catch (e) {}
+
     applyTheme({});
     showToast("ظاهر به حالت اولیه برگشت.");
     viewThemeSettings();
@@ -1462,12 +1652,21 @@ function viewThemeSettings() {
 
 function viewProfile() {
   const user = tg?.initDataUnsafe?.user || {};
+
   const name = [user.first_name, user.last_name]
     .filter(Boolean)
     .join(" ") || "کاربر Mio";
-  const username = user.username ? `@${user.username}` : "بدون یوزرنیم";
+
+  const username = user.username
+    ? `@${user.username}`
+    : "بدون یوزرنیم";
+
   const id = user.id || "—";
-  const initial = escapeText((user.first_name || "M").slice(0,1).toUpperCase());
+
+  const initial = escapeText(
+    (user.first_name || "M").slice(0, 1).toUpperCase()
+  );
+
   const avatar = user.photo_url
     ? `<img src="${escapeText(user.photo_url)}" alt="">`
     : initial;
@@ -1478,6 +1677,7 @@ function viewProfile() {
   paint(`
     <div class="profile-box">
       <div class="profile-avatar">${avatar}</div>
+
       <div>
         <strong>${escapeText(name)}</strong>
         <small>${escapeText(username)}</small>
@@ -1485,18 +1685,33 @@ function viewProfile() {
     </div>
 
     <div class="profile-list">
-      <div class="profile-row"><span>User ID</span><b>${escapeText(id)}</b></div>
-      <div class="profile-row"><span>وضعیت حساب</span><b>${state.not_started ? "نیاز به Start" : "فعال ✅"}</b></div>
-      <div class="profile-row"><span>موجودی</span><b>${fmt(state.balance)} Mio</b></div>
+      <div class="profile-row">
+        <span>User ID</span>
+        <b>${escapeText(id)}</b>
+      </div>
+
+      <div class="profile-row">
+        <span>وضعیت حساب</span>
+        <b>${state.not_started ? "نیاز به Start" : "فعال ✅"}</b>
+      </div>
+
+      <div class="profile-row">
+        <span>موجودی</span>
+        <b>${fmt(state.balance)} Mio</b>
+      </div>
     </div>
 
-    <button type="button" class="ghost-btn" id="profileRefreshBtn">بروزرسانی اطلاعات</button>
+    <button type="button" class="ghost-btn" id="profileRefreshBtn">
+      بروزرسانی اطلاعات
+    </button>
   `);
 
   $("profileRefreshBtn").onclick = () => refreshData(true);
 }
 
 applyTheme();
+
+/* ================= BALANCE ================= */
 
 let balanceFrame = 0;
 let displayedBalance = 0;
@@ -1537,6 +1752,8 @@ function setBalance(value) {
 
   balanceFrame = requestAnimationFrame(tick);
 }
+
+/* ================= NAVIGATION ================= */
 
 function playEnter(element, className) {
   element.classList.remove("anim-in-right", "anim-in-left");
@@ -1589,6 +1806,8 @@ function showView(name, title) {
 
 backArrow.onclick = showHome;
 
+/* ================= NOTIFICATIONS ================= */
+
 const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
 
 let seenMemory = "";
@@ -1629,8 +1848,10 @@ function renderNotifications() {
 
   state.notifications.forEach((notification, index) => {
     const item = document.createElement("div");
+
     item.className = "notif-item " +
       (notification.type === "fail" ? "fail" : "success");
+
     item.style.animationDelay = `${Math.min(index, 6) * 45}ms`;
 
     const text = document.createElement("div");
@@ -1647,7 +1868,11 @@ function renderNotifications() {
 
 function updateBellDot() {
   const newest = notificationKey(state.notifications[0]);
-  $("bellDot").classList.toggle("show", Boolean(newest && newest !== getSeen()));
+
+  $("bellDot").classList.toggle(
+    "show",
+    Boolean(newest && newest !== getSeen())
+  );
 }
 
 function openNotifications() {
@@ -1658,9 +1883,11 @@ function openNotifications() {
   previousOverflow = document.body.style.overflow;
 
   renderNotifications();
+
   overlay.inert = false;
   overlay.setAttribute("aria-hidden", "false");
   overlay.classList.add("show");
+
   $("bellBtn").setAttribute("aria-expanded", "true");
 
   document.body.style.overflow = "hidden";
@@ -1673,11 +1900,11 @@ function openNotifications() {
 
 function closeNotifications() {
   const overlay = $("notifOverlay");
-
   if (!overlay.classList.contains("show")) return;
 
   app.inert = false;
   document.body.style.overflow = previousOverflow;
+
   $("bellBtn").setAttribute("aria-expanded", "false");
 
   if (previousFocus?.isConnected) {
@@ -1693,7 +1920,9 @@ $("bellBtn").onclick = openNotifications;
 $("closeNotifBtn").onclick = closeNotifications;
 
 $("notifOverlay").onclick = event => {
-  if (event.target === $("notifOverlay")) closeNotifications();
+  if (event.target === $("notifOverlay")) {
+    closeNotifications();
+  }
 };
 
 $("notifSheet").addEventListener("keydown", event => {
@@ -1708,6 +1937,8 @@ $("notifSheet").addEventListener("keydown", event => {
   }
 });
 
+/* ================= INVITE ================= */
+
 async function viewInvite() {
   const version = showView("invite", "👥 لینک دعوت");
 
@@ -1717,9 +1948,12 @@ async function viewInvite() {
       <b class="gold-text">۴۰۰,۰۰۰ میو</b>
       به حساب شما واریز خواهد شد.
     </p>
+
     <div class="link-box">
       <span id="inviteLinkText">در حال دریافت لینک…</span>
-      <button type="button" class="copy-btn" id="copyBtn" disabled>کپی</button>
+      <button type="button" class="copy-btn" id="copyBtn" disabled>
+        کپی
+      </button>
     </div>
   `);
 
@@ -1735,6 +1969,8 @@ async function viewInvite() {
   if (!link) showToast(errorText(result.error));
 }
 
+/* ================= WITHDRAW FORMS ================= */
+
 function viewWithdrawForm() {
   if (activeWithdrawal) {
     viewActiveWithdrawal();
@@ -1747,16 +1983,27 @@ function viewWithdrawForm() {
   showView("withdraw-form", "📤 برداشت با آیدی");
 
   paint(`
-    <p>موجودی قابل برداشت شما:
+    <p>
+      موجودی قابل برداشت شما:
       <b class="gold-text">${fmt(state.balance)} میو</b>
     </p>
+
     <p>آیدی تلگرام خود را وارد کنید و تأیید را بزنید.</p>
 
     <form id="withdrawForm" novalidate>
-      <label class="field-label" for="withdrawIdInput">آیدی تلگرام</label>
-      <input class="id-input" id="withdrawIdInput" placeholder="@username"
-        autocomplete="off" autocapitalize="off" spellcheck="false"
-        aria-describedby="withdrawError">
+      <label class="field-label" for="withdrawIdInput">
+        آیدی تلگرام
+      </label>
+
+      <input
+        class="id-input"
+        id="withdrawIdInput"
+        placeholder="@username"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-describedby="withdrawError"
+      >
 
       <div class="field-error" id="withdrawError" role="alert"></div>
 
@@ -1802,12 +2049,16 @@ function viewBankWithdrawConfirm() {
       <b class="gold-text">${fmt(state.balance)} میو</b>
       با بانک میویی برداشت کنید.
     </p>
+
     <p>برای ادامه روی تأیید بزنید.</p>
 
     <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">
       ${confirmLabel()}
     </button>
-    <button type="button" class="ghost-btn" id="bankCancelBtn">لغو</button>
+
+    <button type="button" class="ghost-btn" id="bankCancelBtn">
+      لغو
+    </button>
   `);
 
   $("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
@@ -1829,17 +2080,28 @@ function viewBankWithdrawCardInput() {
     <p>شماره کارت میویی خود را وارد کنید:</p>
 
     <form id="bankCardForm" novalidate>
-      <label class="field-label" for="bankCardInput">شماره کارت میویی</label>
-      <input class="id-input" id="bankCardInput"
-        placeholder="مثلاً 232491826963" inputmode="numeric"
-        autocomplete="off" aria-describedby="bankCardError">
+      <label class="field-label" for="bankCardInput">
+        شماره کارت میویی
+      </label>
+
+      <input
+        class="id-input"
+        id="bankCardInput"
+        placeholder="مثلاً 232491826963"
+        inputmode="numeric"
+        autocomplete="off"
+        aria-describedby="bankCardError"
+      >
 
       <div class="field-error" id="bankCardError" role="alert"></div>
 
       <button type="submit" class="primary-btn rgb-btn">
         ${confirmLabel()}
       </button>
-      <button type="button" class="ghost-btn" id="bankCardBackBtn">برگشت</button>
+
+      <button type="button" class="ghost-btn" id="bankCardBackBtn">
+        برگشت
+      </button>
     </form>
   `);
 
@@ -1851,7 +2113,8 @@ function viewBankWithdrawCardInput() {
     const card = englishDigits($("bankCardInput").value.trim());
 
     if (!/^[0-9]{10,20}$/.test(card)) {
-      $("bankCardError").textContent = "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
+      $("bankCardError").textContent =
+        "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
       return;
     }
 
@@ -1863,6 +2126,8 @@ function viewBankWithdrawCardInput() {
     startWithdrawal("bank", card);
   };
 }
+
+/* ================= WITHDRAW PROCESS ================= */
 
 function isWithdrawalView() {
   return ["withdraw-waiting", "withdraw-unknown"].includes(currentView);
@@ -1903,7 +2168,10 @@ function viewActiveWithdrawal() {
 
   viewWithdrawWaiting();
 
-  if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
+  if (
+    activeWithdrawal?.phase === "pending" &&
+    !pollingWithdrawal
+  ) {
     pollWithdrawStatus();
   }
 }
@@ -1929,7 +2197,11 @@ async function startWithdrawal(method, value) {
 
   if (result.ok || result.error === "already_pending") {
     Object.assign(job, result, { phase: "pending" });
-    if (isWithdrawalView()) updateWaitingInfo(job);
+
+    if (isWithdrawalView()) {
+      updateWaitingInfo(job);
+    }
+
     pollWithdrawStatus();
     return;
   }
@@ -1939,16 +2211,30 @@ async function startWithdrawal(method, value) {
       .includes(result.error)
   ) {
     job.phase = "unknown";
-    if (isWithdrawalView()) viewWithdrawUnknown();
-    else showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
+
+    if (isWithdrawalView()) {
+      viewWithdrawUnknown();
+    } else {
+      showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
+    }
+
     return;
   }
 
   activeWithdrawal = null;
-  if (isWithdrawalView()) viewWithdrawFailed(errorText(result.error));
-  else showToast(errorText(result.error));
+
+  if (isWithdrawalView()) {
+    viewWithdrawFailed(errorText(result.error));
+  } else {
+    showToast(errorText(result.error));
+  }
 }
 
+/*
+ * نسخهٔ اصلاح‌شده:
+ * بررسی صف بعد از ۴۰ بار یا دو دقیقه متوقف نمی‌شود.
+ * تا مشخص‌شدن نتیجه، وضعیت و زمان انتظار از سرور دریافت می‌شود.
+ */
 async function pollWithdrawStatus() {
   if (pollingWithdrawal || !activeWithdrawal) return;
 
@@ -1957,18 +2243,46 @@ async function pollWithdrawStatus() {
   job.phase = "pending";
 
   try {
-    for (let attempt = 0; attempt < 40; attempt++) {
+    while (activeWithdrawal === job) {
       await new Promise(resolve => setTimeout(resolve, 3000));
+
       if (activeWithdrawal !== job) return;
 
       if (!job.withdraw_id) {
         const user = await api("/user");
 
+        if (activeWithdrawal !== job) return;
+
+        if (user.ok === false) {
+          if (user.error === "unauthorized") {
+            job.phase = "unknown";
+
+            if (isWithdrawalView()) {
+              viewWithdrawUnknown();
+            }
+
+            showToast(errorText(user.error));
+            return;
+          }
+
+          if ($("queueWaitText")) {
+            $("queueWaitText").textContent =
+              "ارتباط با سرور قطع شده؛ در حال بررسی دوباره…";
+          }
+
+          continue;
+        }
+
         if (user.pending_withdrawal?.withdraw_id) {
           Object.assign(job, user.pending_withdrawal);
         } else {
+          // درخواست نامشخص دوباره ارسال نمی‌شود.
           job.phase = "unknown";
-          if (isWithdrawalView()) viewWithdrawUnknown();
+
+          if (isWithdrawalView()) {
+            viewWithdrawUnknown();
+          }
+
           return;
         }
       }
@@ -1983,8 +2297,11 @@ async function pollWithdrawStatus() {
       if (result.status === "success") {
         activeWithdrawal = null;
 
-        if (isWithdrawalView()) viewWithdrawSuccess();
-        else showToast("🎉 برداشت شما با موفقیت انجام شد.");
+        if (isWithdrawalView()) {
+          viewWithdrawSuccess();
+        } else {
+          showToast("🎉 برداشت شما با موفقیت انجام شد.");
+        }
 
         refreshData(false);
         return;
@@ -1993,21 +2310,53 @@ async function pollWithdrawStatus() {
       if (result.status === "failed") {
         activeWithdrawal = null;
 
-        if (isWithdrawalView()) viewWithdrawFailed();
-        else showToast("برداشت ناموفق بود.");
+        if (isWithdrawalView()) {
+          viewWithdrawFailed();
+        } else {
+          showToast("برداشت ناموفق بود.");
+        }
 
         refreshData(false);
         return;
       }
 
       if (result.status === "pending") {
-        Object.assign(job, result);
-        if (currentView === "withdraw-waiting") updateWaitingInfo(job);
+        Object.assign(job, result, { phase: "pending" });
+
+        if (currentView === "withdraw-waiting") {
+          updateWaitingInfo(job);
+        }
+
+        continue;
+      }
+
+      if (result.error === "unauthorized") {
+        job.phase = "unknown";
+
+        if (isWithdrawalView()) {
+          viewWithdrawUnknown();
+        }
+
+        showToast(errorText(result.error));
+        return;
+      }
+
+      if (result.status === "none") {
+        job.phase = "unknown";
+
+        if (isWithdrawalView()) {
+          viewWithdrawUnknown();
+        }
+
+        return;
+      }
+
+      // قطعی موقت، برداشت را ناموفق نمی‌کند.
+      if ($("queueWaitText")) {
+        $("queueWaitText").textContent =
+          "دریافت وضعیت با تأخیر مواجه شده؛ در حال بررسی دوباره…";
       }
     }
-
-    job.phase = "unknown";
-    if (isWithdrawalView()) viewWithdrawUnknown();
   } finally {
     pollingWithdrawal = false;
   }
@@ -2018,13 +2367,23 @@ function viewWithdrawUnknown() {
 
   paint(`
     <div class="result-icon">⏳</div>
-    <p class="muted-center"><b>نتیجهٔ برداشت هنوز مشخص نشده است.</b></p>
+
+    <p class="muted-center">
+      <b>نتیجهٔ برداشت هنوز مشخص نشده است.</b>
+    </p>
+
     <p class="muted-center">
       آخرین وضعیت و موجودی را بررسی کن. اگر پاسخ ثبت درخواست قطع شده،
       ممکن است نتیجه در اعلان‌ها نمایش داده شود.
     </p>
-    <button type="button" class="primary-btn" id="checkWithdrawBtn">بررسی دوباره</button>
-    <button type="button" class="ghost-btn" id="withdrawHomeBtn">بازگشت به خانه</button>
+
+    <button type="button" class="primary-btn" id="checkWithdrawBtn">
+      بررسی دوباره
+    </button>
+
+    <button type="button" class="ghost-btn" id="withdrawHomeBtn">
+      بازگشت به خانه
+    </button>
   `);
 
   $("checkWithdrawBtn").onclick = () => {
@@ -2043,14 +2402,20 @@ function viewWithdrawFailed(message = "لطفاً دوباره تلاش کنید
     <div class="result-icon">❌</div>
     <p class="muted-center"><b>برداشت ناموفق بود</b></p>
     <p class="muted-center" id="withdrawFailMessage"></p>
-    <button type="button" class="primary-btn" id="retryBtn">تلاش دوباره</button>
+
+    <button type="button" class="primary-btn" id="retryBtn">
+      تلاش دوباره
+    </button>
   `);
 
   $("withdrawFailMessage").textContent = message;
 
   $("retryBtn").onclick = () => {
-    if (lastWithdrawMethod === "bank") viewBankWithdrawCardInput();
-    else viewWithdrawForm();
+    if (lastWithdrawMethod === "bank") {
+      viewBankWithdrawCardInput();
+    } else {
+      viewWithdrawForm();
+    }
   };
 }
 
@@ -2059,18 +2424,27 @@ function viewWithdrawSuccess() {
 
   paint(`
     <div class="result-icon">🎉</div>
-    <p class="muted-center"><b>میوهای شما با موفقیت واریز شد</b></p>
+
+    <p class="muted-center">
+      <b>میوهای شما با موفقیت واریز شد</b>
+    </p>
+
     <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
 
     <button type="button" class="primary-btn" id="receiptYesBtn">
       تأیید، رسید می‌خواهم
     </button>
-    <button type="button" class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
+
+    <button type="button" class="ghost-btn" id="receiptNoBtn">
+      فعلاً نه
+    </button>
   `);
 
   $("receiptYesBtn").onclick = requestReceipt;
   $("receiptNoBtn").onclick = showHome;
 }
+
+/* ================= RECEIPT ================= */
 
 async function requestReceipt() {
   const version = showView("receipt-loading", "📨 رسید");
@@ -2083,14 +2457,21 @@ async function requestReceipt() {
   const result = await post("/receipt");
 
   if (version !== viewVersion) {
-    showToast(result.ok ? "درخواست رسید ثبت شد." : errorText(result.error));
+    showToast(
+      result.ok
+        ? "درخواست رسید ثبت شد."
+        : errorText(result.error)
+    );
     return;
   }
 
   if (!result.ok) {
     paint(`
       <p class="muted-center">ثبت درخواست رسید انجام نشد.</p>
-      <button type="button" class="primary-btn" id="receiptRetryBtn">تلاش دوباره</button>
+
+      <button type="button" class="primary-btn" id="receiptRetryBtn">
+        تلاش دوباره
+      </button>
     `);
 
     $("receiptRetryBtn").onclick = requestReceipt;
@@ -2101,21 +2482,34 @@ async function requestReceipt() {
 
   paint(`
     <div class="result-icon">📨</div>
+
     <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
     <p class="muted-center">به اکانت زیر پیام بده:</p>
 
     <div class="link-box">
       <span style="text-align:center">@Pott5y6jg</span>
-      <button type="button" class="copy-btn" id="copyAccountBtn">کپی</button>
+      <button type="button" class="copy-btn" id="copyAccountBtn">
+        کپی
+      </button>
     </div>
 
     <p class="muted-center">و بنویس:</p>
-    <p class="muted-center"><b class="gold-text">رسیدم رو بده ❤️</b></p>
-    <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
+
+    <p class="muted-center">
+      <b class="gold-text">رسیدم رو بده ❤️</b>
+    </p>
+
+    <p class="muted-center">
+      🤖 رسید به صورت خودکار برات ارسال می‌شود.
+    </p>
   `);
 
-  $("copyAccountBtn").onclick = () => copyText("@Pott5y6jg", $("copyAccountBtn"));
+  $("copyAccountBtn").onclick = () => {
+    copyText("@Pott5y6jg", $("copyAccountBtn"));
+  };
 }
+
+/* ================= DAILY ================= */
 
 function viewDaily() {
   if (!ensureUserData()) return;
@@ -2127,8 +2521,10 @@ function viewDaily() {
       <div class="toggle-row">
         <span class="status-text">روشن است ✅</span>
       </div>
+
       <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
     `);
+
     return;
   }
 
@@ -2138,8 +2534,13 @@ function viewDaily() {
       <b class="gold-text">۳۴۰,۰۰۰ میو</b>
       دریافت می‌کنید.
     </p>
-    <button type="button" class="primary-btn" id="enableDailyBtn"
-      ${enablingDaily ? "disabled" : ""}>
+
+    <button
+      type="button"
+      class="primary-btn"
+      id="enableDailyBtn"
+      ${enablingDaily ? "disabled" : ""}
+    >
       ${enablingDaily ? "در حال فعال‌سازی…" : "✅ فعال کن"}
     </button>
   `);
@@ -2161,9 +2562,13 @@ function viewDaily() {
       showToast(errorText(result.error));
     }
 
-    if (currentView === "daily") viewDaily();
+    if (currentView === "daily") {
+      viewDaily();
+    }
   };
 }
+
+/* ================= GAME REQUEST PERSISTENCE ================= */
 
 const GAME_PENDING_KEY = `mio_game_pending_${TG_USER_ID}`;
 let pendingGameMemory = "";
@@ -2178,13 +2583,16 @@ function getPendingGame() {
 
 function savePendingGame(id) {
   pendingGameMemory = id;
+
   try {
     localStorage.setItem(GAME_PENDING_KEY, id);
   } catch {}
 }
 
 function clearPendingGame(id) {
-  if (pendingGameMemory === id) pendingGameMemory = "";
+  if (pendingGameMemory === id) {
+    pendingGameMemory = "";
+  }
 
   try {
     if (localStorage.getItem(GAME_PENDING_KEY) === id) {
@@ -2194,13 +2602,18 @@ function clearPendingGame(id) {
 }
 
 function makeRequestId() {
-  if (crypto.randomUUID) return crypto.randomUUID();
+  if (crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
 
   const bytes = crypto.getRandomValues(new Uint8Array(16));
+
   bytes[6] = (bytes[6] & 15) | 64;
   bytes[8] = (bytes[8] & 63) | 128;
 
-  const hex = [...bytes].map(v => v.toString(16).padStart(2, "0"));
+  const hex = [...bytes].map(
+    value => value.toString(16).padStart(2, "0")
+  );
 
   return [
     hex.slice(0, 4).join(""),
@@ -2210,6 +2623,8 @@ function makeRequestId() {
     hex.slice(10, 16).join("")
   ].join("-");
 }
+
+/* ================= GAME ================= */
 
 function acceptGameState(data) {
   gameState = {
@@ -2221,7 +2636,11 @@ function acceptGameState(data) {
 
 function remainingGameSeconds() {
   if (!gameState) return 0;
-  return Math.max(0, Math.ceil((gameState.deadline - performance.now()) / 1000));
+
+  return Math.max(
+    0,
+    Math.ceil((gameState.deadline - performance.now()) / 1000)
+  );
 }
 
 function formatCountdown(seconds) {
@@ -2255,7 +2674,9 @@ async function viewGame() {
 
   paint(`
     <div class="spinner" aria-hidden="true"></div>
-    <p class="muted-center" role="status">در حال دریافت وضعیت بازی…</p>
+    <p class="muted-center" role="status">
+      در حال دریافت وضعیت بازی…
+    </p>
   `);
 
   const result = await api("/game/status");
@@ -2265,7 +2686,9 @@ async function viewGame() {
   if (!result.ok) {
     paint(`
       <p class="muted-center" id="gameLoadError"></p>
-      <button type="button" class="primary-btn" id="reloadGameBtn">تلاش دوباره</button>
+      <button type="button" class="primary-btn" id="reloadGameBtn">
+        تلاش دوباره
+      </button>
     `);
 
     $("gameLoadError").textContent = errorText(result.error);
@@ -2284,24 +2707,28 @@ function renderGame() {
   clearGameTimer();
 
   const lastRound = gameState.last_round;
+
   const symbols = Array.isArray(lastRound?.symbols)
     ? lastRound.symbols
     : ["seven", "grape", "lemon"];
 
   const payouts = gameState.payouts || DEFAULT_PAYOUTS;
 
-  const tableRows = ["seven", "grape", "lemon", "blank"].map(symbol => {
-    const values = payouts[symbol] || DEFAULT_PAYOUTS[symbol];
+  const tableRows = ["seven", "grape", "lemon", "blank"]
+    .map(symbol => {
+      const values = payouts[symbol] || DEFAULT_PAYOUTS[symbol];
 
-    return `
-      <tr>
-        <td aria-label="${SYMBOL_NAMES[symbol]}">${GAME_SYMBOLS[symbol]}</td>
-        <td>${fmt(values[1])}</td>
-        <td>${fmt(values[2])}</td>
-        <td>${fmt(values[3])}</td>
-      </tr>
-    `;
-  }).join("");
+      return `
+        <tr>
+          <td aria-label="${SYMBOL_NAMES[symbol]}">
+            ${GAME_SYMBOLS[symbol]}
+          </td>
+          <td>${fmt(values[1])}</td>
+          <td>${fmt(values[2])}</td>
+          <td>${fmt(values[3])}</td>
+        </tr>
+      `;
+    }).join("");
 
   paint(`
     <div class="game-intro">
@@ -2309,8 +2736,13 @@ function renderGame() {
       <p>روی دستگاه بزن و شانست رو امتحان کن ✨</p>
     </div>
 
-    <button type="button" class="slot-machine" id="slotMachine"
-      aria-label="شروع بازی میویی" disabled>
+    <button
+      type="button"
+      class="slot-machine"
+      id="slotMachine"
+      aria-label="شروع بازی میویی"
+      disabled
+    >
       <span class="slot-heading">MIO LUCK</span>
 
       <span class="reels" aria-hidden="true">
@@ -2330,7 +2762,12 @@ function renderGame() {
       </span>
     </button>
 
-    <button type="button" class="primary-btn rgb-btn" id="playGameBtn" disabled>
+    <button
+      type="button"
+      class="primary-btn rgb-btn"
+      id="playGameBtn"
+      disabled
+    >
       <span class="btn-label" id="playGameLabel">بازی کن</span>
     </button>
 
@@ -2340,6 +2777,7 @@ function renderGame() {
       <div class="game-result">
         <small>آخرین نتیجهٔ ثبت‌شده</small>
         <strong>${fmt(lastRound.reward)} میو</strong>
+
         <p>
           ${Number(lastRound.reward) > 0
             ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
@@ -2350,6 +2788,7 @@ function renderGame() {
 
     <table class="prize-table">
       <caption>جدول جایزه‌ها — به میو</caption>
+
       <thead>
         <tr>
           <th scope="col">نماد</th>
@@ -2358,6 +2797,7 @@ function renderGame() {
           <th scope="col">سه عدد</th>
         </tr>
       </thead>
+
       <tbody>${tableRows}</tbody>
     </table>
 
@@ -2383,7 +2823,10 @@ function updateGameControls() {
   if (currentView !== "game" || !$("playGameBtn")) return;
 
   const pendingId = getPendingGame();
-  const canPlay = !gameBusy && (Boolean(pendingId) || canStartGame());
+
+  const canPlay = !gameBusy && (
+    Boolean(pendingId) || canStartGame()
+  );
 
   $("playGameBtn").disabled = !canPlay;
   $("slotMachine").disabled = !canPlay;
@@ -2423,7 +2866,8 @@ function updateGameControls() {
       <b>${formatCountdown(remaining)}</b>
     `;
   } else {
-    $("gameStatus").textContent = "شانست آماده‌ست؛ بازی کاملاً رایگانه ✨";
+    $("gameStatus").textContent =
+      "شانست آماده‌ست؛ بازی کاملاً رایگانه ✨";
   }
 }
 
@@ -2451,11 +2895,13 @@ function startReelAnimation() {
 
   function stopOne(index, finalSymbol) {
     const reel = reels[index];
+
     clearInterval(reel.interval);
     reel.box?.classList.remove("rolling");
 
     if (reel.symbol && finalSymbol) {
-      reel.symbol.textContent = GAME_SYMBOLS[finalSymbol] || "✖️";
+      reel.symbol.textContent =
+        GAME_SYMBOLS[finalSymbol] || "✖️";
     }
   }
 
@@ -2541,7 +2987,10 @@ async function playGame() {
 
     if (typeof result.remaining_seconds === "number") {
       acceptGameState(result);
-      if (typeof result.balance === "number") setBalance(result.balance);
+
+      if (typeof result.balance === "number") {
+        setBalance(result.balance);
+      }
     }
 
     showToast(errorText(result.error));
@@ -2549,9 +2998,13 @@ async function playGame() {
     animation.stop();
     gameBusy = false;
 
-    if (currentView === "game") renderGame();
+    if (currentView === "game") {
+      renderGame();
+    }
   }
 }
+
+/* ================= USER DATA / REFRESH ================= */
 
 function applyUserData(user) {
   if (
@@ -2569,7 +3022,9 @@ function applyUserData(user) {
   setBalance(user.balance);
 
   state.notifications = Array.isArray(user.notifications)
-    ? user.notifications.filter(item => item && typeof item === "object")
+    ? user.notifications.filter(
+        item => item && typeof item === "object"
+      )
     : [];
 
   if (user.pending_withdrawal && !activeWithdrawal) {
@@ -2605,12 +3060,19 @@ async function refreshData(showError = true) {
     if (requestVersion !== userRequestVersion) return;
 
     if (!applyUserData(user)) {
-      if (showError) showToast(errorText(user.error));
+      if (showError) {
+        showToast(errorText(user.error));
+      }
       return;
     }
 
-    if (currentView === "daily") viewDaily();
-    if (currentView === "game" && !gameBusy) await viewGame();
+    if (currentView === "daily") {
+      viewDaily();
+    }
+
+    if (currentView === "game" && !gameBusy) {
+      await viewGame();
+    }
   } finally {
     if (requestVersion === userRequestVersion) {
       refreshBtn.classList.remove("spinning");
@@ -2619,6 +3081,8 @@ async function refreshData(showError = true) {
     }
   }
 }
+
+/* ================= TOUCH EFFECT ================= */
 
 document.addEventListener("click", event => {
   if (!(event.target instanceof Element)) return;
@@ -2632,10 +3096,16 @@ document.addEventListener("click", event => {
   const rect = button.getBoundingClientRect();
   const size = Math.hypot(rect.width, rect.height) * 2;
 
-  const x = event.detail ? event.clientX - rect.left : rect.width / 2;
-  const y = event.detail ? event.clientY - rect.top : rect.height / 2;
+  const x = event.detail
+    ? event.clientX - rect.left
+    : rect.width / 2;
+
+  const y = event.detail
+    ? event.clientY - rect.top
+    : rect.height / 2;
 
   const ripple = document.createElement("span");
+
   ripple.className = "ripple";
   ripple.setAttribute("aria-hidden", "true");
 
@@ -2650,16 +3120,33 @@ document.addEventListener("click", event => {
   setTimeout(() => ripple.remove(), 650);
 }, true);
 
+/* ================= WIRING ================= */
+
 $("btnInvite").onclick = viewInvite;
 $("btnWithdraw").onclick = viewWithdrawForm;
 $("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
 $("btnDaily").onclick = viewDaily;
 $("btnGame").onclick = viewGame;
 
-$("navHome").onclick = () => { tinyHaptic("light"); showHome(); };
-$("navTheme").onclick = () => { tinyHaptic("light"); viewThemeSettings(); };
-$("navGame").onclick = () => { tinyHaptic("light"); viewGame(); };
-$("navProfile").onclick = () => { tinyHaptic("light"); viewProfile(); };
+$("navHome").onclick = () => {
+  tinyHaptic("light");
+  showHome();
+};
+
+$("navTheme").onclick = () => {
+  tinyHaptic("light");
+  viewThemeSettings();
+};
+
+$("navGame").onclick = () => {
+  tinyHaptic("light");
+  viewGame();
+};
+
+$("navProfile").onclick = () => {
+  tinyHaptic("light");
+  viewProfile();
+};
 
 refreshBtn.onclick = () => refreshData(true);
 
@@ -2669,30 +3156,42 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+/* ================= INIT ================= */
+
 async function init() {
   const requestVersion = ++userRequestVersion;
   const startedAt = performance.now();
   const userPromise = api("/user");
 
   let timeoutId;
+
   const timeoutPromise = new Promise(resolve => {
-    timeoutId = setTimeout(() => resolve({ __timeout: true }), 4000);
+    timeoutId = setTimeout(
+      () => resolve({ __timeout: true }),
+      4000
+    );
   });
 
   let first;
 
   try {
-    first = await Promise.race([userPromise, timeoutPromise]);
+    first = await Promise.race([
+      userPromise,
+      timeoutPromise
+    ]);
   } catch (error) {
     console.error("Initial load failed:", error);
-    first = { ok:false, error:"network" };
+    first = { ok: false, error: "network" };
   } finally {
     clearTimeout(timeoutId);
   }
 
   const elapsed = performance.now() - startedAt;
+
   if (elapsed < 650) {
-    await new Promise(resolve => setTimeout(resolve, 650 - elapsed));
+    await new Promise(resolve =>
+      setTimeout(resolve, 650 - elapsed)
+    );
   }
 
   if (requestVersion !== userRequestVersion) return;
@@ -2705,6 +3204,7 @@ async function init() {
       $("balanceValue").textContent = "—";
       showToast(errorText(first?.error));
     }
+
     return;
   }
 
@@ -2731,4 +3231,4 @@ init();
 </script>
 
 </body>
-      </html>
+</html>
