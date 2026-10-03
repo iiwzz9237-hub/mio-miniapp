@@ -1682,14 +1682,32 @@ body.compact-layout .balance-card{
 </nav>
 
 <script>
+(function () {
+  var emergencyTimer = setTimeout(function () {
+    var skeleton = document.getElementById("skeletonSection");
+    var home = document.getElementById("homeSection");
+    var view = document.getElementById("viewSection");
+
+    if (skeleton && skeleton.style.display !== "none") {
+      skeleton.style.display = "none";
+      if (home) home.style.display = "block";
+      if (view) view.style.display = "none";
+    }
+  }, 7000);
+
+  window.__mioEmergencySkeletonTimer = emergencyTimer;
+})();
+</script>
+
+<script>
 "use strict";
 
 const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
-  tg.ready();
-  tg.expand();
+  try { tg.ready(); } catch {}
+  try { tg.expand(); } catch {}
 }
 
 const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
@@ -1703,7 +1721,9 @@ document.getElementById("topWelcome").textContent = greeting;
 document.getElementById("welcomeText").textContent = greeting;
 
 const $ = id => document.getElementById(id);
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const reduceMotion = window.matchMedia
+  ? window.matchMedia("(prefers-reduced-motion: reduce)")
+  : { matches: false };
 
 const app = $("app");
 const panel = $("panel");
@@ -2220,6 +2240,11 @@ function clearGameTimer() {
 }
 
 function showHome() {
+  if (window.__mioEmergencySkeletonTimer) {
+    clearTimeout(window.__mioEmergencySkeletonTimer);
+    window.__mioEmergencySkeletonTimer = null;
+  }
+
   clearGameTimer();
   currentView = "home";
   viewVersion++;
@@ -3401,38 +3426,79 @@ document.addEventListener("visibilitychange", () => {
 
 async function init() {
   const requestVersion = ++userRequestVersion;
+
+  const skeleton = $("skeletonSection");
+  const startedAt = performance.now();
+
+  if (skeleton) skeleton.style.display = "block";
+  homeSection.style.display = "none";
+  viewSection.style.display = "none";
+
   const userPromise = api("/user");
 
   let timeoutId;
-
   const timeoutPromise = new Promise(resolve => {
-    timeoutId = setTimeout(() => resolve(null), 4000);
+    timeoutId = setTimeout(() => resolve({ __timeout: true }), 4500);
   });
 
-  const first = await Promise.race([userPromise, timeoutPromise]);
+  let firstResult;
 
-  clearTimeout(timeoutId);
-  $("skeletonSection").style.display = "none";
-  showHome();
+  try {
+    firstResult = await Promise.race([userPromise, timeoutPromise]);
+  } catch (error) {
+    console.error("Initial load failed:", error);
+    firstResult = { ok: false, error: "network" };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  /*
+   * Skeleton را حداقل کمی نشان می‌دهیم تا همان لودینگ اولیه حفظ شود.
+   * ولی اجازه نمی‌دهیم روی آن گیر کند.
+   */
+  const elapsed = performance.now() - startedAt;
+  const minimumSkeletonTime = 700;
+
+  if (elapsed < minimumSkeletonTime) {
+    await new Promise(resolve =>
+      setTimeout(resolve, minimumSkeletonTime - elapsed)
+    );
+  }
 
   if (requestVersion !== userRequestVersion) return;
 
-  if (first) {
-    if (!applyUserData(first)) {
+  if (skeleton) skeleton.style.display = "none";
+  showHome();
+
+  if (firstResult && !firstResult.__timeout) {
+    if (!applyUserData(firstResult)) {
       $("balanceValue").textContent = "—";
-      showToast(errorText(first.error));
+      showToast(errorText(firstResult?.error));
     }
     return;
   }
 
-  userPromise.then(user => {
-    if (requestVersion !== userRequestVersion) return;
+  /*
+   * اگر 4.5 ثانیه گذشت، صفحه را باز می‌کنیم،
+   * ولی پاسخ واقعی API هر وقت رسید هنوز اعمال می‌شود.
+   */
+  userPromise
+    .then(user => {
+      if (requestVersion !== userRequestVersion) return;
 
-    if (!applyUserData(user)) {
+      if (!applyUserData(user)) {
+        $("balanceValue").textContent = "—";
+        showToast(errorText(user?.error));
+      }
+    })
+    .catch(error => {
+      console.error("Late user load failed:", error);
+
+      if (requestVersion !== userRequestVersion) return;
+
       $("balanceValue").textContent = "—";
-      showToast(errorText(user.error));
-    }
-  });
+      showToast("اطلاعات حساب دریافت نشد؛ بروزرسانی را بزن.");
+    });
 }
 
 init();
