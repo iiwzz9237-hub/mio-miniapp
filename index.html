@@ -13,1014 +13,861 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --bg: #0d1016;
-    --card: rgba(255,255,255,.045);
-    --card-border: rgba(255,255,255,.085);
-    --card-strong: rgba(255,255,255,.10);
-    --gold: #f4cf77;
-    --text: #f5f5f7;
-    --text-dim: #9da5b5;
-    --danger: #ff8585;
-    --success: #93d8ba;
-    --radius-lg: 28px;
-    --radius-md: 22px;
-    --ease-out: cubic-bezier(.22,1,.36,1);
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  html {
-    min-height: 100%;
-    background: var(--bg);
-    color-scheme: dark;
-  }
-
-  body {
-    min-height: 100vh;
-    margin: 0;
-    padding:
-      env(safe-area-inset-top, 0px)
-      0
-      env(safe-area-inset-bottom, 0px);
-    font-family: "Vazirmatn", sans-serif;
-    color: var(--text);
-    background: var(--bg);
-    overscroll-behavior: none;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(
-        ellipse at 90% 0%,
-        rgba(244,207,119,.09),
-        transparent 48%
-      ),
-      radial-gradient(
-        ellipse at 0% 65%,
-        rgba(109,137,202,.055),
-        transparent 50%
-      ),
-      linear-gradient(165deg, #10131b, #0b0e14 65%, #11151d);
-  }
-
-  button,
-  input {
-    font-family: inherit;
-  }
-
-  button {
-    color: inherit;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  button:disabled {
-    opacity: .55;
-    cursor: not-allowed;
-  }
-
-  button:focus-visible,
-  input:focus-visible,
-  [tabindex]:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 4px;
-  }
-
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 20px 20px 44px;
-    animation: app-in .65s var(--ease-out) backwards;
-  }
-
-  /* ===== نوار بالا ===== */
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 4px 0 12px;
-  }
-
-  .brand {
-    flex: 1;
-    min-width: 0;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1.9;
-    color: #d4d8e1;
-    overflow-wrap: anywhere;
-  }
-
-  .icon-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 1px solid var(--card-border);
-    border-radius: 15px;
-    background: rgba(255,255,255,.035);
-    color: #d8dce5;
-    transition:
-      transform .2s var(--ease-out),
-      background .2s ease,
-      border-color .2s ease;
-  }
-
-  .icon {
-    display: block;
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  /* چرخش فقط روی آیکون؛ خود دکمه ثابت می‌ماند */
-  .refresh-btn .icon {
-    transform-origin: 50% 50%;
-    transform-box: view-box;
-  }
-
-  .refresh-btn.spinning .icon {
-    animation: spin .85s linear infinite;
-  }
-
-  .bell-dot {
-    position: absolute;
-    top: 8px;
-    left: 9px;
-    display: none;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 0 3px #14171e;
-  }
-
-  .bell-dot.show {
-    display: block;
-    animation: dot-in .4s var(--ease-out) backwards;
-  }
-
-  /* ===== عنوان ===== */
-
-  .title-row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    margin: 24px 0 28px;
-  }
-
-  h1.title {
-    margin: 0;
-    text-align: center;
-    font-size: clamp(24px, 7vw, 34px);
-    font-weight: 800;
-    letter-spacing: -.8px;
-  }
-
-  .back-arrow {
-    position: absolute;
-    right: 0;
-    display: none;
-  }
-
-  .view-active .title-row {
-    padding-inline: 49px;
-  }
-
-  .view-active h1.title {
-    font-size: clamp(19px, 5.8vw, 28px);
-    line-height: 1.6;
-  }
-
-  /* ===== کارت موجودی ===== */
-
-  .balance-card {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: 32px 20px 36px;
-    margin-bottom: 22px;
-    text-align: center;
-    border: 1px solid rgba(244,207,119,.22);
-    border-radius: var(--radius-lg);
-    background:
-      radial-gradient(
-        ellipse at 50% 0%,
-        rgba(244,207,119,.13),
-        transparent 75%
-      ),
-      linear-gradient(135deg, #202027, #14171f);
-    box-shadow:
-      0 18px 44px rgba(0,0,0,.20),
-      inset 0 1px 0 rgba(255,255,255,.05);
-    animation: rise .7s .04s var(--ease-out) backwards;
-  }
-
-  .balance-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 18% auto;
-    height: 1px;
-    opacity: .8;
-    pointer-events: none;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--gold),
-      transparent
-    );
-  }
-
-  .balance-card::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: -95px;
-    bottom: -105px;
-    width: 170px;
-    height: 170px;
-    border: 1px solid rgba(244,207,119,.065);
-    border-radius: 50%;
-    box-shadow:
-      0 0 0 22px rgba(244,207,119,.025),
-      0 0 0 44px rgba(244,207,119,.018);
-    pointer-events: none;
-  }
-
-  .balance-label {
-    margin-bottom: 18px;
-    font-size: 13px;
-    color: #c4bba7;
-  }
-
-  .balance-value {
-    display: inline-block;
-    max-width: 100%;
-    direction: ltr;
-    font-size: clamp(30px, 9vw, 46px);
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.3;
-    letter-spacing: -1.5px;
-    color: #f6d58a;
-    overflow-wrap: anywhere;
-    text-shadow: 0 3px 24px rgba(244,207,119,.10);
-  }
-
-  .balance-unit {
-    margin-inline-start: 6px;
-    font-size: 17px;
-    font-weight: 700;
-    color: #d4b46e;
-  }
-
-  /* ===== منوی اصلی ===== */
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .menu-btn {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 13px;
-    min-width: 0;
-    min-height: 132px;
-    padding: 22px 10px;
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-md);
-    background: linear-gradient(
-      145deg,
-      rgba(255,255,255,.065),
-      rgba(255,255,255,.025)
-    );
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.7;
-    transition:
-      transform .25s var(--ease-out),
-      border-color .25s ease,
-      background .25s ease,
-      box-shadow .25s ease;
-    animation: rise .65s var(--enter-delay) var(--ease-out) backwards;
-  }
-
-  .menu-btn:nth-child(1) { --enter-delay: .10s; }
-  .menu-btn:nth-child(2) { --enter-delay: .16s; }
-  .menu-btn:nth-child(3) { --enter-delay: .22s; }
-  .menu-btn:nth-child(4) { --enter-delay: .28s; }
-
-  .menu-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 16px;
-    background: rgba(244,207,119,.09);
-    color: var(--gold);
-    transition: transform .3s var(--ease-out);
-  }
-
-  #btnInvite .menu-icon {
-    background: rgba(141,174,246,.10);
-    color: #9ebbf6;
-  }
-
-  #btnBankWithdraw .menu-icon {
-    background: rgba(136,213,181,.10);
-    color: #93d8ba;
-  }
-
-  #btnDaily .menu-icon {
-    background: rgba(192,156,238,.10);
-    color: #c8abef;
-  }
-
-  /* ===== پنل‌ها ===== */
-
-  .panel {
-    min-height: 140px;
-    padding: 25px 21px;
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-lg);
-    background: linear-gradient(
-      145deg,
-      rgba(255,255,255,.045),
-      rgba(255,255,255,.02)
-    );
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-  }
-
-  #homeSection > .panel {
-    animation: rise .65s .34s var(--ease-out) backwards;
-  }
-
-  .panel h2 {
-    margin: 0 0 12px;
-    font-size: 19px;
-    font-weight: 700;
-  }
-
-  .panel p {
-    margin: 0 0 10px;
-    color: var(--text-dim);
-    font-size: 14px;
-    line-height: 2;
-  }
-
-  .panel .muted-center {
-    padding: 10px 0 4px;
-    text-align: center;
-  }
-
-  .panel .muted-center b {
-    color: #e9ecf2;
-  }
-
-  .gold-text {
-    color: var(--gold) !important;
-  }
-
-  .link-box {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 14px 0 18px;
-    padding: 12px;
-    border: 1px solid var(--card-border);
-    border-radius: 17px;
-    background: rgba(0,0,0,.17);
-  }
-
-  .link-box > span {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    direction: ltr;
-    text-align: left;
-    white-space: nowrap;
-    font-size: 13px;
-  }
-
-  .field-label {
-    display: block;
-    margin-top: 14px;
-    color: #d5d9e2;
-    font-size: 13px;
-  }
-
-  input.id-input {
-    width: 100%;
-    margin: 10px 0 6px;
-    padding: 16px;
-    border: 1px solid var(--card-border);
-    border-radius: 17px;
-    background: rgba(0,0,0,.18);
-    color: var(--text);
-    direction: ltr;
-    text-align: left;
-    font-size: 16px;
-    transition:
-      border-color .2s ease,
-      background .2s ease,
-      box-shadow .2s ease;
-  }
-
-  input.id-input::placeholder {
-    color: rgba(255,255,255,.30);
-  }
-
-  input.id-input:focus {
-    outline: none;
-    border-color: rgba(244,207,119,.55);
-    background: rgba(244,207,119,.025);
-    box-shadow: 0 0 0 4px rgba(244,207,119,.07);
-  }
-
-  .field-error {
-    min-height: 20px;
-    margin-bottom: 6px;
-    color: var(--danger);
-    font-size: 12px;
-    line-height: 1.8;
-  }
-
-  /* ===== دکمه‌ها ===== */
-
-  .primary-btn,
-  .ghost-btn,
-  .copy-btn {
-    position: relative;
-    overflow: hidden;
-    border: none;
-    font-weight: 700;
-    transition:
-      transform .2s var(--ease-out),
-      opacity .2s ease,
-      background .2s ease,
-      box-shadow .2s ease;
-  }
-
-  .primary-btn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 16px;
-    border-radius: 17px;
-    background: linear-gradient(115deg, #f6d98f, #e8bd5e);
-    color: #252014;
-    font-size: 15px;
-    font-weight: 800;
-    box-shadow: 0 6px 18px rgba(232,189,94,.10);
-  }
-
-  .ghost-btn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 14px;
-    border: 1px solid var(--card-border);
-    border-radius: 17px;
-    background: rgba(255,255,255,.02);
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-
-  .copy-btn {
-    flex-shrink: 0;
-    padding: 9px 14px;
-    border-radius: 11px;
-    background: linear-gradient(115deg, #f6d98f, #e8bd5e);
-    color: #252014;
-    font-size: 12px;
-    white-space: nowrap;
-  }
-
-  .copy-btn.copied {
-    background: #92d7ad;
-    color: #143322;
-  }
-
-  /*
-   * دکمهٔ تأیید RGB
-   * زمینهٔ رنگی متحرک است؛ نوشته روی یک لایهٔ تیرهٔ ثابت قرار دارد.
-   */
-  .primary-btn.rgb-btn {
-    isolation: isolate;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 64px;
-    padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,.18);
-    background: linear-gradient(
-      110deg,
-      #ff356f 0%,
-      #a855f7 22%,
-      #4f6cff 44%,
-      #06b6d4 65%,
-      #22c55e 82%,
-      #ff356f 100%
-    );
-    background-size: 350% 350%;
-    color: #fff;
-    box-shadow:
-      0 8px 25px rgba(109,80,230,.20),
-      inset 0 1px 0 rgba(255,255,255,.20);
-    animation: rgb-flow 7s ease-in-out infinite;
-  }
-
-  .rgb-btn .btn-label {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 112px;
-    padding: 7px 20px;
-    border: 1px solid rgba(255,255,255,.20);
-    border-radius: 11px;
-    background: #111625;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.6;
-    text-shadow: 0 1px 2px rgba(0,0,0,.35);
-    box-shadow: 0 3px 10px rgba(0,0,0,.15);
-    pointer-events: none;
-  }
-
-  .btn-label .icon {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2.2;
-  }
-
-  .menu-btn:active,
-  .primary-btn:active,
-  .ghost-btn:active,
-  .copy-btn:active,
-  .icon-btn:active {
-    transform: scale(.965);
-  }
-
-  /* ===== وضعیت‌ها ===== */
-
-  .spinner {
-    width: 38px;
-    height: 38px;
-    margin: 8px auto 16px;
-    border: 2px solid rgba(244,207,119,.12);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin .9s linear infinite;
-  }
-
-  .result-icon {
-    margin: 4px 0 18px;
-    text-align: center;
-    font-size: 42px;
-    animation: result-in .6s var(--ease-out) backwards;
-  }
-
-  .toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 16px 0 12px;
-    padding: 14px 16px;
-    border: 1px solid var(--card-border);
-    border-radius: 17px;
-    background: rgba(0,0,0,.17);
-  }
-
-  .status-text {
-    color: var(--success);
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-  /* ===== اسکلتون ===== */
-
-  .skel {
-    border-radius: var(--radius-lg);
-    background: linear-gradient(
-      100deg,
-      rgba(255,255,255,.035) 30%,
-      rgba(255,255,255,.085) 50%,
-      rgba(255,255,255,.035) 70%
-    );
-    background-size: 220% 100%;
-    animation: shimmer 1.8s ease-in-out infinite;
-  }
-
-  .skel-card {
-    height: 176px;
-    margin-bottom: 22px;
-  }
-
-  .skel-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .skel-btn {
-    height: 132px;
-    border-radius: var(--radius-md);
-  }
-
-  .skel-panel {
-    height: 140px;
-  }
-
-  /* ===== اعلان‌ها ===== */
-
-  .sheet-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding:
-      calc(env(safe-area-inset-top, 0px) + 76px)
-      16px
-      calc(env(safe-area-inset-bottom, 0px) + 20px);
-    background: rgba(3,6,11,.66);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity .25s ease, visibility .25s;
-  }
-
-  .sheet-overlay.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .sheet {
-    width: min(420px, 100%);
-    max-height: 70vh;
-    max-height: 70dvh;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: 18px;
-    border: 1px solid rgba(255,255,255,.11);
-    border-radius: 26px;
-    background: linear-gradient(145deg, #20242d, #141820);
-    box-shadow: 0 30px 90px rgba(0,0,0,.4);
-    transform: translateY(-14px) scale(.975);
-    transition: transform .35s var(--ease-out);
-  }
-
-  .sheet-overlay.show .sheet {
-    transform: translateY(0) scale(1);
-  }
-
-  .sheet-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .sheet h3 {
-    margin: 0;
-    font-size: 16px;
-  }
-
-  .close-btn {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-    border-radius: 11px;
-  }
-
-  .close-btn .icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  .notif-item {
-    margin-bottom: 8px;
-    padding: 12px 14px;
-    border: 1px solid rgba(255,255,255,.045);
-    border-radius: 15px;
-    background: rgba(255,255,255,.035);
-    font-size: 14px;
-    line-height: 1.9;
-    overflow-wrap: anywhere;
-    animation: rise .4s var(--ease-out) backwards;
-  }
-
-  .notif-item.success {
-    border-inline-start: 3px solid var(--success);
-  }
-
-  .notif-item.fail {
-    border-inline-start: 3px solid var(--danger);
-  }
-
-  .notif-item .t {
-    margin-top: 5px;
-    direction: ltr;
-    text-align: right;
-    color: var(--text-dim);
-    font-size: 11px;
-  }
-
-  .notif-empty {
-    padding: 24px 0;
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-
-  /* ===== پیام کوتاه ===== */
-
-  .toast {
-    position: fixed;
-    z-index: 100;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
-    left: 50%;
-    width: max-content;
-    max-width: calc(100vw - 40px);
-    padding: 12px 18px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 15px;
-    background: #242a35;
-    color: #f5f5f7;
-    box-shadow: 0 12px 36px rgba(0,0,0,.3);
-    text-align: center;
-    font-size: 13px;
-    line-height: 1.9;
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, 14px);
-    pointer-events: none;
-    transition:
-      opacity .25s ease,
-      transform .3s var(--ease-out),
-      visibility .25s;
-  }
-
-  .toast.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
-  }
-
-  /* ===== افکت لمس و حرکت صفحه ===== */
-
-  .ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0;
-    pointer-events: none;
-    animation: ripple-out .6s var(--ease-out) forwards;
-  }
-
-  .anim-in-right {
-    animation: forward-in .4s var(--ease-out) backwards;
-  }
-
-  .anim-in-left {
-    animation: back-in .4s var(--ease-out) backwards;
-  }
-
-  .anim-pop {
-    animation: panel-in .35s var(--ease-out) backwards;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .menu-btn:hover {
-      transform: translateY(-4px);
-      border-color: rgba(244,207,119,.23);
-      box-shadow: 0 12px 28px rgba(0,0,0,.16);
-    }
-
-    .menu-btn:hover .menu-icon {
-      transform: translateY(-2px) rotate(-5deg);
-    }
-
-    .primary-btn:hover,
-    .copy-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .rgb-btn:hover {
-      box-shadow:
-        0 10px 30px rgba(109,80,230,.30),
-        inset 0 1px 0 rgba(255,255,255,.20);
-    }
-
-    .ghost-btn:hover,
-    .icon-btn:hover {
-      background: rgba(255,255,255,.08);
-    }
-  }
-
-  @media (max-width: 360px) {
-    .app {
-      padding-inline: 14px;
-    }
-
-    .topbar {
-      gap: 8px;
-    }
-
-    .brand {
-      font-size: 11px;
-    }
-
-    .menu-btn {
-      padding-inline: 7px;
-      font-size: 13px;
-    }
-
-    .panel {
-      padding-inline: 16px;
-    }
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  @keyframes shimmer {
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
-  }
-
-  @keyframes rgb-flow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  @keyframes app-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes forward-in {
-    from { opacity: 0; transform: translateX(14px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes back-in {
-    from { opacity: 0; transform: translateX(-14px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes panel-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes result-in {
-    from { opacity: 0; transform: scale(.8) translateY(8px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes dot-in {
-    from { opacity: 0; transform: scale(.4); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes ripple-out {
-    from { opacity: .16; transform: scale(0); }
-    to { opacity: 0; transform: scale(1); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation: none !important;
-      transition: none !important;
-      scroll-behavior: auto !important;
-    }
-  }
+:root {
+  --bg:#0d1016;
+  --card:rgba(255,255,255,.045);
+  --border:rgba(255,255,255,.085);
+  --gold:#f4cf77;
+  --text:#f5f5f7;
+  --dim:#9da5b5;
+  --danger:#ff8585;
+  --success:#93d8ba;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{box-sizing:border-box}
+
+html{
+  min-height:100%;
+  background:var(--bg);
+  color-scheme:dark;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Vazirmatn",sans-serif;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 90% 0%,rgba(244,207,119,.09),transparent 48%),
+    radial-gradient(ellipse at 0% 65%,rgba(109,137,202,.055),transparent 50%),
+    linear-gradient(165deg,#10131b,#0b0e14 65%,#11151d);
+}
+
+button,input{font-family:inherit}
+
+button{
+  color:inherit;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+
+button:disabled{opacity:.55;cursor:not-allowed}
+
+button:focus-visible,input:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:4px;
+}
+
+.app{
+  position:relative;
+  z-index:1;
+  max-width:480px;
+  margin:auto;
+  padding:20px 20px 44px;
+  animation:fade-in .65s var(--ease) backwards;
+}
+
+/* ===== Top bar ===== */
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:4px 0 12px;
+}
+
+.brand{
+  flex:1;
+  min-width:0;
+  text-align:center;
+  font-size:12px;
+  font-weight:600;
+  line-height:1.9;
+  color:#d4d8e1;
+  overflow-wrap:anywhere;
+}
+
+.icon-btn{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 44px;
+  width:44px;
+  height:44px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  color:#d8dce5;
+  transition:transform .2s var(--ease),background .2s ease;
+}
+
+.icon{
+  display:block;
+  flex-shrink:0;
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.refresh-btn .icon{
+  transform-box:view-box;
+  transform-origin:50% 50%;
+}
+
+.refresh-btn.spinning .icon{animation:spin .85s linear infinite}
+
+.bell-dot{
+  position:absolute;
+  top:8px;
+  left:9px;
+  display:none;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 0 3px #14171e;
+}
+
+.bell-dot.show{display:block;animation:pop-in .4s var(--ease) backwards}
+
+/* ===== Title ===== */
+
+.title-row{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  margin:24px 0 28px;
+}
+
+.title{
+  margin:0;
+  text-align:center;
+  font-size:clamp(24px,7vw,34px);
+  font-weight:800;
+  letter-spacing:-.8px;
+}
+
+.back-arrow{position:absolute;right:0;display:none}
+
+.view-active .title-row{padding-inline:49px}
+.view-active .title{font-size:clamp(19px,5.8vw,28px);line-height:1.6}
+
+/* ===== Balance ===== */
+
+.balance-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding:32px 20px 36px;
+  margin-bottom:22px;
+  text-align:center;
+  border:1px solid rgba(244,207,119,.22);
+  border-radius:28px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(244,207,119,.13),transparent 75%),
+    linear-gradient(135deg,#202027,#14171f);
+  box-shadow:0 18px 44px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.05);
+  animation:rise .7s .04s var(--ease) backwards;
+}
+
+.balance-card::before{
+  content:"";
+  position:absolute;
+  inset:0 18% auto;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  pointer-events:none;
+}
+
+.balance-card::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:-95px;
+  bottom:-105px;
+  width:170px;
+  height:170px;
+  border:1px solid rgba(244,207,119,.065);
+  border-radius:50%;
+  box-shadow:0 0 0 22px rgba(244,207,119,.025),0 0 0 44px rgba(244,207,119,.018);
+  pointer-events:none;
+}
+
+.balance-label{margin-bottom:18px;font-size:13px;color:#c4bba7}
+
+.balance-value{
+  display:inline-block;
+  max-width:100%;
+  direction:ltr;
+  font-size:clamp(30px,9vw,46px);
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  line-height:1.3;
+  letter-spacing:-1.5px;
+  color:#f6d58a;
+  overflow-wrap:anywhere;
+}
+
+.balance-unit{margin-inline-start:6px;font-size:17px;font-weight:700;color:#d4b46e}
+
+/* ===== Menu ===== */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.menu-btn{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  min-width:0;
+  min-height:132px;
+  padding:22px 10px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));
+  text-align:center;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.7;
+  transition:transform .25s var(--ease),border-color .25s ease,box-shadow .25s ease;
+  animation:rise .65s var(--delay,.1s) var(--ease) backwards;
+}
+
+.menu-btn:nth-child(1){--delay:.10s}
+.menu-btn:nth-child(2){--delay:.16s}
+.menu-btn:nth-child(3){--delay:.22s}
+.menu-btn:nth-child(4){--delay:.28s}
+.menu-btn:nth-child(5){--delay:.34s}
+
+.menu-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  background:rgba(244,207,119,.09);
+  color:var(--gold);
+  transition:transform .3s var(--ease);
+}
+
+#btnInvite .menu-icon{background:rgba(141,174,246,.10);color:#9ebbf6}
+#btnBankWithdraw .menu-icon{background:rgba(136,213,181,.10);color:#93d8ba}
+#btnDaily .menu-icon{background:rgba(192,156,238,.10);color:#c8abef}
+
+.menu-btn.game-menu{
+  grid-column:1/-1;
+  flex-direction:row;
+  justify-content:flex-start;
+  gap:16px;
+  min-height:106px;
+  padding:20px;
+  border-color:rgba(176,133,255,.23);
+  background:
+    radial-gradient(ellipse at 0% 50%,rgba(128,87,221,.15),transparent 70%),
+    linear-gradient(135deg,#202030,#141821);
+  text-align:right;
+}
+
+.game-menu .menu-icon{
+  width:54px;
+  height:54px;
+  flex-shrink:0;
+  font-size:30px;
+  background:rgba(176,133,255,.10);
+}
+
+.menu-copy{flex:1;min-width:0}
+.menu-copy strong{display:block;font-size:16px}
+.menu-copy small{display:block;margin-top:5px;color:var(--dim);font-size:12px;font-weight:400}
+.game-menu>.icon{color:#a49abf}
+
+/* ===== Panel / fields ===== */
+
+.panel{
+  min-height:140px;
+  padding:25px 21px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.02));
+}
+
+#homeSection>.panel{animation:rise .65s .4s var(--ease) backwards}
+
+.panel h2{margin:0 0 12px;font-size:19px}
+.panel p{margin:0 0 10px;color:var(--dim);font-size:14px;line-height:2}
+.muted-center{text-align:center;padding:10px 0 4px}
+.panel b{color:#e9ecf2}
+.gold-text{color:var(--gold)!important}
+
+.link-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:14px 0 18px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:rgba(0,0,0,.17);
+}
+
+.link-box>span{
+  flex:1;
+  min-width:0;
+  overflow-x:auto;
+  direction:ltr;
+  text-align:left;
+  white-space:nowrap;
+  font-size:13px;
+}
+
+.field-label{display:block;margin-top:14px;color:#d5d9e2;font-size:13px}
+
+.id-input{
+  width:100%;
+  margin:10px 0 6px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:rgba(0,0,0,.18);
+  color:var(--text);
+  direction:ltr;
+  text-align:left;
+  font-size:16px;
+  transition:border-color .2s,box-shadow .2s;
+}
+
+.id-input::placeholder{color:rgba(255,255,255,.30)}
+
+.id-input:focus{
+  outline:none;
+  border-color:rgba(244,207,119,.55);
+  box-shadow:0 0 0 4px rgba(244,207,119,.07);
+}
+
+.field-error{min-height:20px;margin-bottom:6px;color:var(--danger);font-size:12px;line-height:1.8}
+
+/* ===== Buttons ===== */
+
+.primary-btn,.ghost-btn,.copy-btn{
+  position:relative;
+  overflow:hidden;
+  border:none;
+  font-weight:700;
+  transition:transform .2s var(--ease),opacity .2s,background .2s;
+}
+
+.primary-btn{
+  width:100%;
+  margin-top:10px;
+  padding:16px;
+  border-radius:17px;
+  background:linear-gradient(115deg,#f6d98f,#e8bd5e);
+  color:#252014;
+  font-size:15px;
+  font-weight:800;
+}
+
+.ghost-btn{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:rgba(255,255,255,.02);
+  color:var(--dim);
+  font-size:14px;
+}
+
+.copy-btn{
+  flex-shrink:0;
+  padding:9px 14px;
+  border-radius:11px;
+  background:linear-gradient(115deg,#f6d98f,#e8bd5e);
+  color:#252014;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.copy-btn.copied{background:#92d7ad;color:#143322}
+
+.primary-btn.rgb-btn{
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:64px;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(110deg,#ff356f,#a855f7 22%,#4f6cff 44%,#06b6d4 65%,#22c55e 82%,#ff356f);
+  background-size:350% 350%;
+  color:#fff;
+  box-shadow:0 8px 25px rgba(109,80,230,.20);
+  animation:rgb-flow 7s ease-in-out infinite;
+}
+
+.rgb-btn .btn-label{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-width:112px;
+  padding:7px 20px;
+  border:1px solid rgba(255,255,255,.20);
+  border-radius:11px;
+  background:#111625;
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.6;
+  pointer-events:none;
+}
+
+.btn-label .icon{width:18px;height:18px;stroke-width:2.2}
+
+.menu-btn:active,.primary-btn:active,.ghost-btn:active,.copy-btn:active,.icon-btn:active{
+  transform:scale(.965);
+}
+
+.spinner{
+  width:38px;
+  height:38px;
+  margin:8px auto 16px;
+  border:2px solid rgba(244,207,119,.12);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .9s linear infinite;
+}
+
+.result-icon{text-align:center;font-size:42px;margin:4px 0 18px;animation:pop-in .6s var(--ease) backwards}
+.toggle-row{margin:16px 0 12px;padding:14px 16px;border:1px solid var(--border);border-radius:17px;background:rgba(0,0,0,.17)}
+.status-text{color:var(--success);font-size:15px;font-weight:700}
+
+/* ===== Game ===== */
+
+.game-intro{text-align:center}
+
+.game-badge{
+  display:inline-block;
+  padding:5px 12px;
+  margin-bottom:12px;
+  border:1px solid rgba(183,147,255,.18);
+  border-radius:999px;
+  background:rgba(183,147,255,.07);
+  color:#d5befb;
+  font-size:11px;
+}
+
+.slot-machine{
+  position:relative;
+  display:block;
+  width:100%;
+  margin:12px 0 18px;
+  padding:20px 12px 16px;
+  overflow:hidden;
+  border:1px solid rgba(219,180,255,.30);
+  border-radius:25px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(188,95,251,.22),transparent 70%),
+    linear-gradient(145deg,#282039,#151422);
+  box-shadow:0 16px 35px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:transform .2s var(--ease),border-color .2s;
+}
+
+.slot-machine:disabled{opacity:1}
+
+.slot-machine:not(:disabled):active{transform:scale(.985)}
+
+.slot-heading{
+  display:block;
+  margin-bottom:18px;
+  direction:ltr;
+  color:#eedcfc;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:3px;
+}
+
+.reels{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  direction:ltr;
+}
+
+.reel{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:104px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:17px;
+  background:linear-gradient(#101019,#282337 48%,#101019);
+  box-shadow:inset 0 9px 18px rgba(0,0,0,.35);
+}
+
+.reel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  pointer-events:none;
+}
+
+.reel-symbol{
+  display:block;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  font-size:clamp(36px,11vw,54px);
+  line-height:1;
+}
+
+.reel.rolling .reel-symbol{animation:reel-shake .13s linear infinite}
+
+.slot-footer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:17px;
+  color:#afa3c8;
+  font-size:11px;
+}
+
+.slot-light{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#dcbafa;
+  box-shadow:0 0 8px rgba(220,186,250,.45);
+}
+
+.game-result{
+  padding:15px;
+  margin:14px 0;
+  border:1px solid rgba(244,207,119,.18);
+  border-radius:18px;
+  background:rgba(244,207,119,.045);
+  text-align:center;
+  animation:rise .4s var(--ease) backwards;
+}
+
+.game-result small{display:block;color:var(--dim);font-size:11px}
+.game-result strong{display:block;margin:7px 0;font-size:25px;color:var(--gold)}
+.game-result p{font-size:12px;margin:0}
+
+.game-status{
+  min-height:54px;
+  margin:14px 0 4px;
+  text-align:center;
+  color:var(--dim);
+  font-size:12px;
+  line-height:1.9;
+}
+
+.game-status b{
+  display:block;
+  direction:ltr;
+  color:#ded1fa;
+  font-variant-numeric:tabular-nums;
+  font-size:20px;
+}
+
+.prize-table{
+  width:100%;
+  margin-top:22px;
+  border-collapse:collapse;
+  text-align:center;
+  font-size:12px;
+}
+
+.prize-table caption{
+  padding-bottom:10px;
+  text-align:right;
+  color:#d5d9e2;
+  font-size:13px;
+  font-weight:700;
+}
+
+.prize-table th,.prize-table td{
+  padding:11px 4px;
+  border-bottom:1px solid var(--border);
+}
+
+.prize-table th{color:var(--dim);font-size:11px;font-weight:500}
+.prize-table td:first-child{font-size:21px}
+.game-note{margin-top:14px!important;font-size:11px!important}
+
+/* ===== Skeleton ===== */
+
+.skel{
+  border-radius:28px;
+  background:linear-gradient(100deg,rgba(255,255,255,.035) 30%,rgba(255,255,255,.085) 50%,rgba(255,255,255,.035) 70%);
+  background-size:220% 100%;
+  animation:shimmer 1.8s ease-in-out infinite;
+}
+
+.skel-card{height:176px;margin-bottom:22px}
+.skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.skel-btn{height:132px;border-radius:22px}
+.skel-game{height:106px;grid-column:1/-1;border-radius:22px}
+.skel-panel{height:140px}
+
+/* ===== Notifications ===== */
+
+.sheet-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;
+  background:rgba(3,6,11,.66);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .25s,visibility .25s;
+}
+
+.sheet-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+
+.sheet{
+  width:min(420px,100%);
+  max-height:70vh;
+  max-height:70dvh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:26px;
+  background:linear-gradient(145deg,#20242d,#141820);
+  box-shadow:0 30px 90px rgba(0,0,0,.4);
+  transform:translateY(-14px) scale(.975);
+  transition:transform .35s var(--ease);
+}
+
+.sheet-overlay.show .sheet{transform:translateY(0) scale(1)}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.sheet h3{margin:0;font-size:16px}
+.close-btn{width:34px;height:34px;flex-basis:34px;border-radius:11px}
+
+.notif-item{
+  margin-bottom:8px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.045);
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  font-size:14px;
+  line-height:1.9;
+  overflow-wrap:anywhere;
+  animation:rise .4s var(--ease) backwards;
+}
+
+.notif-item.success{border-inline-start:3px solid var(--success)}
+.notif-item.fail{border-inline-start:3px solid var(--danger)}
+.notif-item .t{margin-top:5px;direction:ltr;text-align:right;color:var(--dim);font-size:11px}
+.notif-empty{padding:24px 0;text-align:center;color:var(--dim);font-size:14px}
+
+/* ===== Toast / animations ===== */
+
+.toast{
+  position:fixed;
+  z-index:100;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 24px);
+  left:50%;
+  width:max-content;
+  max-width:calc(100vw - 40px);
+  padding:12px 18px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:15px;
+  background:#242a35;
+  color:var(--text);
+  box-shadow:0 12px 36px rgba(0,0,0,.3);
+  text-align:center;
+  font-size:13px;
+  line-height:1.9;
+  opacity:0;
+  visibility:hidden;
+  transform:translate(-50%,14px);
+  pointer-events:none;
+  transition:opacity .25s,transform .3s var(--ease),visibility .25s;
+}
+
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.ripple{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;animation:ripple-out .6s var(--ease) forwards}
+.anim-in-right{animation:forward-in .4s var(--ease) backwards}
+.anim-in-left{animation:back-in .4s var(--ease) backwards}
+.anim-pop{animation:rise .35s var(--ease) backwards}
+
+@media(hover:hover) and (pointer:fine){
+  .menu-btn:hover{transform:translateY(-4px);border-color:rgba(244,207,119,.23);box-shadow:0 12px 28px rgba(0,0,0,.16)}
+  .menu-btn:hover .menu-icon{transform:translateY(-2px) rotate(-5deg)}
+  .primary-btn:not(:disabled):hover{transform:translateY(-2px)}
+  .icon-btn:hover,.ghost-btn:hover{background:rgba(255,255,255,.08)}
+}
+
+@media(max-width:360px){
+  .app{padding-inline:14px}
+  .brand{font-size:11px}
+  .menu-btn{font-size:13px;padding-inline:7px}
+  .panel{padding-inline:16px}
+  .reel{height:88px}
+  .menu-btn.game-menu{padding:16px;gap:12px}
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes rgb-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes forward-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes back-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pop-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes ripple-out{from{opacity:.16;transform:scale(0)}to{opacity:0;transform:scale(1)}}
+@keyframes reel-shake{0%{transform:translateY(-5px)}100%{transform:translateY(5px)}}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 
 <body>
 
-<div class="app" id="app">
+<!-- آیکون‌های داخلی؛ بدون کتابخانهٔ خارجی -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-bell" viewBox="0 0 24 24">
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>
+  </symbol>
 
+  <symbol id="i-refresh" viewBox="0 0 24 24">
+    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+    <path d="M21 3v5h-5"/>
+    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+    <path d="M8 16H3v5"/>
+  </symbol>
+
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <path d="m9 5 7 7-7 7M16 12H4"/>
+  </symbol>
+
+  <symbol id="i-withdraw" viewBox="0 0 24 24">
+    <path d="M12 16V3m-5 5 5-5 5 5"/>
+    <path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
+  </symbol>
+
+  <symbol id="i-invite" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"/>
+    <path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/>
+  </symbol>
+
+  <symbol id="i-bank" viewBox="0 0 24 24">
+    <path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/>
+  </symbol>
+
+  <symbol id="i-gift" viewBox="0 0 24 24">
+    <rect x="3" y="8" width="18" height="4" rx="1"/>
+    <path d="M5 12v9h14v-9M12 8v13"/>
+    <path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>
+  </symbol>
+
+  <symbol id="i-check" viewBox="0 0 24 24">
+    <path d="m5 12 4 4L19 6"/>
+  </symbol>
+
+  <symbol id="i-close" viewBox="0 0 24 24">
+    <path d="m6 6 12 12M18 6 6 18"/>
+  </symbol>
+
+  <symbol id="i-chevron" viewBox="0 0 24 24">
+    <path d="m14 6-6 6 6 6"/>
+  </symbol>
+</svg>
+
+<div class="app" id="app">
   <div class="topbar">
-    <button
-      type="button"
-      class="icon-btn bell-btn"
-      id="bellBtn"
-      aria-label="اعلان‌ها"
-      aria-haspopup="dialog"
-      aria-controls="notifOverlay"
-      aria-expanded="false"
-    >
+    <button type="button" class="icon-btn" id="bellBtn"
+      aria-label="اعلان‌ها" aria-haspopup="dialog"
+      aria-controls="notifOverlay" aria-expanded="false">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-        <path d="M10 21h4"/>
+        <use href="#i-bell"></use>
       </svg>
       <span class="bell-dot" id="bellDot" aria-hidden="true"></span>
     </button>
 
     <span class="brand" id="topWelcome">خوش آمدید عزیز</span>
 
-    <button
-      type="button"
-      class="icon-btn refresh-btn"
-      id="refreshBtn"
-      aria-label="بروزرسانی"
-    >
+    <button type="button" class="icon-btn refresh-btn"
+      id="refreshBtn" aria-label="بروزرسانی">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-        <path d="M21 3v5h-5"/>
-        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
-        <path d="M8 16H3v5"/>
+        <use href="#i-refresh"></use>
       </svg>
     </button>
   </div>
 
   <div class="title-row">
-    <button
-      type="button"
-      class="icon-btn back-arrow"
-      id="backArrow"
-      aria-label="بازگشت به خانه"
-    >
+    <button type="button" class="icon-btn back-arrow"
+      id="backArrow" aria-label="بازگشت به خانه">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m9 5 7 7-7 7M16 12H4"/>
+        <use href="#i-back"></use>
       </svg>
     </button>
-
     <h1 class="title" id="pageTitle">Mio Point</h1>
   </div>
 
   <div id="skeletonSection" aria-label="در حال دریافت اطلاعات">
     <div class="skel skel-card"></div>
-
     <div class="skel-grid">
       <div class="skel skel-btn"></div>
       <div class="skel skel-btn"></div>
       <div class="skel skel-btn"></div>
       <div class="skel skel-btn"></div>
+      <div class="skel skel-game"></div>
     </div>
-
     <div class="skel skel-panel"></div>
   </div>
 
-  <div id="homeSection" style="display:none;">
+  <div id="homeSection" style="display:none">
     <div class="balance-card">
       <div class="balance-label">💎 موجودی شما</div>
-
       <div>
         <span class="balance-value" id="balanceValue">…</span>
         <span class="balance-unit">میو</span>
@@ -1030,91 +877,67 @@
     <div class="grid">
       <button type="button" class="menu-btn" id="btnWithdraw">
         <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <path d="M12 16V3m-5 5 5-5 5 5"/>
-            <path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-withdraw"></use></svg>
         </span>
         <span>برداشت با آیدی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnInvite">
         <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <circle cx="9" cy="8" r="3"/>
-            <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
-            <path d="M16 4a3 3 0 0 1 0 6"/>
-            <path d="M21 21v-2a6 6 0 0 0-4-5.66"/>
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-invite"></use></svg>
         </span>
         <span>لینک دعوت</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnBankWithdraw">
         <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <path d="m3 9 9-6 9 6H3Z"/>
-            <path d="M5 12v6m7-6v6m7-6v6M3 21h18"/>
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-bank"></use></svg>
         </span>
         <span>برداشت با بانک میویی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnDaily">
         <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <rect x="3" y="8" width="18" height="4" rx="1"/>
-            <path d="M5 12v9h14v-9M12 8v13"/>
-            <path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Z"/>
-            <path d="M12 8h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>
-          </svg>
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-gift"></use></svg>
         </span>
         <span>میو روزانه</span>
       </button>
-    </div>
 
-    <div class="panel">
-      <p class="muted-center">
-        🐾 <b id="welcomeText">خوش آمدید عزیز</b>
-      </p>
-      <p class="muted-center">از منوی بالا انتخاب کنید</p>
-    </div>
-  </div>
-
-  <div id="viewSection" style="display:none;">
-    <div class="panel" id="panel"></div>
-  </div>
-
-</div>
-
-<div
-  class="sheet-overlay"
-  id="notifOverlay"
-  aria-hidden="true"
-  inert
->
-  <div
-    class="sheet"
-    id="notifSheet"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="notificationTitle"
-  >
-    <div class="sheet-header">
-      <h3 id="notificationTitle">🔔 اعلان‌ها</h3>
-
-      <button
-        type="button"
-        class="icon-btn close-btn"
-        id="closeNotifBtn"
-        aria-label="بستن اعلان‌ها"
-      >
+      <button type="button" class="menu-btn game-menu" id="btnGame">
+        <span class="menu-icon" aria-hidden="true">🎰</span>
+        <span class="menu-copy">
+          <strong>بازی میویی</strong>
+          <small>بازی کن و پوینت جایزه بگیر!!</small>
+        </span>
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m6 6 12 12M18 6 6 18"/>
+          <use href="#i-chevron"></use>
         </svg>
       </button>
     </div>
 
+    <div class="panel">
+      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید عزیز</b></p>
+      <p class="muted-center">از منوی بالا انتخاب کنید</p>
+    </div>
+  </div>
+
+  <div id="viewSection" style="display:none">
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+
+<div class="sheet-overlay" id="notifOverlay" aria-hidden="true" inert>
+  <div class="sheet" id="notifSheet" role="dialog"
+    aria-modal="true" aria-labelledby="notificationTitle">
+    <div class="sheet-header">
+      <h3 id="notificationTitle">🔔 اعلان‌ها</h3>
+      <button type="button" class="icon-btn close-btn"
+        id="closeNotifBtn" aria-label="بستن اعلان‌ها">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <use href="#i-close"></use>
+        </svg>
+      </button>
+    </div>
     <div id="notifList"></div>
   </div>
 </div>
@@ -1124,7 +947,7 @@
 <script>
 "use strict";
 
-/* ===================== Telegram ===================== */
+/* ================= CONFIG ================= */
 
 const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
 const tg = window.Telegram?.WebApp;
@@ -1144,37 +967,87 @@ const greeting = TG_FIRST_NAME
 document.getElementById("topWelcome").textContent = greeting;
 document.getElementById("welcomeText").textContent = greeting;
 
-/*
-  بک‌اند باید Telegram initData را اعتبارسنجی کند.
-  نمایش نام در فرانت‌اند جایگزین احراز هویت نیست.
-*/
+const $ = id => document.getElementById(id);
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-function authHeaders() {
-  return {
-    "Content-Type": "application/json",
-    "Authorization": "tma " + (tg?.initData || "")
-  };
-}
+const app = $("app");
+const panel = $("panel");
+const homeSection = $("homeSection");
+const viewSection = $("viewSection");
+const pageTitle = $("pageTitle");
+const backArrow = $("backArrow");
+const refreshBtn = $("refreshBtn");
 
-/* ===================== API ===================== */
+const state = {
+  balance: 0,
+  daily_enabled: false,
+  notifications: [],
+  not_started: false
+};
 
-async function apiRequest(path, options = {}) {
+let hasUserData = false;
+let currentView = "home";
+let viewVersion = 0;
+let userRequestVersion = 0;
+
+let activeWithdrawal = null;
+let pollingWithdrawal = false;
+let lastWithdrawMethod = "id";
+let enablingDaily = false;
+
+let gameState = null;
+let gameBusy = false;
+let gameTimer = null;
+
+const GAME_SYMBOLS = {
+  seven: "7️⃣",
+  grape: "🍇",
+  lemon: "🍋",
+  blank: "✖️"
+};
+
+const SYMBOL_NAMES = {
+  seven: "هفت",
+  grape: "انگور",
+  lemon: "لیمو",
+  blank: "پوچ"
+};
+
+const DEFAULT_PAYOUTS = {
+  seven: [0, 100000, 200000, 400000],
+  grape: [0, 30000, 60000, 80000],
+  lemon: [0, 10000, 20000, 30000],
+  blank: [0, 0, 0, 0]
+};
+
+/* ================= API ================= */
+
+async function api(path, options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+
   try {
-    const response = await fetch(`${API_BASE}${path}`, {
+    const response = await fetch(API_BASE + path, {
       ...options,
-      headers: authHeaders()
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "tma " + (tg?.initData || "")
+      }
     });
 
     const data = await response.json();
 
-    if (!data || typeof data !== "object") {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
       return { ok: false, error: "invalid_response" };
     }
 
     if (!response.ok) {
       return {
+        ...data,
         ok: false,
-        error: data.error || "server"
+        error: data.error || "server",
+        http_status: response.status
       };
     }
 
@@ -1182,112 +1055,82 @@ async function apiRequest(path, options = {}) {
   } catch (error) {
     console.error("API request failed:", path, error);
     return { ok: false, error: "network" };
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
-const MioAPI = {
-  async getUser() {
-    const data = await apiRequest("/user");
-    return data.ok === false ? null : data;
-  },
+function post(path, data = {}) {
+  return api(path, {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+}
 
-  async getInviteLink() {
-    const data = await apiRequest("/invite-link");
-    return typeof data.link === "string" ? data.link : "";
-  },
+function errorText(code) {
+  return {
+    unauthorized: "لطفاً مینی‌اپ را ببند و دوباره از داخل تلگرام باز کن.",
+    not_started: "ابتدا ربات را استارت کن، سپس دوباره وارد شو.",
+    zero_balance: "موجودی قابل برداشت شما صفر است.",
+    already_pending: "یک برداشت در حال پردازش داری.",
+    withdrawal_pending: "بعد از پایان برداشت فعلی دوباره امتحان کن.",
+    game_disabled: "بازی فعلاً غیرفعال است.",
+    cooldown: "هنوز زمان بازی بعدی نرسیده است.",
+    invalid_target: "آیدی تلگرام معتبر وارد کن.",
+    invalid_card: "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.",
+    database_unavailable: "ارتباط با سرور برقرار نشد؛ دوباره تلاش کن.",
+    network: "ارتباط قطع شد؛ دوباره تلاش کن.",
+    invalid_response: "پاسخ سرور کامل دریافت نشد.",
+    bot_username_not_configured: "لینک دعوت هنوز تنظیم نشده است."
+  }[code] || "عملیات انجام نشد؛ دوباره تلاش کن.";
+}
 
-  requestWithdraw(target) {
-    return apiRequest("/withdraw", {
-      method: "POST",
-      body: JSON.stringify({ target })
-    });
-  },
-
-  requestBankWithdraw(card) {
-    return apiRequest("/withdraw-bank", {
-      method: "POST",
-      body: JSON.stringify({ card })
-    });
-  },
-
-  async getWithdrawStatus() {
-    const data = await apiRequest("/withdraw-status");
-
-    if (data.ok === false) {
-      return { status: "unknown" };
-    }
-
-    return data;
-  },
-
-  requestReceipt() {
-    return apiRequest("/receipt", {
-      method: "POST"
-    });
-  },
-
-  enableDaily() {
-    return apiRequest("/daily/enable", {
-      method: "POST"
-    });
-  }
-};
-
-/* ===================== State / DOM ===================== */
-
-const state = {
-  balance: 0,
-  daily_enabled: false,
-  notifications: []
-};
-
-const app = document.getElementById("app");
-const panel = document.getElementById("panel");
-const homeSection = document.getElementById("homeSection");
-const viewSection = document.getElementById("viewSection");
-const pageTitle = document.getElementById("pageTitle");
-const backArrow = document.getElementById("backArrow");
-const balanceValueEl = document.getElementById("balanceValue");
-const refreshBtn = document.getElementById("refreshBtn");
-const skeletonSection = document.getElementById("skeletonSection");
-
-const reduceMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-);
-
-let hasUserData = false;
-let currentView = "home";
-let viewVersion = 0;
-let userRequestVersion = 0;
-let lastWithdrawMethod = "id";
-
-let activeWithdrawal = null;
-let pollingWithdrawal = false;
-
-/* ===================== Helpers ===================== */
+/* ================= Helpers ================= */
 
 function fmt(value) {
   return Number(value || 0).toLocaleString("en-US");
 }
 
-function toEnglishDigits(value) {
+function icon(name) {
+  return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+    <use href="#i-${name}"></use>
+  </svg>`;
+}
+
+function confirmLabel(text = "تأیید") {
+  return `<span class="btn-label">${icon("check")}<span>${text}</span></span>`;
+}
+
+function englishDigits(value) {
   return value
-    .replace(/[۰-۹]/g, digit => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit)))
-    .replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
+    .replace(/[۰-۹]/g, d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+}
+
+function ensureUserData() {
+  if (!hasUserData) {
+    showToast("اطلاعات حساب هنوز دریافت نشده؛ بروزرسانی را بزن.");
+    return false;
+  }
+
+  if (state.not_started) {
+    showToast(errorText("not_started"));
+    return false;
+  }
+
+  return true;
 }
 
 let toastTimer;
 
 function showToast(message) {
-  const toast = document.getElementById("toast");
-
   clearTimeout(toastTimer);
-  toast.textContent = message;
-  toast.classList.add("show");
+  $("toast").textContent = message;
+  $("toast").classList.add("show");
 
   toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3200);
+    $("toast").classList.remove("show");
+  }, 4000);
 }
 
 async function copyText(text, button) {
@@ -1298,47 +1141,26 @@ async function copyText(text, button) {
 
     if (!button.isConnected) return;
 
-    const originalText = button.textContent;
     button.textContent = "کپی شد ✓";
     button.classList.add("copied");
 
     setTimeout(() => {
       if (!button.isConnected) return;
-      button.textContent = originalText;
+      button.textContent = "کپی";
       button.classList.remove("copied");
     }, 1800);
-  } catch (error) {
-    console.error("Clipboard failed:", error);
-    showToast("کپی انجام نشد؛ متن را دستی کپی کنید.");
+  } catch {
+    showToast("کپی انجام نشد؛ متن را دستی کپی کن.");
   }
 }
 
-function rgbConfirmLabel(text = "تأیید") {
-  return `
-    <span class="btn-label">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m5 12 4 4L19 6"/>
-      </svg>
-      <span>${text}</span>
-    </span>
-  `;
-}
-
-function ensureUserData() {
-  if (hasUserData) return true;
-
-  showToast("اطلاعات حساب هنوز دریافت نشده؛ دکمهٔ بروزرسانی را بزنید.");
-  return false;
-}
-
-/* ===================== Animated balance ===================== */
+/* ================= Balance animation ================= */
 
 let balanceFrame = 0;
 let displayedBalance = 0;
 
 function setBalance(value) {
   const target = Number(value);
-
   if (!Number.isFinite(target)) return;
 
   state.balance = target;
@@ -1346,27 +1168,23 @@ function setBalance(value) {
 
   if (reduceMotion.matches || displayedBalance === target) {
     displayedBalance = target;
-    balanceValueEl.textContent = fmt(target);
+    $("balanceValue").textContent = fmt(target);
     return;
   }
 
   const from = displayedBalance;
   const startedAt = performance.now();
-  const duration = 850;
 
   function tick(now) {
-    if (reduceMotion.matches) {
-      displayedBalance = target;
-      balanceValueEl.textContent = fmt(target);
-      return;
-    }
+    const progress = reduceMotion.matches
+      ? 1
+      : Math.min((now - startedAt) / 850, 1);
 
-    const progress = Math.min((now - startedAt) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 4);
 
     displayedBalance = from + (target - from) * eased;
 
-    balanceValueEl.textContent = fmt(
+    $("balanceValue").textContent = fmt(
       progress === 1 ? target : Math.round(displayedBalance)
     );
 
@@ -1378,7 +1196,7 @@ function setBalance(value) {
   balanceFrame = requestAnimationFrame(tick);
 }
 
-/* ===================== Navigation ===================== */
+/* ================= Navigation ================= */
 
 function playEnter(element, className) {
   element.classList.remove("anim-in-right", "anim-in-left");
@@ -1393,7 +1211,13 @@ function paint(html) {
   panel.classList.add("anim-pop");
 }
 
+function clearGameTimer() {
+  clearInterval(gameTimer);
+  gameTimer = null;
+}
+
 function showHome() {
+  clearGameTimer();
   currentView = "home";
   viewVersion++;
 
@@ -1407,6 +1231,7 @@ function showHome() {
 }
 
 function showView(name, title) {
+  clearGameTimer();
   currentView = name;
   viewVersion++;
 
@@ -1423,57 +1248,50 @@ function showView(name, title) {
 
 backArrow.onclick = showHome;
 
-/* ===================== Notifications ===================== */
-
-const notifOverlay = document.getElementById("notifOverlay");
-const notifSheet = document.getElementById("notifSheet");
-const notifList = document.getElementById("notifList");
-const bellBtn = document.getElementById("bellBtn");
-const bellDot = document.getElementById("bellDot");
-const closeNotifBtn = document.getElementById("closeNotifBtn");
+/* ================= Notifications ================= */
 
 const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
 
-let lastSeenMemory = "";
+let seenMemory = "";
 let previousFocus = null;
 let previousOverflow = "";
 
-function getLastSeenTime() {
+function notificationKey(notification) {
+  return String(notification?.id || notification?.time || "");
+}
+
+function getSeen() {
   try {
-    return localStorage.getItem(LAST_SEEN_KEY) || lastSeenMemory;
+    return localStorage.getItem(LAST_SEEN_KEY) || seenMemory;
   } catch {
-    return lastSeenMemory;
+    return seenMemory;
   }
 }
 
-function setLastSeenTime(value) {
-  lastSeenMemory = String(value || "");
+function setSeen(value) {
+  seenMemory = value;
 
   try {
-    localStorage.setItem(LAST_SEEN_KEY, lastSeenMemory);
-  } catch {
-    // در صورت نبود دسترسی، مقدار در حافظه نگه داشته می‌شود.
-  }
+    localStorage.setItem(LAST_SEEN_KEY, value);
+  } catch {}
 }
 
 function renderNotifications() {
-  notifList.replaceChildren();
+  const list = $("notifList");
+  list.replaceChildren();
 
   if (!state.notifications.length) {
     const empty = document.createElement("div");
     empty.className = "notif-empty";
     empty.textContent = "هنوز اعلانی نداری";
-    notifList.appendChild(empty);
+    list.appendChild(empty);
     return;
   }
-
-  const fragment = document.createDocumentFragment();
 
   state.notifications.forEach((notification, index) => {
     const item = document.createElement("div");
     item.className = "notif-item " +
       (notification.type === "fail" ? "fail" : "success");
-
     item.style.animationDelay = `${Math.min(index, 6) * 45}ms`;
 
     const text = document.createElement("div");
@@ -1484,128 +1302,103 @@ function renderNotifications() {
     time.textContent = String(notification.time || "");
 
     item.append(text, time);
-    fragment.appendChild(item);
+    list.appendChild(item);
   });
-
-  notifList.appendChild(fragment);
 }
 
 function updateBellDot() {
-  const newestTime = String(state.notifications[0]?.time || "");
-
-  bellDot.classList.toggle(
-    "show",
-    Boolean(newestTime && newestTime !== getLastSeenTime())
-  );
+  const newest = notificationKey(state.notifications[0]);
+  $("bellDot").classList.toggle("show", Boolean(newest && newest !== getSeen()));
 }
 
 function openNotifications() {
-  if (notifOverlay.classList.contains("show")) return;
+  const overlay = $("notifOverlay");
+  if (overlay.classList.contains("show")) return;
 
   previousFocus = document.activeElement;
   previousOverflow = document.body.style.overflow;
 
   renderNotifications();
-
-  notifOverlay.inert = false;
-  notifOverlay.setAttribute("aria-hidden", "false");
-  notifOverlay.classList.add("show");
-  bellBtn.setAttribute("aria-expanded", "true");
+  overlay.inert = false;
+  overlay.setAttribute("aria-hidden", "false");
+  overlay.classList.add("show");
+  $("bellBtn").setAttribute("aria-expanded", "true");
 
   document.body.style.overflow = "hidden";
-  closeNotifBtn.focus({ preventScroll: true });
+  $("closeNotifBtn").focus({ preventScroll: true });
   app.inert = true;
 
-  if (state.notifications.length) {
-    setLastSeenTime(state.notifications[0].time);
-  }
-
+  setSeen(notificationKey(state.notifications[0]));
   updateBellDot();
 }
 
 function closeNotifications() {
-  if (!notifOverlay.classList.contains("show")) return;
+  const overlay = $("notifOverlay");
+
+  if (!overlay.classList.contains("show")) return;
 
   app.inert = false;
   document.body.style.overflow = previousOverflow;
-  bellBtn.setAttribute("aria-expanded", "false");
+  $("bellBtn").setAttribute("aria-expanded", "false");
 
   if (previousFocus?.isConnected) {
     previousFocus.focus({ preventScroll: true });
   }
 
-  notifOverlay.classList.remove("show");
-  notifOverlay.setAttribute("aria-hidden", "true");
-  notifOverlay.inert = true;
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.inert = true;
 }
 
-bellBtn.onclick = openNotifications;
-closeNotifBtn.onclick = closeNotifications;
+$("bellBtn").onclick = openNotifications;
+$("closeNotifBtn").onclick = closeNotifications;
 
-notifOverlay.onclick = event => {
-  if (event.target === notifOverlay) closeNotifications();
+$("notifOverlay").onclick = event => {
+  if (event.target === $("notifOverlay")) closeNotifications();
 };
 
-notifSheet.addEventListener("keydown", event => {
+$("notifSheet").addEventListener("keydown", event => {
   if (event.key === "Escape") {
     event.preventDefault();
     closeNotifications();
-    return;
   }
 
-  if (event.key !== "Tab") return;
-
-  const focusable = [...notifSheet.querySelectorAll(
-    'button:not(:disabled), a[href], input:not(:disabled), ' +
-    '[tabindex]:not([tabindex="-1"])'
-  )].filter(element => element.getClientRects().length);
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-
-  if (event.shiftKey && document.activeElement === first) {
+  if (event.key === "Tab") {
     event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
+    $("closeNotifBtn").focus();
   }
 });
 
-/* ===================== Invite ===================== */
+/* ================= Invite ================= */
 
 async function viewInvite() {
   const version = showView("invite", "👥 لینک دعوت");
 
   paint(`
     <p>
-      اگر این لینک را برای دوستتان بفرستید و او با همین لینک
-      ربات را استارت کند، مستقیم
+      اگر دوستت با لینک دعوت تو ربات را استارت کند،
       <b class="gold-text">۴۰۰,۰۰۰ میو</b>
       به حساب شما واریز خواهد شد.
     </p>
-
     <div class="link-box">
       <span id="inviteLinkText">در حال دریافت لینک…</span>
-      <button type="button" class="copy-btn" id="copyBtn" disabled>
-        کپی
-      </button>
+      <button type="button" class="copy-btn" id="copyBtn" disabled>کپی</button>
     </div>
   `);
 
-  const link = await MioAPI.getInviteLink();
-
+  const result = await api("/invite-link");
   if (version !== viewVersion) return;
 
-  const linkElement = document.getElementById("inviteLinkText");
-  const copyButton = document.getElementById("copyBtn");
+  const link = typeof result.link === "string" ? result.link : "";
 
-  linkElement.textContent = link || "خطا در دریافت لینک";
-  copyButton.disabled = !link;
-  copyButton.onclick = () => copyText(link, copyButton);
+  $("inviteLinkText").textContent = link || "خطا در دریافت لینک";
+  $("copyBtn").disabled = !link;
+  $("copyBtn").onclick = () => copyText(link, $("copyBtn"));
+
+  if (!link) showToast(errorText(result.error));
 }
 
-/* ===================== Withdraw / ID ===================== */
+/* ================= Withdraw forms ================= */
 
 function viewWithdrawForm() {
   if (activeWithdrawal) {
@@ -1619,69 +1412,43 @@ function viewWithdrawForm() {
   showView("withdraw-form", "📤 برداشت با آیدی");
 
   paint(`
-    <p>دوست عزیز، شما در حالت برداشت هستید.</p>
-
-    <p>
-      موجودی قابل برداشت شما:
+    <p>موجودی قابل برداشت شما:
       <b class="gold-text">${fmt(state.balance)} میو</b>
     </p>
-
-    <p>آیدی تلگرام خود را وارد کنید و سپس تأیید را بزنید.</p>
+    <p>آیدی تلگرام خود را وارد کنید و تأیید را بزنید.</p>
 
     <form id="withdrawForm" novalidate>
-      <label class="field-label" for="withdrawIdInput">
-        آیدی تلگرام
-      </label>
+      <label class="field-label" for="withdrawIdInput">آیدی تلگرام</label>
+      <input class="id-input" id="withdrawIdInput" placeholder="@username"
+        autocomplete="off" autocapitalize="off" spellcheck="false"
+        aria-describedby="withdrawError">
 
-      <input
-        class="id-input"
-        id="withdrawIdInput"
-        placeholder="@username"
-        autocomplete="off"
-        autocapitalize="off"
-        spellcheck="false"
-        aria-describedby="withdrawError"
-      >
+      <div class="field-error" id="withdrawError" role="alert"></div>
 
-      <div
-        class="field-error"
-        id="withdrawError"
-        role="alert"
-      ></div>
-
-      <button
-        type="submit"
-        class="primary-btn rgb-btn"
-        id="withdrawConfirmBtn"
-      >
-        ${rgbConfirmLabel()}
+      <button type="submit" class="primary-btn rgb-btn">
+        ${confirmLabel()}
       </button>
     </form>
   `);
 
-  document.getElementById("withdrawForm").onsubmit = event => {
+  $("withdrawForm").onsubmit = event => {
     event.preventDefault();
 
-    const input = document.getElementById("withdrawIdInput");
-    const error = document.getElementById("withdrawError");
-    const target = input.value.trim();
+    const target = $("withdrawIdInput").value.trim();
 
-    if (!target.startsWith("@") || target.length < 2) {
-      error.textContent = "❌ آیدی باید با @ شروع شود.";
-      input.focus();
+    if (!/^@[A-Za-z0-9_]{1,32}$/.test(target)) {
+      $("withdrawError").textContent = "آیدی معتبر با @ وارد کن.";
       return;
     }
 
     if (state.balance <= 0) {
-      error.textContent = "❌ موجودی شما صفر است.";
+      $("withdrawError").textContent = "موجودی شما صفر است.";
       return;
     }
 
     startWithdrawal("id", target);
   };
 }
-
-/* ===================== Withdraw / Bank ===================== */
 
 function viewBankWithdrawConfirm() {
   if (activeWithdrawal) {
@@ -1698,28 +1465,18 @@ function viewBankWithdrawConfirm() {
     <p>
       شما می‌توانید
       <b class="gold-text">${fmt(state.balance)} میو</b>
-      از موجودی خود را با بانک میویی برداشت کنید.
+      با بانک میویی برداشت کنید.
     </p>
-
     <p>برای ادامه روی تأیید بزنید.</p>
 
-    <button
-      type="button"
-      class="primary-btn rgb-btn"
-      id="bankConfirmBtn"
-    >
-      ${rgbConfirmLabel()}
+    <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">
+      ${confirmLabel()}
     </button>
-
-    <button type="button" class="ghost-btn" id="bankCancelBtn">
-      لغو
-    </button>
+    <button type="button" class="ghost-btn" id="bankCancelBtn">لغو</button>
   `);
 
-  document.getElementById("bankConfirmBtn").onclick =
-    viewBankWithdrawCardInput;
-
-  document.getElementById("bankCancelBtn").onclick = showHome;
+  $("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
+  $("bankCancelBtn").onclick = showHome;
 }
 
 function viewBankWithdrawCardInput() {
@@ -1737,58 +1494,34 @@ function viewBankWithdrawCardInput() {
     <p>شماره کارت میویی خود را وارد کنید:</p>
 
     <form id="bankCardForm" novalidate>
-      <label class="field-label" for="bankCardInput">
-        شماره کارت میویی
-      </label>
+      <label class="field-label" for="bankCardInput">شماره کارت میویی</label>
+      <input class="id-input" id="bankCardInput"
+        placeholder="مثلاً 232491826963" inputmode="numeric"
+        autocomplete="off" aria-describedby="bankCardError">
 
-      <input
-        class="id-input"
-        id="bankCardInput"
-        placeholder="مثلاً 232491826963"
-        inputmode="numeric"
-        autocomplete="off"
-        aria-describedby="bankCardError"
-      >
+      <div class="field-error" id="bankCardError" role="alert"></div>
 
-      <div
-        class="field-error"
-        id="bankCardError"
-        role="alert"
-      ></div>
-
-      <button
-        type="submit"
-        class="primary-btn rgb-btn"
-        id="bankCardConfirmBtn"
-      >
-        ${rgbConfirmLabel()}
+      <button type="submit" class="primary-btn rgb-btn">
+        ${confirmLabel()}
       </button>
-
-      <button type="button" class="ghost-btn" id="bankCardBackBtn">
-        برگشت
-      </button>
+      <button type="button" class="ghost-btn" id="bankCardBackBtn">برگشت</button>
     </form>
   `);
 
-  document.getElementById("bankCardBackBtn").onclick =
-    viewBankWithdrawConfirm;
+  $("bankCardBackBtn").onclick = viewBankWithdrawConfirm;
 
-  document.getElementById("bankCardForm").onsubmit = event => {
+  $("bankCardForm").onsubmit = event => {
     event.preventDefault();
 
-    const input = document.getElementById("bankCardInput");
-    const error = document.getElementById("bankCardError");
-    const card = toEnglishDigits(input.value.trim());
+    const card = englishDigits($("bankCardInput").value.trim());
 
     if (!/^[0-9]{10,20}$/.test(card)) {
-      error.textContent =
-        "❌ شماره کارت میویی باید بین ۱۰ تا ۲۰ رقم باشد.";
-      input.focus();
+      $("bankCardError").textContent = "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
       return;
     }
 
     if (state.balance <= 0) {
-      error.textContent = "❌ موجودی شما صفر است.";
+      $("bankCardError").textContent = "موجودی شما صفر است.";
       return;
     }
 
@@ -1796,11 +1529,10 @@ function viewBankWithdrawCardInput() {
   };
 }
 
-/* ===================== Withdraw process ===================== */
+/* ================= Withdraw process ================= */
 
 function isWithdrawalView() {
-  return currentView === "withdraw-waiting" ||
-         currentView === "withdraw-unknown";
+  return ["withdraw-waiting", "withdraw-unknown"].includes(currentView);
 }
 
 function viewWithdrawWaiting() {
@@ -1813,97 +1545,75 @@ function viewWithdrawWaiting() {
     <p class="muted-center" id="queueWaitText"></p>
   `);
 
-  if (activeWithdrawal) {
-    updateWaitingInfo(
-      activeWithdrawal.position,
-      activeWithdrawal.wait_text
-    );
-  }
+  updateWaitingInfo(activeWithdrawal || {});
 }
 
-function updateWaitingInfo(position, waitText) {
-  const positionElement = document.getElementById("queuePositionText");
-  const waitElement = document.getElementById("queueWaitText");
-
-  if (positionElement) {
-    positionElement.textContent = position
-      ? `👤 شما نفر ${position} در صف هستید`
+function updateWaitingInfo(result) {
+  if ($("queuePositionText")) {
+    $("queuePositionText").textContent = result.position
+      ? `👤 شما نفر ${result.position} در صف هستید`
       : "";
   }
 
-  if (waitElement) {
-    waitElement.textContent = waitText ? `⏱ ${waitText}` : "";
+  if ($("queueWaitText")) {
+    $("queueWaitText").textContent = result.wait_text
+      ? `⏱ ${result.wait_text}`
+      : "";
   }
 }
 
 function viewActiveWithdrawal() {
   if (activeWithdrawal?.phase === "unknown") {
     viewWithdrawUnknown();
-  } else {
-    viewWithdrawWaiting();
+    return;
+  }
+
+  viewWithdrawWaiting();
+
+  if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
+    pollWithdrawStatus();
   }
 }
 
 async function startWithdrawal(method, value) {
-  if (activeWithdrawal) {
-    viewActiveWithdrawal();
-    return;
-  }
-
-  lastWithdrawMethod = method;
+  if (activeWithdrawal) return viewActiveWithdrawal();
 
   const job = {
     method,
     phase: "submitting",
-    position: null,
-    wait_text: ""
+    withdraw_id: null
   };
 
   activeWithdrawal = job;
+  lastWithdrawMethod = method;
   viewWithdrawWaiting();
 
   const result = method === "bank"
-    ? await MioAPI.requestBankWithdraw(value)
-    : await MioAPI.requestWithdraw(value);
+    ? await post("/withdraw-bank", { card: value })
+    : await post("/withdraw", { target: value });
 
   if (activeWithdrawal !== job) return;
 
-  if (!result.ok) {
-    if (
-      result.error === "network" ||
-      result.error === "invalid_response"
-    ) {
-      job.phase = "unknown";
-
-      if (isWithdrawalView()) {
-        viewWithdrawUnknown();
-      } else {
-        showToast("وضعیت برداشت مشخص نشد؛ دوباره وضعیت را بررسی کنید.");
-      }
-
-      return;
-    }
-
-    activeWithdrawal = null;
-
-    if (isWithdrawalView()) {
-      viewWithdrawFailed();
-    } else {
-      showToast("درخواست برداشت ناموفق بود.");
-    }
-
+  if (result.ok || result.error === "already_pending") {
+    Object.assign(job, result, { phase: "pending" });
+    if (isWithdrawalView()) updateWaitingInfo(job);
+    pollWithdrawStatus();
     return;
   }
 
-  job.phase = "pending";
-  job.position = result.position;
-  job.wait_text = result.wait_text;
-
-  if (currentView === "withdraw-waiting") {
-    updateWaitingInfo(job.position, job.wait_text);
+  if (
+    ["network", "invalid_response", "database_unavailable", "server"]
+      .includes(result.error)
+  ) {
+    job.phase = "unknown";
+    if (isWithdrawalView()) viewWithdrawUnknown();
+    else showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
+    return;
   }
 
-  pollWithdrawStatus();
+  activeWithdrawal = null;
+  if (isWithdrawalView()) viewWithdrawFailed(errorText(result.error));
+  else showToast(errorText(result.error));
 }
 
 async function pollWithdrawStatus() {
@@ -1916,23 +1626,37 @@ async function pollWithdrawStatus() {
   try {
     for (let attempt = 0; attempt < 40; attempt++) {
       await new Promise(resolve => setTimeout(resolve, 3000));
-
       if (activeWithdrawal !== job) return;
 
-      const result = await MioAPI.getWithdrawStatus();
+      /*
+       * اگر پاسخ ثبت برداشت گم شده، ابتدا فقط برداشت معلق را پیدا می‌کنیم.
+       * آخرین برداشت موفق قدیمی را به اشتباه نتیجهٔ درخواست جدید نمی‌گیریم.
+       */
+      if (!job.withdraw_id) {
+        const user = await api("/user");
+
+        if (user.pending_withdrawal?.withdraw_id) {
+          Object.assign(job, user.pending_withdrawal);
+        } else {
+          job.phase = "unknown";
+          if (isWithdrawalView()) viewWithdrawUnknown();
+          return;
+        }
+      }
+
+      const result = await api(
+        "/withdraw-status?withdraw_id=" +
+        encodeURIComponent(job.withdraw_id)
+      );
 
       if (activeWithdrawal !== job) return;
 
       if (result.status === "success") {
         activeWithdrawal = null;
 
-        if (isWithdrawalView()) {
-          viewWithdrawSuccess();
-        } else {
-          showToast("🎉 برداشت شما با موفقیت انجام شد.");
-        }
+        if (isWithdrawalView()) viewWithdrawSuccess();
+        else showToast("🎉 برداشت شما با موفقیت انجام شد.");
 
-        // موجودی واقعی را دوباره از بک‌اند دریافت می‌کنیم.
         refreshData(false);
         return;
       }
@@ -1940,32 +1664,21 @@ async function pollWithdrawStatus() {
       if (result.status === "failed") {
         activeWithdrawal = null;
 
-        if (isWithdrawalView()) {
-          viewWithdrawFailed();
-        } else {
-          showToast("برداشت ناموفق بود.");
-        }
+        if (isWithdrawalView()) viewWithdrawFailed();
+        else showToast("برداشت ناموفق بود.");
 
+        refreshData(false);
         return;
       }
 
       if (result.status === "pending") {
-        job.position = result.position;
-        job.wait_text = result.wait_text;
-
-        if (currentView === "withdraw-waiting") {
-          updateWaitingInfo(job.position, job.wait_text);
-        }
+        Object.assign(job, result);
+        if (currentView === "withdraw-waiting") updateWaitingInfo(job);
       }
     }
 
     job.phase = "unknown";
-
-    if (isWithdrawalView()) {
-      viewWithdrawUnknown();
-    } else {
-      showToast("نتیجهٔ برداشت هنوز مشخص نشده است.");
-    }
+    if (isWithdrawalView()) viewWithdrawUnknown();
   } finally {
     pollingWithdrawal = false;
   }
@@ -1976,52 +1689,39 @@ function viewWithdrawUnknown() {
 
   paint(`
     <div class="result-icon">⏳</div>
-
+    <p class="muted-center"><b>نتیجهٔ برداشت هنوز مشخص نشده است.</b></p>
     <p class="muted-center">
-      <b>نتیجهٔ برداشت هنوز مشخص نشده است.</b>
+      آخرین وضعیت و موجودی را بررسی کن. اگر پاسخ ثبت درخواست قطع شده،
+      ممکن است نتیجه در اعلان‌ها نمایش داده شود.
     </p>
-
-    <p class="muted-center">
-      برای دریافت آخرین وضعیت، بررسی دوباره را بزنید.
-    </p>
-
-    <button type="button" class="primary-btn" id="checkWithdrawBtn">
-      بررسی دوباره
-    </button>
-
-    <button type="button" class="ghost-btn" id="withdrawHomeBtn">
-      بازگشت به خانه
-    </button>
+    <button type="button" class="primary-btn" id="checkWithdrawBtn">بررسی دوباره</button>
+    <button type="button" class="ghost-btn" id="withdrawHomeBtn">بازگشت به خانه</button>
   `);
 
-  document.getElementById("checkWithdrawBtn").onclick = () => {
+  $("checkWithdrawBtn").onclick = () => {
+    refreshData(false);
     viewWithdrawWaiting();
     pollWithdrawStatus();
   };
 
-  document.getElementById("withdrawHomeBtn").onclick = showHome;
+  $("withdrawHomeBtn").onclick = showHome;
 }
 
-function viewWithdrawFailed() {
+function viewWithdrawFailed(message = "لطفاً دوباره تلاش کنید.") {
   showView("withdraw-failed", "📤 برداشت");
 
   paint(`
     <div class="result-icon">❌</div>
-
     <p class="muted-center"><b>برداشت ناموفق بود</b></p>
-    <p class="muted-center">لطفاً دوباره تلاش کنید.</p>
-
-    <button type="button" class="primary-btn" id="retryBtn">
-      تلاش دوباره
-    </button>
+    <p class="muted-center" id="withdrawFailMessage"></p>
+    <button type="button" class="primary-btn" id="retryBtn">تلاش دوباره</button>
   `);
 
-  document.getElementById("retryBtn").onclick = () => {
-    if (lastWithdrawMethod === "bank") {
-      viewBankWithdrawCardInput();
-    } else {
-      viewWithdrawForm();
-    }
+  $("withdrawFailMessage").textContent = message;
+
+  $("retryBtn").onclick = () => {
+    if (lastWithdrawMethod === "bank") viewBankWithdrawCardInput();
+    else viewWithdrawForm();
   };
 }
 
@@ -2030,27 +1730,20 @@ function viewWithdrawSuccess() {
 
   paint(`
     <div class="result-icon">🎉</div>
-
-    <p class="muted-center">
-      <b>میوهای شما با موفقیت واریز شد</b>
-    </p>
-
+    <p class="muted-center"><b>میوهای شما با موفقیت واریز شد</b></p>
     <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
 
     <button type="button" class="primary-btn" id="receiptYesBtn">
       تأیید، رسید می‌خواهم
     </button>
-
-    <button type="button" class="ghost-btn" id="receiptNoBtn">
-      فعلاً نه
-    </button>
+    <button type="button" class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
   `);
 
-  document.getElementById("receiptYesBtn").onclick = requestReceipt;
-  document.getElementById("receiptNoBtn").onclick = showHome;
+  $("receiptYesBtn").onclick = requestReceipt;
+  $("receiptNoBtn").onclick = showHome;
 }
 
-/* ===================== Receipt ===================== */
+/* ================= Receipt ================= */
 
 async function requestReceipt() {
   const version = showView("receipt-loading", "📨 رسید");
@@ -2060,31 +1753,20 @@ async function requestReceipt() {
     <p class="muted-center" role="status">در حال ثبت درخواست…</p>
   `);
 
-  const result = await MioAPI.requestReceipt();
+  const result = await post("/receipt");
 
   if (version !== viewVersion) {
-    showToast(
-      result.ok
-        ? "درخواست رسید ثبت شد."
-        : "ثبت درخواست رسید انجام نشد."
-    );
+    showToast(result.ok ? "درخواست رسید ثبت شد." : errorText(result.error));
     return;
   }
 
   if (!result.ok) {
     paint(`
-      <div class="result-icon">📨</div>
-
-      <p class="muted-center">
-        ثبت درخواست رسید انجام نشد. دوباره تلاش کنید.
-      </p>
-
-      <button type="button" class="primary-btn" id="receiptRetryBtn">
-        تلاش دوباره
-      </button>
+      <p class="muted-center">ثبت درخواست رسید انجام نشد.</p>
+      <button type="button" class="primary-btn" id="receiptRetryBtn">تلاش دوباره</button>
     `);
 
-    document.getElementById("receiptRetryBtn").onclick = requestReceipt;
+    $("receiptRetryBtn").onclick = requestReceipt;
     return;
   }
 
@@ -2092,35 +1774,23 @@ async function requestReceipt() {
 
   paint(`
     <div class="result-icon">📨</div>
-
     <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
     <p class="muted-center">به اکانت زیر پیام بده:</p>
 
     <div class="link-box">
-      <span style="text-align:center;">@Pott5y6jg</span>
-      <button type="button" class="copy-btn" id="copyAccountBtn">
-        کپی
-      </button>
+      <span style="text-align:center">@Pott5y6jg</span>
+      <button type="button" class="copy-btn" id="copyAccountBtn">کپی</button>
     </div>
 
     <p class="muted-center">و بنویس:</p>
-
-    <p class="muted-center">
-      <b class="gold-text">رسیدم رو بده ❤️</b>
-    </p>
-
-    <p class="muted-center">
-      🤖 رسید به صورت خودکار برات ارسال می‌شود.
-    </p>
+    <p class="muted-center"><b class="gold-text">رسیدم رو بده ❤️</b></p>
+    <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
   `);
 
-  const button = document.getElementById("copyAccountBtn");
-  button.onclick = () => copyText("@Pott5y6jg", button);
+  $("copyAccountBtn").onclick = () => copyText("@Pott5y6jg", $("copyAccountBtn"));
 }
 
-/* ===================== Daily ===================== */
-
-let enablingDaily = false;
+/* ================= Daily ================= */
 
 function viewDaily() {
   if (!ensureUserData()) return;
@@ -2132,10 +1802,8 @@ function viewDaily() {
       <div class="toggle-row">
         <span class="status-text">روشن است ✅</span>
       </div>
-
       <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
     `);
-
     return;
   }
 
@@ -2145,64 +1813,471 @@ function viewDaily() {
       <b class="gold-text">۳۴۰,۰۰۰ میو</b>
       دریافت می‌کنید.
     </p>
-
-    <button
-      type="button"
-      class="primary-btn"
-      id="enableDailyBtn"
-      ${enablingDaily ? "disabled" : ""}
-    >
+    <button type="button" class="primary-btn" id="enableDailyBtn"
+      ${enablingDaily ? "disabled" : ""}>
       ${enablingDaily ? "در حال فعال‌سازی…" : "✅ فعال کن"}
     </button>
   `);
 
-  document.getElementById("enableDailyBtn").onclick = async () => {
+  $("enableDailyBtn").onclick = async () => {
     if (enablingDaily) return;
 
     enablingDaily = true;
+    $("enableDailyBtn").disabled = true;
+    $("enableDailyBtn").textContent = "در حال فعال‌سازی…";
 
-    const button = document.getElementById("enableDailyBtn");
-    button.disabled = true;
-    button.textContent = "در حال فعال‌سازی…";
-
-    const result = await MioAPI.enableDaily();
+    const result = await post("/daily/enable");
     enablingDaily = false;
 
     if (result.ok) {
       state.daily_enabled = true;
-
-      if (typeof result.balance === "number") {
-        setBalance(result.balance);
-      }
+      setBalance(result.balance);
     } else {
-      showToast("فعال‌سازی انجام نشد؛ دوباره تلاش کنید.");
+      showToast(errorText(result.error));
     }
 
-    if (currentView === "daily") {
-      viewDaily();
+    if (currentView === "daily") viewDaily();
+  };
+}
+
+/* ================= Game request persistence ================= */
+
+const GAME_PENDING_KEY = `mio_game_pending_${TG_USER_ID}`;
+let pendingGameMemory = "";
+
+function getPendingGame() {
+  try {
+    return localStorage.getItem(GAME_PENDING_KEY) || pendingGameMemory;
+  } catch {
+    return pendingGameMemory;
+  }
+}
+
+function savePendingGame(id) {
+  pendingGameMemory = id;
+  try {
+    localStorage.setItem(GAME_PENDING_KEY, id);
+  } catch {}
+}
+
+function clearPendingGame(id) {
+  if (pendingGameMemory === id) pendingGameMemory = "";
+
+  try {
+    if (localStorage.getItem(GAME_PENDING_KEY) === id) {
+      localStorage.removeItem(GAME_PENDING_KEY);
+    }
+  } catch {}
+}
+
+function makeRequestId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 15) | 64;
+  bytes[8] = (bytes[8] & 63) | 128;
+
+  const hex = [...bytes].map(v => v.toString(16).padStart(2, "0"));
+
+  return [
+    hex.slice(0, 4).join(""),
+    hex.slice(4, 6).join(""),
+    hex.slice(6, 8).join(""),
+    hex.slice(8, 10).join(""),
+    hex.slice(10, 16).join("")
+  ].join("-");
+}
+
+/* ================= Game page ================= */
+
+function acceptGameState(data) {
+  gameState = {
+    ...data,
+    deadline: performance.now() +
+      Math.max(0, Number(data.remaining_seconds) || 0) * 1000
+  };
+}
+
+function remainingGameSeconds() {
+  if (!gameState) return 0;
+  return Math.max(0, Math.ceil((gameState.deadline - performance.now()) / 1000));
+}
+
+function formatCountdown(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return [hours, minutes, secs]
+    .map(value => String(value).padStart(2, "0"))
+    .join(":");
+}
+
+function canStartGame() {
+  return Boolean(
+    gameState?.enabled &&
+    !gameState.withdrawal_pending &&
+    remainingGameSeconds() === 0
+  );
+}
+
+async function viewGame() {
+  if (!ensureUserData()) return;
+
+  const version = showView("game", "🎰 بازی میویی");
+
+  if (gameBusy && gameState) {
+    renderGame();
+    return;
+  }
+
+  paint(`
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="muted-center" role="status">در حال دریافت وضعیت بازی…</p>
+  `);
+
+  const result = await api("/game/status");
+
+  if (version !== viewVersion) return;
+
+  if (!result.ok) {
+    paint(`
+      <p class="muted-center" id="gameLoadError"></p>
+      <button type="button" class="primary-btn" id="reloadGameBtn">تلاش دوباره</button>
+    `);
+
+    $("gameLoadError").textContent = errorText(result.error);
+    $("reloadGameBtn").onclick = viewGame;
+    return;
+  }
+
+  acceptGameState(result);
+  setBalance(result.balance);
+  renderGame();
+}
+
+function renderGame() {
+  if (currentView !== "game" || !gameState) return;
+
+  clearGameTimer();
+
+  const lastRound = gameState.last_round;
+  const symbols = Array.isArray(lastRound?.symbols)
+    ? lastRound.symbols
+    : ["seven", "grape", "lemon"];
+
+  const payouts = gameState.payouts || DEFAULT_PAYOUTS;
+
+  const tableRows = ["seven", "grape", "lemon", "blank"].map(symbol => {
+    const values = payouts[symbol] || DEFAULT_PAYOUTS[symbol];
+
+    return `
+      <tr>
+        <td aria-label="${SYMBOL_NAMES[symbol]}">${GAME_SYMBOLS[symbol]}</td>
+        <td>${fmt(values[1])}</td>
+        <td>${fmt(values[2])}</td>
+        <td>${fmt(values[3])}</td>
+      </tr>
+    `;
+  }).join("");
+
+  paint(`
+    <div class="game-intro">
+      <span class="game-badge">یک بازی رایگان، هر ۴۸ ساعت</span>
+      <p>روی دستگاه بزن و شانست رو امتحان کن ✨</p>
+    </div>
+
+    <button type="button" class="slot-machine" id="slotMachine"
+      aria-label="شروع بازی میویی" disabled>
+      <span class="slot-heading">MIO LUCK</span>
+
+      <span class="reels" aria-hidden="true">
+        ${symbols.map((symbol, index) => `
+          <span class="reel" id="reel${index}">
+            <span class="reel-symbol" id="reelSymbol${index}">
+              ${GAME_SYMBOLS[symbol] || "✖️"}
+            </span>
+          </span>
+        `).join("")}
+      </span>
+
+      <span class="slot-footer">
+        <span class="slot-light"></span>
+        سه خانه، یک شانس تازه
+        <span class="slot-light"></span>
+      </span>
+    </button>
+
+    <button type="button" class="primary-btn rgb-btn" id="playGameBtn" disabled>
+      <span class="btn-label" id="playGameLabel">بازی کن</span>
+    </button>
+
+    <div class="game-status" id="gameStatus" role="status"></div>
+
+    ${lastRound ? `
+      <div class="game-result">
+        <small>آخرین نتیجهٔ ثبت‌شده</small>
+        <strong>${fmt(lastRound.reward)} میو</strong>
+        <p>
+          ${Number(lastRound.reward) > 0
+            ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
+            : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀"}
+        </p>
+      </div>
+    ` : ""}
+
+    <table class="prize-table">
+      <caption>جدول جایزه‌ها — به میو</caption>
+      <thead>
+        <tr>
+          <th scope="col">نماد</th>
+          <th scope="col">یک عدد</th>
+          <th scope="col">دو عدد</th>
+          <th scope="col">سه عدد</th>
+        </tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+
+    <p class="game-note">
+      جایزهٔ نمادهای مختلف با هم جمع می‌شود.
+      مثلاً هفت + انگور + پوچ = ۱۳۰,۰۰۰ میو.
+    </p>
+
+    <button type="button" class="ghost-btn" id="gameRefreshBtn">
+      بروزرسانی وضعیت بازی
+    </button>
+  `);
+
+  $("slotMachine").onclick = playGame;
+  $("playGameBtn").onclick = playGame;
+  $("gameRefreshBtn").onclick = viewGame;
+
+  updateGameControls();
+  gameTimer = setInterval(updateGameControls, 1000);
+}
+
+function updateGameControls() {
+  if (currentView !== "game" || !$("playGameBtn")) return;
+
+  const pendingId = getPendingGame();
+  const canPlay = !gameBusy && (Boolean(pendingId) || canStartGame());
+
+  $("playGameBtn").disabled = !canPlay;
+  $("slotMachine").disabled = !canPlay;
+  $("gameRefreshBtn").disabled = gameBusy;
+
+  if (gameBusy) {
+    $("playGameLabel").textContent = "در حال دریافت نتیجه…";
+    $("gameStatus").textContent = "چند لحظه صبر کن 🎰";
+    return;
+  }
+
+  if (pendingId) {
+    $("playGameLabel").textContent = "بازیابی نتیجه";
+    $("gameStatus").textContent =
+      "پاسخ بازی قبلی کامل نرسیده؛ برای دریافت همان نتیجه بزن.";
+    return;
+  }
+
+  $("playGameLabel").textContent = "بازی کن 🎰";
+
+  if (!gameState.enabled) {
+    $("gameStatus").textContent = "بازی فعلاً غیرفعال است.";
+    return;
+  }
+
+  if (gameState.withdrawal_pending) {
+    $("gameStatus").textContent =
+      "برداشتت در حال پردازش است؛ بعد از پایان آن وضعیت بازی را بروزرسانی کن.";
+    return;
+  }
+
+  const remaining = remainingGameSeconds();
+
+  if (remaining > 0) {
+    $("gameStatus").innerHTML = `
+      بازی بعدی
+      <b>${formatCountdown(remaining)}</b>
+    `;
+  } else {
+    $("gameStatus").textContent = "شانست آماده‌ست؛ بازی کاملاً رایگانه ✨";
+  }
+}
+
+/*
+ * این اعداد تصادفی فقط برای انیمیشن هستند.
+ * نتیجه و جایزهٔ واقعی همیشه از سرور می‌آید.
+ */
+function startReelAnimation() {
+  const reels = [0, 1, 2].map(index => ({
+    box: $("reel" + index),
+    symbol: $("reelSymbol" + index),
+    interval: null
+  }));
+
+  const values = Object.values(GAME_SYMBOLS);
+
+  if (!reduceMotion.matches) {
+    reels.forEach(reel => {
+      reel.box?.classList.add("rolling");
+
+      reel.interval = setInterval(() => {
+        if (reel.symbol) {
+          reel.symbol.textContent =
+            values[Math.floor(Math.random() * values.length)];
+        }
+      }, 75);
+    });
+  }
+
+  function stopOne(index, finalSymbol) {
+    const reel = reels[index];
+    clearInterval(reel.interval);
+    reel.box?.classList.remove("rolling");
+
+    if (reel.symbol && finalSymbol) {
+      reel.symbol.textContent = GAME_SYMBOLS[finalSymbol] || "✖️";
+    }
+  }
+
+  return {
+    stop() {
+      reels.forEach((_, index) => stopOne(index));
+    },
+
+    async finish(symbols) {
+      for (let index = 0; index < 3; index++) {
+        if (!reduceMotion.matches) {
+          await new Promise(resolve =>
+            setTimeout(resolve, index === 0 ? 500 : 350)
+          );
+        }
+
+        stopOne(index, symbols[index]);
+      }
     }
   };
 }
 
-/* ===================== User data / Refresh ===================== */
+async function playGame() {
+  if (gameBusy) return;
+
+  let requestId = getPendingGame();
+
+  if (!requestId && !canStartGame()) return;
+
+  if (!requestId) {
+    try {
+      requestId = makeRequestId();
+    } catch {
+      showToast("برای بازی، مینی‌اپ را داخل تلگرام باز کن.");
+      return;
+    }
+
+    savePendingGame(requestId);
+  }
+
+  gameBusy = true;
+  updateGameControls();
+
+  const animation = startReelAnimation();
+
+  try {
+    const result = await post("/game/play", {
+      request_id: requestId
+    });
+
+    if (result.ok && result.round) {
+      acceptGameState(result);
+
+      await animation.finish(result.round.symbols);
+
+      clearPendingGame(requestId);
+      setBalance(result.balance);
+
+      const reward = Number(result.round.reward) || 0;
+
+      showToast(
+        result.replayed
+          ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
+          : reward > 0
+            ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
+            : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀"
+      );
+
+      return;
+    }
+
+    /*
+     * فقط پاسخ قطعیِ رد درخواست اجازه پاک‌کردن شناسه را دارد.
+     * در قطعی شبکه، همان شناسه برای بازیابی نتیجه نگه داشته می‌شود.
+     */
+    const definitiveErrors = [
+      "cooldown",
+      "withdrawal_pending",
+      "game_disabled",
+      "not_started",
+      "invalid_request_id"
+    ];
+
+    if (definitiveErrors.includes(result.error)) {
+      clearPendingGame(requestId);
+    }
+
+    if (typeof result.remaining_seconds === "number") {
+      acceptGameState(result);
+      if (typeof result.balance === "number") setBalance(result.balance);
+    }
+
+    showToast(errorText(result.error));
+  } finally {
+    animation.stop();
+    gameBusy = false;
+
+    if (currentView === "game") renderGame();
+  }
+}
+
+/* ================= User data ================= */
 
 function applyUserData(user) {
-  if (!user || !Number.isFinite(Number(user.balance))) return false;
+  if (
+    !user ||
+    user.ok === false ||
+    !Number.isFinite(Number(user.balance))
+  ) {
+    return false;
+  }
 
   hasUserData = true;
-  setBalance(user.balance);
+  state.not_started = Boolean(user.not_started);
   state.daily_enabled = Boolean(user.daily_enabled);
 
+  setBalance(user.balance);
+
   state.notifications = Array.isArray(user.notifications)
-    ? user.notifications.filter(
-        notification => notification && typeof notification === "object"
-      )
+    ? user.notifications.filter(item => item && typeof item === "object")
     : [];
+
+  /*
+   * پس از بازکردن مجدد مینی‌اپ، برداشت معلق از سرور بازیابی می‌شود.
+   * درخواست محلی در حال ارسال را با پاسخ قدیمی GET جایگزین نمی‌کنیم.
+   */
+  if (user.pending_withdrawal && !activeWithdrawal) {
+    activeWithdrawal = {
+      ...user.pending_withdrawal,
+      phase: "pending",
+      method: user.pending_withdrawal.withdraw_type === "card"
+        ? "bank"
+        : "id"
+    };
+  }
 
   renderNotifications();
 
-  if (notifOverlay.classList.contains("show")) {
-    setLastSeenTime(state.notifications[0]?.time);
+  if ($("notifOverlay").classList.contains("show")) {
+    setSeen(notificationKey(state.notifications[0]));
   }
 
   updateBellDot();
@@ -2217,21 +2292,17 @@ async function refreshData(showError = true) {
   refreshBtn.setAttribute("aria-busy", "true");
 
   try {
-    const user = await MioAPI.getUser();
+    const user = await api("/user");
 
     if (requestVersion !== userRequestVersion) return;
 
     if (!applyUserData(user)) {
-      if (showError) {
-        showToast("دریافت اطلاعات انجام نشد؛ دوباره تلاش کنید.");
-      }
-
+      if (showError) showToast(errorText(user.error));
       return;
     }
 
-    if (currentView === "daily") {
-      viewDaily();
-    }
+    if (currentView === "daily") viewDaily();
+    if (currentView === "game" && !gameBusy) await viewGame();
   } finally {
     if (requestVersion === userRequestVersion) {
       refreshBtn.classList.remove("spinning");
@@ -2241,13 +2312,13 @@ async function refreshData(showError = true) {
   }
 }
 
-/* ===================== Touch ripple ===================== */
+/* ================= Touch effect ================= */
 
 document.addEventListener("click", event => {
   if (!(event.target instanceof Element)) return;
 
   const button = event.target.closest(
-    ".menu-btn, .primary-btn, .copy-btn"
+    ".menu-btn,.primary-btn,.copy-btn"
   );
 
   if (!button || button.disabled || reduceMotion.matches) return;
@@ -2255,13 +2326,8 @@ document.addEventListener("click", event => {
   const rect = button.getBoundingClientRect();
   const size = Math.hypot(rect.width, rect.height) * 2;
 
-  const x = event.detail === 0
-    ? rect.width / 2
-    : event.clientX - rect.left;
-
-  const y = event.detail === 0
-    ? rect.height / 2
-    : event.clientY - rect.top;
+  const x = event.detail ? event.clientX - rect.left : rect.width / 2;
+  const y = event.detail ? event.clientY - rect.top : rect.height / 2;
 
   const ripple = document.createElement("span");
   ripple.className = "ripple";
@@ -2278,21 +2344,27 @@ document.addEventListener("click", event => {
   setTimeout(() => ripple.remove(), 650);
 }, true);
 
-/* ===================== Wiring ===================== */
+/* ================= Wiring ================= */
 
-document.getElementById("btnInvite").onclick = viewInvite;
-document.getElementById("btnWithdraw").onclick = viewWithdrawForm;
-document.getElementById("btnBankWithdraw").onclick =
-  viewBankWithdrawCardInput;
-document.getElementById("btnDaily").onclick = viewDaily;
+$("btnInvite").onclick = viewInvite;
+$("btnWithdraw").onclick = viewWithdrawForm;
+$("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
+$("btnDaily").onclick = viewDaily;
+$("btnGame").onclick = viewGame;
 
 refreshBtn.onclick = () => refreshData(true);
 
-/* ===================== Init ===================== */
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && currentView === "game") {
+    updateGameControls();
+  }
+});
+
+/* ================= Init ================= */
 
 async function init() {
   const requestVersion = ++userRequestVersion;
-  const userPromise = MioAPI.getUser();
+  const userPromise = api("/user");
 
   let timeoutId;
 
@@ -2300,24 +2372,19 @@ async function init() {
     timeoutId = setTimeout(() => resolve(null), 4000);
   });
 
-  const firstResult = await Promise.race([
-    userPromise,
-    timeoutPromise
-  ]);
+  const first = await Promise.race([userPromise, timeoutPromise]);
 
   clearTimeout(timeoutId);
-
-  skeletonSection.style.display = "none";
+  $("skeletonSection").style.display = "none";
   showHome();
 
   if (requestVersion !== userRequestVersion) return;
 
-  if (firstResult) {
-    if (!applyUserData(firstResult)) {
-      balanceValueEl.textContent = "—";
-      showToast("اطلاعات حساب دریافت نشد؛ بروزرسانی را بزنید.");
+  if (first) {
+    if (!applyUserData(first)) {
+      $("balanceValue").textContent = "—";
+      showToast(errorText(first.error));
     }
-
     return;
   }
 
@@ -2325,8 +2392,8 @@ async function init() {
     if (requestVersion !== userRequestVersion) return;
 
     if (!applyUserData(user)) {
-      balanceValueEl.textContent = "—";
-      showToast("اطلاعات حساب دریافت نشد؛ بروزرسانی را بزنید.");
+      $("balanceValue").textContent = "—";
+      showToast(errorText(user.error));
     }
   });
 }
