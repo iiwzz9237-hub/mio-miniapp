@@ -14,30 +14,25 @@
 
 <style>
 :root{
-  --bg:#0b3d91;
-  --card:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.10);
-  --gold:#f4cf77;
+  --user-bg:#0d1016;
+  --user-card:#202027;
+  --user-accent:#4f8cff;
   --text:#f5f5f7;
   --dim:#b6c8e8;
+  --border:rgba(255,255,255,.10);
   --danger:#ff8585;
   --success:#93d8ba;
   --ease:cubic-bezier(.22,1,.36,1);
 }
 
 *{box-sizing:border-box}
-
-html{
-  min-height:100%;
-  background:var(--bg);
-  color-scheme:dark;
-}
+html{min-height:100%;background:var(--user-bg);color-scheme:dark}
 
 body{
   margin:0;
   min-height:100vh;
-  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
-  background:var(--bg);
+  padding:env(safe-area-inset-top,0px) 0 calc(env(safe-area-inset-bottom,0px) + 94px);
+  background:var(--user-bg);
   color:var(--text);
   font-family:"Vazirmatn",sans-serif;
   overscroll-behavior:none;
@@ -51,57 +46,27 @@ body::before{
   z-index:0;
   pointer-events:none;
   background:
-    radial-gradient(ellipse at 85% 0%,rgba(64,156,255,.45),transparent 45%),
-    radial-gradient(ellipse at 0% 70%,rgba(0,105,255,.30),transparent 50%),
-    radial-gradient(ellipse at 50% 100%,rgba(0,47,120,.55),transparent 58%),
-    linear-gradient(165deg,#1479e9 0%,#0b4fb3 38%,#082e74 72%,#061f52 100%);
+    radial-gradient(ellipse at 88% 0%,rgba(255,255,255,.065),transparent 46%),
+    radial-gradient(ellipse at 0% 68%,rgba(91,135,220,.075),transparent 50%),
+    linear-gradient(165deg,var(--user-bg),var(--user-bg));
 }
 
 button,input{font-family:inherit}
-
-button{
-  color:inherit;
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
-}
-
+button{color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button:disabled{opacity:.55;cursor:not-allowed}
-
-button:focus-visible,input:focus-visible{
-  outline:2px solid var(--gold);
-  outline-offset:4px;
-}
+button:focus-visible,input:focus-visible{outline:2px solid var(--user-accent);outline-offset:4px}
 
 .app{
   position:relative;
   z-index:1;
   max-width:480px;
   margin:auto;
-  padding:20px 20px 44px;
+  padding:20px 20px 122px;
   animation:fade-in .65s var(--ease) backwards;
 }
 
-/* ===== Top bar ===== */
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:4px 0 12px;
-}
-
-.brand{
-  flex:1;
-  min-width:0;
-  text-align:center;
-  font-size:12px;
-  font-weight:600;
-  line-height:1.9;
-  color:#eef5ff;
-  overflow-wrap:anywhere;
-}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 12px}
+.brand{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:600;line-height:1.9;color:var(--text);overflow-wrap:anywhere}
 
 .icon-btn{
   position:relative;
@@ -112,14 +77,14 @@ button:focus-visible,input:focus-visible{
   width:44px;
   height:44px;
   padding:0;
-  border:1px solid rgba(255,255,255,.16);
+  border:1px solid var(--border);
   border-radius:15px;
-  background:rgba(4,35,90,.36);
-  color:#edf5ff;
-  transition:transform .2s var(--ease),background .2s ease;
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  transition:transform .2s var(--ease),background .2s;
 }
 
-.icon{
+.icon,.nav-svg{
   display:block;
   flex-shrink:0;
   width:22px;
@@ -131,117 +96,59 @@ button:focus-visible,input:focus-visible{
   stroke-linejoin:round;
 }
 
-.refresh-btn .icon{
-  transform-box:view-box;
-  transform-origin:50% 50%;
-}
-
+.refresh-btn .icon{transform-box:view-box;transform-origin:50% 50%}
 .refresh-btn.spinning .icon{animation:spin .85s linear infinite}
-
-.bell-dot{
-  position:absolute;
-  top:8px;
-  left:9px;
-  display:none;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--gold);
-  box-shadow:0 0 0 3px #0b3d91;
-}
-
+.bell-dot{position:absolute;top:8px;left:9px;display:none;width:7px;height:7px;border-radius:50%;background:var(--user-accent);box-shadow:0 0 0 3px var(--user-bg)}
 .bell-dot.show{display:block;animation:pop-in .4s var(--ease) backwards}
 
-/* ===== Title ===== */
-
-.title-row{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:46px;
-  margin:24px 0 28px;
-}
-
-.title{
-  margin:0;
-  text-align:center;
-  font-size:clamp(24px,7vw,34px);
-  font-weight:800;
-  letter-spacing:-.8px;
-}
-
+.title-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;margin:24px 0 28px}
+.title{margin:0;text-align:center;font-size:clamp(24px,7vw,34px);font-weight:800;letter-spacing:-.8px}
 .back-arrow{position:absolute;right:0;display:none}
 .view-active .title-row{padding-inline:49px}
 .view-active .title{font-size:clamp(19px,5.8vw,28px);line-height:1.6}
-
-/* ===== Balance ===== */
 
 .balance-card{
   position:relative;
   isolation:isolate;
   overflow:hidden;
   padding:32px 20px 36px;
-  margin-bottom:22px;
+  margin-bottom:14px;
   text-align:center;
-  border:1px solid rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.12);
   border-radius:28px;
   background:
-    radial-gradient(ellipse at 50% 0%,rgba(105,189,255,.24),transparent 75%),
-    linear-gradient(135deg,rgba(7,55,133,.88),rgba(4,29,78,.88));
-  box-shadow:0 18px 44px rgba(0,18,60,.26),inset 0 1px 0 rgba(255,255,255,.08);
+    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.075),transparent 72%),
+    linear-gradient(135deg,var(--user-card),var(--user-bg));
+  box-shadow:0 18px 44px rgba(0,0,0,.20);
   animation:rise .7s .04s var(--ease) backwards;
 }
 
-.balance-card::before{
-  content:"";
-  position:absolute;
-  inset:0 18% auto;
-  height:1px;
-  background:linear-gradient(90deg,transparent,#8dcbff,transparent);
-  pointer-events:none;
-}
+.balance-card::before{content:"";position:absolute;inset:0 18% auto;height:1px;background:linear-gradient(90deg,transparent,var(--user-accent),transparent);pointer-events:none}
+.balance-card::after{content:"";position:absolute;z-index:-1;left:-95px;bottom:-105px;width:170px;height:170px;border:1px solid rgba(122,195,255,.11);border-radius:50%;box-shadow:0 0 0 22px rgba(88,170,255,.045),0 0 0 44px rgba(88,170,255,.025);pointer-events:none}
+.balance-label{margin-bottom:18px;font-size:13px;color:var(--dim)}
+.balance-value{display:inline-block;max-width:100%;direction:ltr;font-size:clamp(30px,9vw,46px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3;letter-spacing:-1.5px;color:var(--user-accent);overflow-wrap:anywhere}
+.balance-unit{margin-inline-start:6px;font-size:17px;font-weight:700;color:var(--user-accent)}
 
-.balance-card::after{
-  content:"";
-  position:absolute;
-  z-index:-1;
-  left:-95px;
-  bottom:-105px;
-  width:170px;
-  height:170px;
-  border:1px solid rgba(122,195,255,.11);
-  border-radius:50%;
-  box-shadow:0 0 0 22px rgba(88,170,255,.045),0 0 0 44px rgba(88,170,255,.025);
-  pointer-events:none;
-}
+/* آمار برداشت */
+.withdraw-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.summary-card{padding:17px 10px;border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.035);text-align:center;animation:rise .6s .10s var(--ease) backwards}
+.summary-card .label{display:block;color:var(--dim);font-size:11px;line-height:1.9}
+.summary-card strong{display:block;margin:8px 0 2px;font-size:clamp(18px,5.8vw,25px);font-variant-numeric:tabular-nums;direction:ltr;overflow-wrap:anywhere}
+.summary-card small{color:var(--dim);font-size:11px}
+.summary-card.success strong{color:var(--success)}
+.summary-card.pending strong{color:#e4c48f}
 
-.balance-label{margin-bottom:18px;font-size:13px;color:#dbeaff}
+.pending-list{display:grid;gap:10px;margin-bottom:20px}
+.pending-empty{padding:11px;text-align:center;color:var(--dim);font-size:12px}
+.pending-item{width:100%;padding:16px;border:1px solid rgba(244,207,119,.18);border-radius:20px;background:linear-gradient(135deg,rgba(244,207,119,.06),rgba(255,255,255,.02));text-align:right;animation:rise .35s var(--ease) backwards}
+.pending-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px}
+.pending-head strong{color:var(--text);font-size:14px}
+.pending-meta{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:var(--dim);font-size:11px}
+.pending-clock{display:block;margin-top:10px;color:#ead3a3;font-size:13px;line-height:1.9}
+.pending-hint{display:block;margin-top:6px;color:var(--dim);font-size:10px}
+.receipt-home{margin-bottom:20px!important}
 
-.balance-value{
-  display:inline-block;
-  max-width:100%;
-  direction:ltr;
-  font-size:clamp(30px,9vw,46px);
-  font-weight:800;
-  font-variant-numeric:tabular-nums;
-  line-height:1.3;
-  letter-spacing:-1.5px;
-  color:#f6d58a;
-  overflow-wrap:anywhere;
-}
-
-.balance-unit{margin-inline-start:6px;font-size:17px;font-weight:700;color:#f1d289}
-
-/* ===== Menu ===== */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:22px;
-}
-
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
 .menu-btn{
   position:relative;
   overflow:hidden;
@@ -253,14 +160,14 @@ button:focus-visible,input:focus-visible{
   min-width:0;
   min-height:132px;
   padding:22px 10px;
-  border:1px solid rgba(255,255,255,.14);
+  border:1px solid var(--border);
   border-radius:22px;
-  background:linear-gradient(145deg,rgba(12,71,164,.68),rgba(5,39,101,.62));
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.022));
   text-align:center;
   font-size:14px;
   font-weight:600;
   line-height:1.7;
-  transition:transform .25s var(--ease),border-color .25s ease,box-shadow .25s ease;
+  transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;
   animation:rise .65s var(--delay,.1s) var(--ease) backwards;
 }
 
@@ -269,579 +176,106 @@ button:focus-visible,input:focus-visible{
 .menu-btn:nth-child(3){--delay:.22s}
 .menu-btn:nth-child(4){--delay:.28s}
 .menu-btn:nth-child(5){--delay:.34s}
-
-.menu-icon{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:46px;
-  height:46px;
-  border-radius:16px;
-  background:rgba(255,255,255,.10);
-  color:#d6edff;
-  transition:transform .3s var(--ease);
-}
-
+.menu-icon{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:16px;background:rgba(255,255,255,.10);color:#d6edff;transition:transform .3s var(--ease)}
 #btnInvite .menu-icon{background:rgba(141,174,246,.16);color:#d8e7ff}
 #btnBankWithdraw .menu-icon{background:rgba(136,213,181,.14);color:#a8ead0}
 #btnDaily .menu-icon{background:rgba(192,156,238,.14);color:#dbc6f7}
-
-.menu-btn.game-menu{
-  grid-column:1/-1;
-  flex-direction:row;
-  justify-content:flex-start;
-  gap:16px;
-  min-height:106px;
-  padding:20px;
-  border-color:rgba(176,133,255,.23);
-  background:
-    radial-gradient(ellipse at 0% 50%,rgba(128,87,221,.18),transparent 70%),
-    linear-gradient(135deg,rgba(17,69,153,.92),rgba(7,39,104,.92));
-  text-align:right;
-}
-
-.game-menu .menu-icon{
-  width:54px;
-  height:54px;
-  flex-shrink:0;
-  font-size:30px;
-  background:rgba(176,133,255,.10);
-}
-
+.menu-btn.game-menu{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:16px;min-height:106px;padding:20px;border-color:rgba(176,133,255,.23);text-align:right}
+.game-menu .menu-icon{width:54px;height:54px;flex-shrink:0;font-size:30px;background:rgba(176,133,255,.10)}
 .menu-copy{flex:1;min-width:0}
 .menu-copy strong{display:block;font-size:16px}
 .menu-copy small{display:block;margin-top:5px;color:var(--dim);font-size:12px;font-weight:400}
 .game-menu>.icon{color:#c9d9ff}
 
-/* ===== Panel / fields ===== */
-
-.panel{
-  min-height:140px;
-  padding:25px 21px;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:28px;
-  background:linear-gradient(145deg,rgba(7,57,139,.72),rgba(4,34,88,.68));
-}
-
+.panel{min-height:140px;padding:25px 21px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.022))}
 #homeSection>.panel{animation:rise .65s .4s var(--ease) backwards}
 .panel h2{margin:0 0 12px;font-size:19px}
 .panel p{margin:0 0 10px;color:var(--dim);font-size:14px;line-height:2}
 .muted-center{text-align:center;padding:10px 0 4px}
-.panel b{color:#e9ecf2}
-.gold-text{color:var(--gold)!important}
-
-.link-box{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin:14px 0 18px;
-  padding:12px;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:17px;
-  background:rgba(2,25,68,.35);
-}
-
-.link-box>span{
-  flex:1;
-  min-width:0;
-  overflow-x:auto;
-  direction:ltr;
-  text-align:left;
-  white-space:nowrap;
-  font-size:13px;
-}
-
-.field-label{display:block;margin-top:14px;color:#eef4ff;font-size:13px}
-
-.id-input{
-  width:100%;
-  margin:10px 0 6px;
-  padding:16px;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:17px;
-  background:rgba(2,25,68,.38);
-  color:var(--text);
-  direction:ltr;
-  text-align:left;
-  font-size:16px;
-  transition:border-color .2s,box-shadow .2s;
-}
-
-.id-input::placeholder{color:rgba(255,255,255,.45)}
-
-.id-input:focus{
-  outline:none;
-  border-color:rgba(125,195,255,.72);
-  box-shadow:0 0 0 4px rgba(80,164,255,.14);
-}
-
+.panel b{color:var(--text)}
+.gold-text{color:var(--user-accent)!important}
+.link-box{display:flex;align-items:center;gap:8px;margin:14px 0 18px;padding:12px;border:1px solid var(--border);border-radius:17px;background:rgba(0,0,0,.15)}
+.link-box>span{flex:1;min-width:0;overflow-x:auto;direction:ltr;text-align:left;white-space:nowrap;font-size:13px}
+.field-label{display:block;margin-top:14px;color:var(--text);font-size:13px}
+.id-input{width:100%;margin:10px 0 6px;padding:16px;border:1px solid var(--border);border-radius:17px;background:rgba(0,0,0,.18);color:var(--text);direction:ltr;text-align:left;font-size:16px;transition:border-color .2s}
+.id-input::placeholder{color:var(--dim);opacity:.6}
+.id-input:focus{outline:none;border-color:var(--user-accent)}
 .field-error{min-height:20px;margin-bottom:6px;color:var(--danger);font-size:12px;line-height:1.8}
 
-/* ===== Buttons ===== */
-
-.primary-btn,.ghost-btn,.copy-btn{
-  position:relative;
-  overflow:hidden;
-  border:none;
-  font-weight:700;
-  transition:transform .2s var(--ease),opacity .2s,background .2s;
-}
-
-.primary-btn{
-  width:100%;
-  margin-top:10px;
-  padding:16px;
-  border-radius:17px;
-  background:linear-gradient(115deg,#f6d98f,#e8bd5e);
-  color:#252014;
-  font-size:15px;
-  font-weight:800;
-}
-
-.ghost-btn{
-  width:100%;
-  margin-top:10px;
-  padding:14px;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:17px;
-  background:rgba(4,32,84,.35);
-  color:#c8d7ef;
-  font-size:14px;
-}
-
-.copy-btn{
-  flex-shrink:0;
-  padding:9px 14px;
-  border-radius:11px;
-  background:linear-gradient(115deg,#f6d98f,#e8bd5e);
-  color:#252014;
-  font-size:12px;
-  white-space:nowrap;
-}
-
+.primary-btn,.ghost-btn,.copy-btn{position:relative;overflow:hidden;border:none;font-weight:700;transition:transform .2s var(--ease),opacity .2s,background .2s}
+.primary-btn{width:100%;margin-top:10px;padding:16px;border-radius:17px;background:var(--user-accent);color:#fff;font-size:15px;font-weight:800}
+.ghost-btn{width:100%;margin-top:10px;padding:14px;border:1px solid var(--border);border-radius:17px;background:rgba(255,255,255,.025);color:var(--dim);font-size:14px}
+.copy-btn{flex-shrink:0;padding:9px 14px;border-radius:11px;background:var(--user-accent);color:#fff;font-size:12px;white-space:nowrap}
 .copy-btn.copied{background:#92d7ad;color:#143322}
-
-.primary-btn.rgb-btn{
-  isolation:isolate;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:64px;
-  padding:10px 14px;
-  border:1px solid rgba(255,255,255,.18);
-  background:linear-gradient(110deg,#ff356f,#a855f7 22%,#4f6cff 44%,#06b6d4 65%,#22c55e 82%,#ff356f);
-  background-size:350% 350%;
-  color:#fff;
-  box-shadow:0 8px 25px rgba(109,80,230,.20);
-  animation:rgb-flow 7s ease-in-out infinite;
-}
-
-.rgb-btn .btn-label{
-  position:relative;
-  z-index:1;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  min-width:112px;
-  padding:7px 20px;
-  border:1px solid rgba(255,255,255,.20);
-  border-radius:11px;
-  background:#111625;
-  color:#fff;
-  font-size:15px;
-  font-weight:800;
-  line-height:1.6;
-  pointer-events:none;
-}
-
+.primary-btn.rgb-btn{isolation:isolate;display:flex;align-items:center;justify-content:center;min-height:64px;padding:10px 14px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(110deg,#ff356f,#a855f7 22%,#4f6cff 44%,#06b6d4 65%,#22c55e 82%,#ff356f);background-size:350% 350%;color:#fff;box-shadow:0 8px 25px rgba(109,80,230,.20);animation:rgb-flow 7s ease-in-out infinite}
+.rgb-btn .btn-label{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;padding:7px 20px;border:1px solid rgba(255,255,255,.20);border-radius:11px;background:#111625;color:#fff;font-size:15px;font-weight:800;line-height:1.6;pointer-events:none}
 .btn-label .icon{width:18px;height:18px;stroke-width:2.2}
+.menu-btn:active,.primary-btn:active,.ghost-btn:active,.copy-btn:active,.icon-btn:active,.pending-item:active{transform:scale(.965)}
 
-.menu-btn:active,.primary-btn:active,.ghost-btn:active,.copy-btn:active,.icon-btn:active{
-  transform:scale(.965);
-}
-
-.spinner{
-  width:38px;
-  height:38px;
-  margin:8px auto 16px;
-  border:2px solid rgba(244,207,119,.12);
-  border-top-color:var(--gold);
-  border-radius:50%;
-  animation:spin .9s linear infinite;
-}
-
+.spinner{width:38px;height:38px;margin:8px auto 16px;border:2px solid rgba(244,207,119,.12);border-top-color:var(--user-accent);border-radius:50%;animation:spin .9s linear infinite}
 .result-icon{text-align:center;font-size:42px;margin:4px 0 18px;animation:pop-in .6s var(--ease) backwards}
-.toggle-row{margin:16px 0 12px;padding:14px 16px;border:1px solid rgba(255,255,255,.13);border-radius:17px;background:rgba(2,25,68,.35)}
+.toggle-row{margin:16px 0 12px;padding:14px 16px;border:1px solid var(--border);border-radius:17px;background:rgba(0,0,0,.12)}
 .status-text{color:var(--success);font-size:15px;font-weight:700}
-
-/* ===== Game ===== */
+.queue-help{font-size:11px!important}
+.bank-notice{padding:16px;border:1px solid rgba(147,216,186,.18);border-radius:18px;background:rgba(147,216,186,.04);text-align:center}
 
 .game-intro{text-align:center}
-
-.game-badge{
-  display:inline-block;
-  padding:5px 12px;
-  margin-bottom:12px;
-  border:1px solid rgba(183,147,255,.18);
-  border-radius:999px;
-  background:rgba(183,147,255,.07);
-  color:#d5befb;
-  font-size:11px;
-}
-
-.slot-machine{
-  position:relative;
-  display:block;
-  width:100%;
-  margin:12px 0 18px;
-  padding:20px 12px 16px;
-  overflow:hidden;
-  border:1px solid rgba(219,180,255,.30);
-  border-radius:25px;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(188,95,251,.22),transparent 70%),
-    linear-gradient(145deg,#282039,#151422);
-  box-shadow:0 16px 35px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08);
-  transition:transform .2s var(--ease),border-color .2s;
-}
-
+.game-badge{display:inline-block;padding:5px 12px;margin-bottom:12px;border:1px solid rgba(183,147,255,.18);border-radius:999px;background:rgba(183,147,255,.07);color:#d5befb;font-size:11px}
+.slot-machine{position:relative;display:block;width:100%;margin:12px 0 18px;padding:20px 12px 16px;overflow:hidden;border:1px solid rgba(219,180,255,.30);border-radius:25px;background:radial-gradient(ellipse at 50% 0%,rgba(188,95,251,.22),transparent 70%),linear-gradient(145deg,#282039,#151422);box-shadow:0 16px 35px rgba(0,0,0,.25);transition:transform .2s var(--ease)}
 .slot-machine:disabled{opacity:1}
 .slot-machine:not(:disabled):active{transform:scale(.985)}
-
-.slot-heading{
-  display:block;
-  margin-bottom:18px;
-  direction:ltr;
-  color:#eedcfc;
-  font-size:14px;
-  font-weight:800;
-  letter-spacing:3px;
-}
-
-.reels{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-  direction:ltr;
-}
-
-.reel{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:104px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:17px;
-  background:linear-gradient(#101019,#282337 48%,#101019);
-  box-shadow:inset 0 9px 18px rgba(0,0,0,.35);
-}
-
-.reel::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
-  pointer-events:none;
-}
-
-.reel-symbol{
-  display:block;
-  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
-  font-size:clamp(36px,11vw,54px);
-  line-height:1;
-}
-
+.slot-heading{display:block;margin-bottom:18px;direction:ltr;color:#eedcfc;font-size:14px;font-weight:800;letter-spacing:3px}
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;direction:ltr}
+.reel{position:relative;display:flex;align-items:center;justify-content:center;height:104px;overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:17px;background:linear-gradient(#101019,#282337 48%,#101019);box-shadow:inset 0 9px 18px rgba(0,0,0,.35)}
+.reel-symbol{display:block;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:clamp(36px,11vw,54px);line-height:1}
 .reel.rolling .reel-symbol{animation:reel-shake .13s linear infinite}
-
-.slot-footer{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  margin-top:17px;
-  color:#afa3c8;
-  font-size:11px;
-}
-
-.slot-light{
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  background:#dcbafa;
-  box-shadow:0 0 8px rgba(220,186,250,.45);
-}
-
-.game-result{
-  padding:15px;
-  margin:14px 0;
-  border:1px solid rgba(244,207,119,.18);
-  border-radius:18px;
-  background:rgba(244,207,119,.045);
-  text-align:center;
-  animation:rise .4s var(--ease) backwards;
-}
-
+.slot-footer{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:17px;color:#afa3c8;font-size:11px}
+.slot-light{width:5px;height:5px;border-radius:50%;background:#dcbafa;box-shadow:0 0 8px rgba(220,186,250,.45)}
+.game-result{padding:15px;margin:14px 0;border:1px solid rgba(244,207,119,.18);border-radius:18px;background:rgba(244,207,119,.045);text-align:center;animation:rise .4s var(--ease) backwards}
 .game-result small{display:block;color:var(--dim);font-size:11px}
-.game-result strong{display:block;margin:7px 0;font-size:25px;color:var(--gold)}
+.game-result strong{display:block;margin:7px 0;font-size:25px;color:#f4cf77}
 .game-result p{font-size:12px;margin:0}
-
-.game-status{
-  min-height:54px;
-  margin:14px 0 4px;
-  text-align:center;
-  color:var(--dim);
-  font-size:12px;
-  line-height:1.9;
-}
-
-.game-status b{
-  display:block;
-  direction:ltr;
-  color:#ded1fa;
-  font-variant-numeric:tabular-nums;
-  font-size:20px;
-}
-
-.prize-table{
-  width:100%;
-  margin-top:22px;
-  border-collapse:collapse;
-  text-align:center;
-  font-size:12px;
-}
-
-.prize-table caption{
-  padding-bottom:10px;
-  text-align:right;
-  color:#d5d9e2;
-  font-size:13px;
-  font-weight:700;
-}
-
-.prize-table th,.prize-table td{padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.12)}
+.game-status{min-height:54px;margin:14px 0 4px;text-align:center;color:var(--dim);font-size:12px;line-height:1.9}
+.game-status b{display:block;direction:ltr;color:#ded1fa;font-variant-numeric:tabular-nums;font-size:20px}
+.prize-table{width:100%;margin-top:22px;border-collapse:collapse;text-align:center;font-size:12px}
+.prize-table caption{padding-bottom:10px;text-align:right;color:var(--text);font-size:13px;font-weight:700}
+.prize-table th,.prize-table td{padding:11px 4px;border-bottom:1px solid var(--border)}
 .prize-table th{color:var(--dim);font-size:11px;font-weight:500}
 .prize-table td:first-child{font-size:21px}
 .game-note{margin-top:14px!important;font-size:11px!important}
 
-/* ===== Skeleton ===== */
-
-.skel{
-  border-radius:28px;
-  background:linear-gradient(100deg,rgba(255,255,255,.055) 30%,rgba(255,255,255,.13) 50%,rgba(255,255,255,.055) 70%);
-  background-size:220% 100%;
-  animation:shimmer 1.8s ease-in-out infinite;
-}
-
+.skel{border-radius:28px;background:linear-gradient(100deg,rgba(255,255,255,.055) 30%,rgba(255,255,255,.13) 50%,rgba(255,255,255,.055) 70%);background-size:220% 100%;animation:shimmer 1.8s ease-in-out infinite}
 .skel-card{height:176px;margin-bottom:22px}
 .skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
 .skel-btn{height:132px;border-radius:22px}
 .skel-game{height:106px;grid-column:1/-1;border-radius:22px}
 .skel-panel{height:140px}
 
-/* ===== Notifications ===== */
-
-.sheet-overlay{
-  position:fixed;
-  inset:0;
-  z-index:50;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;
-  background:rgba(2,22,60,.70);
-  -webkit-backdrop-filter:blur(6px);
-  backdrop-filter:blur(6px);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:opacity .25s,visibility .25s;
-}
-
+.sheet-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;background:rgba(2,12,30,.70);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s,visibility .25s}
 .sheet-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
-
-.sheet{
-  width:min(420px,100%);
-  max-height:70vh;
-  max-height:70dvh;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  padding:18px;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:26px;
-  background:linear-gradient(145deg,#0d4da8,#082c69);
-  box-shadow:0 30px 90px rgba(0,0,0,.4);
-  transform:translateY(-14px) scale(.975);
-  transition:transform .35s var(--ease);
-}
-
+.sheet{width:min(420px,100%);max-height:70vh;max-height:70dvh;overflow-y:auto;overscroll-behavior:contain;padding:18px;border:1px solid var(--border);border-radius:26px;background:var(--user-card);box-shadow:0 30px 90px rgba(0,0,0,.4);transform:translateY(-14px) scale(.975);transition:transform .35s var(--ease)}
 .sheet-overlay.show .sheet{transform:translateY(0) scale(1)}
 .sheet-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .sheet h3{margin:0;font-size:16px}
 .close-btn{width:34px;height:34px;flex-basis:34px;border-radius:11px}
-
-.notif-item{
-  margin-bottom:8px;
-  padding:12px 14px;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  background:rgba(255,255,255,.06);
-  font-size:14px;
-  line-height:1.9;
-  overflow-wrap:anywhere;
-  animation:rise .4s var(--ease) backwards;
-}
-
+.notif-item{margin-bottom:8px;padding:12px 14px;border:1px solid var(--border);border-radius:15px;background:rgba(255,255,255,.04);font-size:14px;line-height:1.9;overflow-wrap:anywhere;animation:rise .4s var(--ease) backwards}
 .notif-item.success{border-inline-start:3px solid var(--success)}
 .notif-item.fail{border-inline-start:3px solid var(--danger)}
 .notif-item .t{margin-top:5px;direction:ltr;text-align:right;color:var(--dim);font-size:11px}
 .notif-empty{padding:24px 0;text-align:center;color:var(--dim);font-size:14px}
 
-/* ===== Toast / animations ===== */
-
-.toast{
-  position:fixed;
-  z-index:100;
-  bottom:calc(env(safe-area-inset-bottom,0px) + 24px);
-  left:50%;
-  width:max-content;
-  max-width:calc(100vw - 40px);
-  padding:12px 18px;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:15px;
-  background:#0a3a83;
-  color:var(--text);
-  box-shadow:0 12px 36px rgba(0,0,0,.3);
-  text-align:center;
-  font-size:13px;
-  line-height:1.9;
-  opacity:0;
-  visibility:hidden;
-  transform:translate(-50%,14px);
-  pointer-events:none;
-  transition:opacity .25s,transform .3s var(--ease),visibility .25s;
-}
-
+.toast{position:fixed;z-index:100;bottom:calc(env(safe-area-inset-bottom,0px) + 95px);left:50%;width:max-content;max-width:calc(100vw - 40px);padding:12px 18px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:#243248;color:#fff;box-shadow:0 12px 36px rgba(0,0,0,.3);text-align:center;font-size:13px;line-height:1.9;opacity:0;visibility:hidden;transform:translate(-50%,14px);pointer-events:none;transition:opacity .25s,transform .3s var(--ease),visibility .25s}
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .ripple{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;animation:ripple-out .6s var(--ease) forwards}
 .anim-in-right{animation:forward-in .4s var(--ease) backwards}
 .anim-in-left{animation:back-in .4s var(--ease) backwards}
 .anim-pop{animation:rise .35s var(--ease) backwards}
 
-@media(hover:hover) and (pointer:fine){
-  .menu-btn:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.24);box-shadow:0 12px 28px rgba(0,0,0,.16)}
-  .menu-btn:hover .menu-icon{transform:translateY(-2px) rotate(-5deg)}
-  .primary-btn:not(:disabled):hover{transform:translateY(-2px)}
-  .icon-btn:hover,.ghost-btn:hover{background:rgba(255,255,255,.10)}
-}
-
-@media(max-width:360px){
-  .app{padding-inline:14px}
-  .brand{font-size:11px}
-  .menu-btn{font-size:13px;padding-inline:7px}
-  .panel{padding-inline:16px}
-  .reel{height:88px}
-  .menu-btn.game-menu{padding:16px;gap:12px}
-}
-
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-@keyframes rgb-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-@keyframes fade-in{from{opacity:0}to{opacity:1}}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes forward-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
-@keyframes back-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pop-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-@keyframes ripple-out{from{opacity:.16;transform:scale(0)}to{opacity:0;transform:scale(1)}}
-@keyframes reel-shake{0%{transform:translateY(-5px)}100%{transform:translateY(5px)}}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation:none!important;
-    transition:none!important;
-    scroll-behavior:auto!important;
-  }
-}
-
-/* ===== Bottom navigation / appearance ===== */
-
-:root{
-  --user-bg:#0d1016;
-  --user-card:#202027;
-  --user-accent:#4f8cff;
-}
-
-html{background:var(--user-bg)!important}
-
-body{
-  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 94px)!important;
-  background:var(--user-bg)!important;
-}
-
-body::before{
-  background:
-    radial-gradient(ellipse at 88% 0%,rgba(255,255,255,.065),transparent 46%),
-    radial-gradient(ellipse at 0% 68%,rgba(91,135,220,.075),transparent 50%),
-    linear-gradient(165deg,var(--user-bg),var(--user-bg))!important;
-}
-
-.app{padding-bottom:122px!important}
-
-.balance-card{
-  border-color:rgba(255,255,255,.12)!important;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.075),transparent 72%),
-    linear-gradient(135deg,var(--user-card),var(--user-bg))!important;
-}
-
-.balance-card::before{background:linear-gradient(90deg,transparent,var(--user-accent),transparent)!important}
-.balance-value,.balance-unit,.gold-text{color:var(--user-accent)!important}
-.menu-btn,.panel{background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.022))!important}
-.primary-btn:not(.rgb-btn),.copy-btn{background:var(--user-accent)!important;color:#fff!important}
-.id-input:focus{border-color:var(--user-accent)!important;box-shadow:none!important}
-
-.bottom-nav{
-  position:fixed;
-  z-index:45;
-  right:50%;
-  bottom:calc(env(safe-area-inset-bottom,0px) + 10px);
-  width:min(448px,calc(100vw - 22px));
-  transform:translateX(50%);
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:5px;
-  padding:8px;
-  border:1px solid var(--border);
-  border-radius:22px;
-  background:rgba(12,15,22,.92);
-  -webkit-backdrop-filter:blur(18px);
-  backdrop-filter:blur(18px);
-  box-shadow:0 18px 55px rgba(0,0,0,.34);
-}
-
-.bottom-nav button{
-  min-width:0;
-  min-height:58px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  padding:7px 2px;
-  border:0;
-  border-radius:15px;
-  background:transparent;
-  color:var(--dim);
-  font-size:10px;
-  font-weight:700;
-}
-
+.bottom-nav{position:fixed;z-index:45;right:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);width:min(448px,calc(100vw - 22px));transform:translateX(50%);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:8px;border:1px solid var(--border);border-radius:22px;background:rgba(12,15,22,.92);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 18px 55px rgba(0,0,0,.34)}
+.bottom-nav button{min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:7px 2px;border:0;border-radius:15px;background:transparent;color:var(--dim);font-size:10px;font-weight:700}
 .bottom-nav button.active{background:rgba(255,255,255,.075);color:var(--text)}
 .bottom-nav button.active .nav-svg{color:var(--user-accent)}
-.nav-svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-svg{width:21px;height:21px}
 .nav-game-icon{font-size:21px;line-height:1}
 
 .settings-wrap{display:grid;gap:12px}
@@ -849,27 +283,23 @@ body::before{
 .settings-card h3{margin:0 0 7px;font-size:14px}
 .settings-card p{margin:0;color:var(--dim);font-size:12px;line-height:1.9}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
-
 .switch{position:relative;width:50px;height:28px;flex:0 0 50px}
-.switch input{position:absolute;opacity:0;pointer-events:none}
-.switch-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.12);transition:.2s}
+.switch input{position:absolute;opacity:0}
+.switch-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.12);transition:.2s;pointer-events:none}
 .switch-track::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
 .switch input:checked + .switch-track{background:var(--user-accent)}
 .switch input:checked + .switch-track::after{transform:translateX(22px)}
-
+.switch input:focus-visible + .switch-track{outline:2px solid var(--user-accent);outline-offset:4px}
 .color-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
 .color-field{padding:10px 7px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.025);text-align:center;color:var(--dim);font-size:10px}
 .color-field input{display:block;width:100%;height:40px;margin-top:7px;padding:0;border:0;border-radius:9px;background:transparent}
-
 .layout-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .layout-choice{padding:11px 5px;border:1px solid var(--border);border-radius:13px;background:rgba(255,255,255,.025);color:var(--text);font-size:11px;font-weight:700}
 .layout-choice.active{border-color:var(--user-accent);background:rgba(255,255,255,.065)}
-
 .theme-preview{padding:17px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(145deg,var(--user-card),var(--user-bg))}
 .theme-preview strong{display:block;margin-bottom:5px}
 .theme-preview small{display:block;color:var(--dim);line-height:1.8}
 .preview-accent{display:inline-block;margin-top:11px;padding:8px 13px;border-radius:10px;background:var(--user-accent);color:#fff;font-size:11px;font-weight:800}
-
 .profile-box{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:15px;border:1px solid var(--border);border-radius:19px;background:rgba(255,255,255,.03)}
 .profile-avatar{display:flex;align-items:center;justify-content:center;width:58px;height:58px;flex:0 0 58px;overflow:hidden;border:1px solid var(--border);border-radius:50%;background:rgba(255,255,255,.06);font-size:22px;font-weight:800}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
@@ -880,64 +310,55 @@ body::before{
 .profile-row span{color:var(--dim)}
 .profile-row b{direction:ltr;text-align:left}
 
-body.theme-light{
-  --text:#172235;
-  --dim:#6e7d91;
-  --border:rgba(20,45,80,.12);
-  color-scheme:light;
-  background:#eef3f8!important;
-}
-
-body.theme-light::before{background:linear-gradient(165deg,#f1f5fa,#e9eff6)!important}
+body.theme-light{--text:#172235;--dim:#6e7d91;--border:rgba(20,45,80,.12);color-scheme:light;background:#eef3f8}
+body.theme-light::before{background:linear-gradient(165deg,#f1f5fa,#e9eff6)}
 body.theme-light .bottom-nav{background:rgba(250,252,255,.94)}
+body.theme-light .icon-btn,body.theme-light .menu-btn,body.theme-light .panel,body.theme-light .settings-card,body.theme-light .profile-box,body.theme-light .profile-row,body.theme-light .summary-card,body.theme-light .sheet{background:rgba(255,255,255,.95)}
+body.theme-light .balance-card{background:linear-gradient(145deg,#fff,#e7edf5)}
+body.theme-light .pending-clock{color:#80551a}
+body.theme-light .summary-card.pending strong{color:#80551a}
+body.theme-light .summary-card.success strong{color:#247858}
+body.theme-light .theme-preview{background:#fff}
 
-body.theme-light .icon-btn,
-body.theme-light .menu-btn,
-body.theme-light .panel,
-body.theme-light .settings-card,
-body.theme-light .profile-box,
-body.theme-light .profile-row{
-  background:rgba(255,255,255,.72)!important;
+body.layout-compact .app{padding-inline:13px}
+body.layout-compact .grid{gap:8px}
+body.layout-compact .menu-btn{min-height:108px;padding:16px 8px}
+body.layout-compact .balance-card{padding:25px 16px 28px}
+body.layout-list .grid{grid-template-columns:1fr}
+body.layout-list .menu-btn{min-height:84px;flex-direction:row;justify-content:flex-start;padding:14px 16px;text-align:right}
+body.layout-list .menu-btn.game-menu{grid-column:auto}
+body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;height:46px;flex:0 0 46px}
+
+@media(hover:hover) and (pointer:fine){
+  .menu-btn:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.24);box-shadow:0 12px 28px rgba(0,0,0,.16)}
+  .menu-btn:hover .menu-icon{transform:translateY(-2px) rotate(-5deg)}
+  .primary-btn:not(:disabled):hover{transform:translateY(-2px)}
 }
-
-body.theme-light .balance-card{background:linear-gradient(145deg,#ffffff,#e7edf5)!important}
-
-body.theme-light .balance-value,
-body.theme-light .title,
-body.theme-light .brand,
-body.theme-light .panel b,
-body.theme-light .profile-box strong{
-  color:#162238!important;
+@media(max-width:360px){
+  .app{padding-inline:14px}
+  .brand{font-size:11px}
+  .menu-btn{font-size:13px;padding-inline:7px}
+  .panel{padding-inline:16px}
+  .reel{height:88px}
+  .menu-btn.game-menu{padding:16px;gap:12px}
 }
-
-body.layout-compact .app{padding-inline:13px!important}
-body.layout-compact .grid{gap:8px!important}
-body.layout-compact .menu-btn{min-height:108px!important;padding:16px 8px!important}
-body.layout-compact .balance-card{padding:25px 16px 28px!important}
-
-body.layout-list .grid{grid-template-columns:1fr!important}
-
-body.layout-list .menu-btn{
-  min-height:84px!important;
-  flex-direction:row!important;
-  justify-content:flex-start!important;
-  padding:14px 16px!important;
-  text-align:right!important;
-}
-
-body.layout-list .menu-btn.game-menu{grid-column:auto!important}
-
-body.layout-list .menu-icon,
-body.layout-list .game-menu .menu-icon{
-  width:46px!important;
-  height:46px!important;
-  flex:0 0 46px!important;
-}
-
 @media(max-width:350px){
   .bottom-nav{width:calc(100vw - 14px)}
   .bottom-nav button{font-size:9px}
   .color-controls{grid-template-columns:1fr}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes rgb-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes forward-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes back-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pop-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes ripple-out{from{opacity:.16;transform:scale(0)}to{opacity:0;transform:scale(1)}}
+@keyframes reel-shake{0%{transform:translateY(-5px)}100%{transform:translateY(5px)}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
@@ -948,116 +369,46 @@ body.layout-list .game-menu .menu-icon{
   <symbol id="i-bell" viewBox="0 0 24 24">
     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>
   </symbol>
-
   <symbol id="i-refresh" viewBox="0 0 24 24">
     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
     <path d="M21 3v5h-5"/>
     <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
     <path d="M8 16H3v5"/>
   </symbol>
-
-  <symbol id="i-back" viewBox="0 0 24 24">
-    <path d="m9 5 7 7-7 7M16 12H4"/>
-  </symbol>
-
-  <symbol id="i-withdraw" viewBox="0 0 24 24">
-    <path d="M12 16V3m-5 5 5-5 5 5"/>
-    <path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
-  </symbol>
-
-  <symbol id="i-invite" viewBox="0 0 24 24">
-    <circle cx="9" cy="8" r="3"/>
-    <path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/>
-  </symbol>
-
-  <symbol id="i-bank" viewBox="0 0 24 24">
-    <path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/>
-  </symbol>
-
-  <symbol id="i-gift" viewBox="0 0 24 24">
-    <rect x="3" y="8" width="18" height="4" rx="1"/>
-    <path d="M5 12v9h14v-9M12 8v13"/>
-    <path d="M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>
-  </symbol>
-
-  <symbol id="i-check" viewBox="0 0 24 24">
-    <path d="m5 12 4 4L19 6"/>
-  </symbol>
-
-  <symbol id="i-close" viewBox="0 0 24 24">
-    <path d="m6 6 12 12M18 6 6 18"/>
-  </symbol>
-
-  <symbol id="i-chevron" viewBox="0 0 24 24">
-    <path d="m14 6-6 6 6 6"/>
-  </symbol>
-
-  <symbol id="i-home" viewBox="0 0 24 24">
-    <path d="m3 11 9-8 9 8"/>
-    <path d="M5 10v10h14V10M9 20v-6h6v6"/>
-  </symbol>
-
-  <symbol id="i-palette" viewBox="0 0 24 24">
-    <path d="M12 3a9 9 0 1 0 0 18h1.5a2.5 2.5 0 0 0 0-5H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-9h-3Z"/>
-    <circle cx="7.5" cy="10" r=".7"/>
-    <circle cx="9" cy="6.5" r=".7"/>
-    <circle cx="13" cy="6" r=".7"/>
-  </symbol>
-
-  <symbol id="i-user" viewBox="0 0 24 24">
-    <circle cx="12" cy="8" r="4"/>
-    <path d="M4 21a8 8 0 0 1 16 0"/>
-  </symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7M16 12H4"/></symbol>
+  <symbol id="i-withdraw" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></symbol>
+  <symbol id="i-invite" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24"><path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8M5 10v10h14V10M9 20v-6h6v6"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.5a2.5 2.5 0 0 0 0-5H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-9h-3Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="9" cy="6.5" r=".7"/><circle cx="13" cy="6" r=".7"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
 </svg>
 
 <div class="app" id="app">
   <div class="topbar">
-    <button
-      type="button"
-      class="icon-btn"
-      id="bellBtn"
-      aria-label="اعلان‌ها"
-      aria-haspopup="dialog"
-      aria-controls="notifOverlay"
-      aria-expanded="false"
-    >
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <use href="#i-bell"></use>
-      </svg>
+    <button type="button" class="icon-btn" id="bellBtn" aria-label="اعلان‌ها" aria-haspopup="dialog" aria-controls="notifOverlay" aria-expanded="false">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"></use></svg>
       <span class="bell-dot" id="bellDot" aria-hidden="true"></span>
     </button>
-
     <span class="brand" id="topWelcome">خوش آمدید عزیز</span>
-
-    <button
-      type="button"
-      class="icon-btn refresh-btn"
-      id="refreshBtn"
-      aria-label="بروزرسانی"
-    >
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <use href="#i-refresh"></use>
-      </svg>
+    <button type="button" class="icon-btn refresh-btn" id="refreshBtn" aria-label="بروزرسانی">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg>
     </button>
   </div>
 
   <div class="title-row">
-    <button
-      type="button"
-      class="icon-btn back-arrow"
-      id="backArrow"
-      aria-label="بازگشت به خانه"
-    >
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <use href="#i-back"></use>
-      </svg>
+    <button type="button" class="icon-btn back-arrow" id="backArrow" aria-label="بازگشت به خانه">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"></use></svg>
     </button>
     <h1 class="title" id="pageTitle">Mio Point</h1>
   </div>
 
   <div id="skeletonSection" aria-label="در حال دریافت اطلاعات">
     <div class="skel skel-card"></div>
-
     <div class="skel-grid">
       <div class="skel skel-btn"></div>
       <div class="skel skel-btn"></div>
@@ -1065,7 +416,6 @@ body.layout-list .game-menu .menu-icon{
       <div class="skel skel-btn"></div>
       <div class="skel skel-game"></div>
     </div>
-
     <div class="skel skel-panel"></div>
   </div>
 
@@ -1078,40 +428,44 @@ body.layout-list .game-menu .menu-icon{
       </div>
     </div>
 
+    <div class="withdraw-summary">
+      <div class="summary-card success">
+        <span class="label">✅ برداشت‌شده امروز</span>
+        <strong id="withdrawnTodayValue">—</strong>
+        <small>میو</small>
+      </div>
+
+      <div class="summary-card pending">
+        <span class="label">⏳ در انتظار برداشت</span>
+        <strong id="pendingTotalValue">—</strong>
+        <small id="pendingCountText">میو</small>
+      </div>
+    </div>
+
+    <div class="pending-list" id="pendingList"></div>
+
+    <button type="button" class="ghost-btn receipt-home" id="homeReceiptBtn" hidden>
+      📨 دریافت رسید آخرین برداشت
+    </button>
+
     <div class="grid">
       <button type="button" class="menu-btn" id="btnWithdraw">
-        <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <use href="#i-withdraw"></use>
-          </svg>
-        </span>
+        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-withdraw"></use></svg></span>
         <span>برداشت با آیدی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnInvite">
-        <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <use href="#i-invite"></use>
-          </svg>
-        </span>
+        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-invite"></use></svg></span>
         <span>لینک دعوت</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnBankWithdraw">
-        <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <use href="#i-bank"></use>
-          </svg>
-        </span>
+        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-bank"></use></svg></span>
         <span>برداشت با بانک میویی</span>
       </button>
 
       <button type="button" class="menu-btn" id="btnDaily">
-        <span class="menu-icon" aria-hidden="true">
-          <svg class="icon" viewBox="0 0 24 24">
-            <use href="#i-gift"></use>
-          </svg>
-        </span>
+        <span class="menu-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><use href="#i-gift"></use></svg></span>
         <span>میو روزانه</span>
       </button>
 
@@ -1121,16 +475,12 @@ body.layout-list .game-menu .menu-icon{
           <strong>بازی میویی</strong>
           <small>بازی کن و پوینت جایزه بگیر!!</small>
         </span>
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <use href="#i-chevron"></use>
-        </svg>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"></use></svg>
       </button>
     </div>
 
     <div class="panel">
-      <p class="muted-center">
-        🐾 <b id="welcomeText">خوش آمدید عزیز</b>
-      </p>
+      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید عزیز</b></p>
       <p class="muted-center">از منوی بالا انتخاب کنید</p>
     </div>
   </div>
@@ -1141,27 +491,13 @@ body.layout-list .game-menu .menu-icon{
 </div>
 
 <div class="sheet-overlay" id="notifOverlay" aria-hidden="true" inert>
-  <div
-    class="sheet"
-    id="notifSheet"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="notificationTitle"
-  >
+  <div class="sheet" id="notifSheet" role="dialog" aria-modal="true" aria-labelledby="notificationTitle">
     <div class="sheet-header">
       <h3 id="notificationTitle">🔔 اعلان‌ها</h3>
-      <button
-        type="button"
-        class="icon-btn close-btn"
-        id="closeNotifBtn"
-        aria-label="بستن اعلان‌ها"
-      >
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <use href="#i-close"></use>
-        </svg>
+      <button type="button" class="icon-btn close-btn" id="closeNotifBtn" aria-label="بستن اعلان‌ها">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"></use></svg>
       </button>
     </div>
-
     <div id="notifList"></div>
   </div>
 </div>
@@ -1170,45 +506,22 @@ body.layout-list .game-menu .menu-icon{
 
 <nav class="bottom-nav" id="bottomNav" aria-label="منوی اصلی">
   <button type="button" id="navHome" class="active">
-    <svg class="nav-svg" viewBox="0 0 24 24">
-      <use href="#i-home"></use>
-    </svg>
+    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-home"></use></svg>
     <span>خانه</span>
   </button>
-
   <button type="button" id="navTheme">
-    <svg class="nav-svg" viewBox="0 0 24 24">
-      <use href="#i-palette"></use>
-    </svg>
+    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-palette"></use></svg>
     <span>تنظیمات رنگ</span>
   </button>
-
   <button type="button" id="navGame">
     <span class="nav-game-icon">🎰</span>
     <span>بازی میویی</span>
   </button>
-
   <button type="button" id="navProfile">
-    <svg class="nav-svg" viewBox="0 0 24 24">
-      <use href="#i-user"></use>
-    </svg>
+    <svg class="nav-svg" viewBox="0 0 24 24"><use href="#i-user"></use></svg>
     <span>پروفایل</span>
   </button>
 </nav>
-
-<script>
-(function(){
-  setTimeout(function(){
-    var skeleton = document.getElementById("skeletonSection");
-    var home = document.getElementById("homeSection");
-
-    if (skeleton && skeleton.style.display !== "none") {
-      skeleton.style.display = "none";
-      if (home) home.style.display = "block";
-    }
-  }, 7000);
-})();
-</script>
 
 <script>
 "use strict";
@@ -1216,28 +529,27 @@ body.layout-list .game-menu .menu-icon{
 /* ================= CONFIG ================= */
 
 const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
+const BANK_QUEUE_SCREEN_MS = 20000;
+const BANK_NOTICE_MS = 3500;
+
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
-  try { tg.ready(); } catch (e) {}
-  try { tg.expand(); } catch (e) {}
+  try { tg.ready(); } catch {}
+  try { tg.expand(); } catch {}
 }
 
 const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
 const TG_FIRST_NAME = tg?.initDataUnsafe?.user?.first_name || "";
+const $ = id => document.getElementById(id);
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
 const greeting = TG_FIRST_NAME
   ? `خوش آمدید ${TG_FIRST_NAME} عزیز`
   : "خوش آمدید عزیز";
 
-document.getElementById("topWelcome").textContent = greeting;
-document.getElementById("welcomeText").textContent = greeting;
-
-const $ = id => document.getElementById(id);
-
-const reduceMotion = window.matchMedia
-  ? window.matchMedia("(prefers-reduced-motion: reduce)")
-  : { matches:false };
+$("topWelcome").textContent = greeting;
+$("welcomeText").textContent = greeting;
 
 const app = $("app");
 const panel = $("panel");
@@ -1251,7 +563,9 @@ const state = {
   balance: 0,
   daily_enabled: false,
   notifications: [],
-  not_started: false
+  not_started: false,
+  withdrawn_today: 0,
+  pending_withdrawals: []
 };
 
 let hasUserData = false;
@@ -1263,6 +577,9 @@ let activeWithdrawal = null;
 let pollingWithdrawal = false;
 let lastWithdrawMethod = "id";
 let enablingDaily = false;
+
+let bankScreenTimer = null;
+let bankNoticeTimer = null;
 
 let gameState = null;
 let gameBusy = false;
@@ -1360,6 +677,19 @@ function fmt(value) {
   return Number(value || 0).toLocaleString("en-US");
 }
 
+function escapeText(value) {
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  };
+
+  return String(value == null ? "" : value)
+    .replace(/[&<>"']/g, ch => map[ch]);
+}
+
 function icon(name) {
   return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
     <use href="#i-${name}"></use>
@@ -1367,10 +697,7 @@ function icon(name) {
 }
 
 function confirmLabel(text = "تأیید") {
-  return `<span class="btn-label">
-    ${icon("check")}
-    <span>${text}</span>
-  </span>`;
+  return `<span class="btn-label">${icon("check")}<span>${text}</span></span>`;
 }
 
 function englishDigits(value) {
@@ -1393,17 +720,17 @@ function ensureUserData() {
   return true;
 }
 
+function tinyHaptic(type = "light") {
+  try { tg?.HapticFeedback?.impactOccurred?.(type); } catch {}
+}
+
 let toastTimer;
 
 function showToast(message) {
   clearTimeout(toastTimer);
-
   $("toast").textContent = message;
   $("toast").classList.add("show");
-
-  toastTimer = setTimeout(() => {
-    $("toast").classList.remove("show");
-  }, 4000);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 5000);
 }
 
 async function copyText(text, button) {
@@ -1411,7 +738,6 @@ async function copyText(text, button) {
 
   try {
     await navigator.clipboard.writeText(text);
-
     if (!button.isConnected) return;
 
     button.textContent = "کپی شد ✓";
@@ -1427,58 +753,60 @@ async function copyText(text, button) {
   }
 }
 
-/* ================= APPEARANCE / NAV / PROFILE ================= */
+function humanDuration(seconds) {
+  seconds = Math.max(0, Math.ceil(seconds));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  const parts = [];
+
+  if (hours) parts.push(`${hours} ساعت`);
+  if (minutes) parts.push(`${minutes} دقیقه`);
+  if (secs) parts.push(`${secs} ثانیه`);
+
+  return parts.join(" و ") || "چند لحظه";
+}
+
+/* ================= APPEARANCE ================= */
 
 const THEME_KEY = `mio_theme_${TG_USER_ID}`;
 
 function readTheme() {
   try {
-    const data = JSON.parse(localStorage.getItem(THEME_KEY) || "{}");
-    return data && typeof data === "object" ? data : {};
-  } catch (e) {
+    const value = JSON.parse(localStorage.getItem(THEME_KEY) || "{}");
+    return value && typeof value === "object" ? value : {};
+  } catch {
     return {};
   }
 }
 
-function writeTheme(data) {
-  try {
-    localStorage.setItem(THEME_KEY, JSON.stringify(data));
-  } catch (e) {}
+function writeTheme(value) {
+  try { localStorage.setItem(THEME_KEY, JSON.stringify(value)); } catch {}
 }
 
 function validHex(value, fallback) {
-  return /^#[0-9a-f]{6}$/i.test(String(value || ""))
-    ? value
-    : fallback;
+  return /^#[0-9a-f]{6}$/i.test(String(value || "")) ? value : fallback;
 }
 
-function applyTheme(data) {
-  data = data || readTheme();
-
-  const root = document.documentElement;
-  const dark = data.mode !== "light";
-  const bg = validHex(data.bg, "#0d1016");
-  const card = validHex(data.card, "#202027");
-  const accent = validHex(data.accent, "#4f8cff");
-
-  const layout = ["normal", "compact", "list"].includes(data.layout)
-    ? data.layout
+function applyTheme(value = readTheme()) {
+  const dark = value.mode !== "light";
+  const bg = validHex(value.bg, "#0d1016");
+  const card = validHex(value.card, "#202027");
+  const accent = validHex(value.accent, "#4f8cff");
+  const layout = ["normal", "compact", "list"].includes(value.layout)
+    ? value.layout
     : "normal";
 
-  root.style.setProperty("--user-bg", bg);
-  root.style.setProperty("--user-card", card);
-  root.style.setProperty("--user-accent", accent);
-  root.style.background = dark ? bg : "#eef3f8";
+  document.documentElement.style.setProperty("--user-bg", bg);
+  document.documentElement.style.setProperty("--user-card", card);
+  document.documentElement.style.setProperty("--user-accent", accent);
 
   document.body.classList.toggle("theme-light", !dark);
   document.body.classList.toggle("layout-compact", layout === "compact");
   document.body.classList.toggle("layout-list", layout === "list");
 
-  const meta = document.querySelector('meta[name="theme-color"]');
-
-  if (meta) {
-    meta.setAttribute("content", dark ? bg : "#eef3f8");
-  }
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", dark ? bg : "#eef3f8");
 }
 
 function setActiveNav(name) {
@@ -1490,31 +818,8 @@ function setActiveNav(name) {
   };
 
   ["navHome", "navTheme", "navGame", "navProfile"].forEach(id => {
-    const element = $(id);
-
-    if (element) {
-      element.classList.toggle("active", id === map[name]);
-    }
+    $(id).classList.toggle("active", id === map[name]);
   });
-}
-
-function tinyHaptic(type) {
-  try {
-    tg?.HapticFeedback?.impactOccurred?.(type || "light");
-  } catch (e) {}
-}
-
-function escapeText(value) {
-  const map = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  };
-
-  return String(value == null ? "" : value)
-    .replace(/[&<>"']/g, ch => map[ch]);
 }
 
 function viewThemeSettings() {
@@ -1523,13 +828,11 @@ function viewThemeSettings() {
   const bg = validHex(settings.bg, "#0d1016");
   const card = validHex(settings.card, "#202027");
   const accent = validHex(settings.accent, "#4f8cff");
-
   const layout = ["compact", "list"].includes(settings.layout)
     ? settings.layout
     : "normal";
 
   showView("theme", "🎨 تنظیمات رنگ");
-  setActiveNav("theme");
 
   paint(`
     <div class="settings-wrap">
@@ -1541,7 +844,7 @@ function viewThemeSettings() {
           </div>
           <label class="switch">
             <input type="checkbox" id="darkModeToggle"
-              ${mode === "dark" ? "checked" : ""}>
+              aria-label="دارک مود" ${mode === "dark" ? "checked" : ""}>
             <span class="switch-track"></span>
           </label>
         </div>
@@ -1550,20 +853,14 @@ function viewThemeSettings() {
       <div class="settings-card">
         <h3>رنگ دلخواه</h3>
         <p>پس‌زمینه، کارت‌ها و رنگ اصلی را خودت انتخاب کن.</p>
-
         <div class="color-controls">
-          <label class="color-field">
-            پس‌زمینه
+          <label class="color-field">پس‌زمینه
             <input id="bgPicker" type="color" value="${bg}">
           </label>
-
-          <label class="color-field">
-            کارت‌ها
+          <label class="color-field">کارت‌ها
             <input id="cardPicker" type="color" value="${card}">
           </label>
-
-          <label class="color-field">
-            رنگ اصلی
+          <label class="color-field">رنگ اصلی
             <input id="accentPicker" type="color" value="${accent}">
           </label>
         </div>
@@ -1572,112 +869,78 @@ function viewThemeSettings() {
       <div class="settings-card">
         <h3>چیدمان صفحه اصلی</h3>
         <p>نمای کارت‌ها را هرطور راحت‌تری انتخاب کن.</p>
-
         <div class="layout-choices">
-          <button type="button"
-            class="layout-choice ${layout === "normal" ? "active" : ""}"
-            data-layout="normal">عادی</button>
-
-          <button type="button"
-            class="layout-choice ${layout === "compact" ? "active" : ""}"
-            data-layout="compact">فشرده</button>
-
-          <button type="button"
-            class="layout-choice ${layout === "list" ? "active" : ""}"
-            data-layout="list">لیستی</button>
+          ${[
+            ["normal", "عادی"],
+            ["compact", "فشرده"],
+            ["list", "لیستی"]
+          ].map(([key, title]) => `
+            <button type="button" class="layout-choice ${layout === key ? "active" : ""}"
+              data-layout="${key}">${title}</button>
+          `).join("")}
         </div>
       </div>
 
       <div class="theme-preview">
         <strong>پیش‌نمایش</strong>
-        <small>
-          هر تغییر همان لحظه روی مینی‌اپ اعمال و روی همین دستگاه ذخیره می‌شود.
-        </small>
+        <small>تغییرات روی همین دستگاه ذخیره می‌شوند.</small>
         <span class="preview-accent">Mio Point</span>
       </div>
 
-      <button type="button" class="ghost-btn" id="resetThemeBtn">
-        بازنشانی ظاهر
-      </button>
+      <button type="button" class="ghost-btn" id="resetThemeBtn">بازنشانی ظاهر</button>
     </div>
   `);
 
   $("darkModeToggle").onchange = event => {
     const next = readTheme();
     next.mode = event.target.checked ? "dark" : "light";
-
     writeTheme(next);
     applyTheme(next);
-    tinyHaptic("light");
+    tinyHaptic();
   };
 
-  [
-    ["bgPicker", "bg"],
-    ["cardPicker", "card"],
-    ["accentPicker", "accent"]
-  ].forEach(pair => {
-    const input = $(pair[0]);
+  [["bgPicker", "bg"], ["cardPicker", "card"], ["accentPicker", "accent"]]
+    .forEach(([id, key]) => {
+      $(id).oninput = event => {
+        const next = readTheme();
+        next[key] = event.target.value;
+        writeTheme(next);
+        applyTheme(next);
+      };
+    });
 
-    input.oninput = event => {
-      const next = readTheme();
-      next[pair[1]] = event.target.value;
-
-      writeTheme(next);
-      applyTheme(next);
-    };
-  });
-
-  document.querySelectorAll(".layout-choice").forEach(button => {
+  panel.querySelectorAll(".layout-choice").forEach(button => {
     button.onclick = () => {
       const next = readTheme();
       next.layout = button.dataset.layout;
-
       writeTheme(next);
       applyTheme(next);
-      tinyHaptic("light");
+      tinyHaptic();
       viewThemeSettings();
     };
   });
 
   $("resetThemeBtn").onclick = () => {
-    try {
-      localStorage.removeItem(THEME_KEY);
-    } catch (e) {}
-
+    try { localStorage.removeItem(THEME_KEY); } catch {}
     applyTheme({});
-    showToast("ظاهر به حالت اولیه برگشت.");
     viewThemeSettings();
+    showToast("ظاهر به حالت اولیه برگشت.");
   };
 }
 
 function viewProfile() {
   const user = tg?.initDataUnsafe?.user || {};
-
-  const name = [user.first_name, user.last_name]
-    .filter(Boolean)
-    .join(" ") || "کاربر Mio";
-
-  const username = user.username
-    ? `@${user.username}`
-    : "بدون یوزرنیم";
-
-  const id = user.id || "—";
-
-  const initial = escapeText(
-    (user.first_name || "M").slice(0, 1).toUpperCase()
-  );
-
+  const name = [user.first_name, user.last_name].filter(Boolean).join(" ") || "کاربر Mio";
+  const username = user.username ? `@${user.username}` : "بدون یوزرنیم";
   const avatar = user.photo_url
     ? `<img src="${escapeText(user.photo_url)}" alt="">`
-    : initial;
+    : escapeText((user.first_name || "M").slice(0, 1).toUpperCase());
 
   showView("profile", "👤 پروفایل");
-  setActiveNav("profile");
 
   paint(`
     <div class="profile-box">
       <div class="profile-avatar">${avatar}</div>
-
       <div>
         <strong>${escapeText(name)}</strong>
         <small>${escapeText(username)}</small>
@@ -1685,25 +948,13 @@ function viewProfile() {
     </div>
 
     <div class="profile-list">
-      <div class="profile-row">
-        <span>User ID</span>
-        <b>${escapeText(id)}</b>
-      </div>
-
-      <div class="profile-row">
-        <span>وضعیت حساب</span>
-        <b>${state.not_started ? "نیاز به Start" : "فعال ✅"}</b>
-      </div>
-
-      <div class="profile-row">
-        <span>موجودی</span>
-        <b>${fmt(state.balance)} Mio</b>
-      </div>
+      <div class="profile-row"><span>User ID</span><b>${escapeText(user.id || "—")}</b></div>
+      <div class="profile-row"><span>وضعیت حساب</span><b>${!hasUserData ? "در حال دریافت…" : state.not_started ? "نیاز به Start" : "فعال ✅"}</b></div>
+      <div class="profile-row"><span>موجودی</span><b id="profileBalance">${fmt(state.balance)} Mio</b></div>
+      <div class="profile-row"><span>برداشت‌شده امروز</span><b>${fmt(state.withdrawn_today)} Mio</b></div>
     </div>
 
-    <button type="button" class="ghost-btn" id="profileRefreshBtn">
-      بروزرسانی اطلاعات
-    </button>
+    <button type="button" class="ghost-btn" id="profileRefreshBtn">بروزرسانی اطلاعات</button>
   `);
 
   $("profileRefreshBtn").onclick = () => refreshData(true);
@@ -1723,6 +974,10 @@ function setBalance(value) {
   state.balance = target;
   cancelAnimationFrame(balanceFrame);
 
+  if ($("profileBalance")) {
+    $("profileBalance").textContent = `${fmt(target)} Mio`;
+  }
+
   if (reduceMotion.matches || displayedBalance === target) {
     displayedBalance = target;
     $("balanceValue").textContent = fmt(target);
@@ -1733,21 +988,15 @@ function setBalance(value) {
   const startedAt = performance.now();
 
   function tick(now) {
-    const progress = reduceMotion.matches
-      ? 1
-      : Math.min((now - startedAt) / 850, 1);
-
+    const progress = reduceMotion.matches ? 1 : Math.min((now - startedAt) / 850, 1);
     const eased = 1 - Math.pow(1 - progress, 4);
-
     displayedBalance = from + (target - from) * eased;
 
     $("balanceValue").textContent = fmt(
       progress === 1 ? target : Math.round(displayedBalance)
     );
 
-    if (progress < 1) {
-      balanceFrame = requestAnimationFrame(tick);
-    }
+    if (progress < 1) balanceFrame = requestAnimationFrame(tick);
   }
 
   balanceFrame = requestAnimationFrame(tick);
@@ -1755,10 +1004,22 @@ function setBalance(value) {
 
 /* ================= NAVIGATION ================= */
 
-function playEnter(element, className) {
+function clearGameTimer() {
+  clearInterval(gameTimer);
+  gameTimer = null;
+}
+
+function clearBankNavigationTimers() {
+  clearTimeout(bankScreenTimer);
+  clearTimeout(bankNoticeTimer);
+  bankScreenTimer = null;
+  bankNoticeTimer = null;
+}
+
+function playEnter(element, name) {
   element.classList.remove("anim-in-right", "anim-in-left");
   void element.offsetWidth;
-  element.classList.add(className);
+  element.classList.add(name);
 }
 
 function paint(html) {
@@ -1768,13 +1029,9 @@ function paint(html) {
   panel.classList.add("anim-pop");
 }
 
-function clearGameTimer() {
-  clearInterval(gameTimer);
-  gameTimer = null;
-}
-
 function showHome() {
   clearGameTimer();
+  clearBankNavigationTimers();
   currentView = "home";
   viewVersion++;
 
@@ -1785,11 +1042,13 @@ function showHome() {
 
   app.classList.remove("view-active");
   setActiveNav("home");
+  renderWithdrawDashboard();
   playEnter(homeSection, "anim-in-left");
 }
 
 function showView(name, title) {
   clearGameTimer();
+  clearBankNavigationTimers();
   currentView = name;
   viewVersion++;
 
@@ -1799,6 +1058,7 @@ function showView(name, title) {
   backArrow.style.display = "flex";
 
   app.classList.add("view-active");
+  setActiveNav(["theme", "game", "profile"].includes(name) ? name : "home");
   playEnter(viewSection, "anim-in-right");
 
   return viewVersion;
@@ -1806,32 +1066,158 @@ function showView(name, title) {
 
 backArrow.onclick = showHome;
 
+/* ================= WITHDRAW DASHBOARD ================= */
+
+function normalizeWithdrawal(value) {
+  return {
+    ...value,
+    method: value.withdraw_type === "card" ? "bank" : "id",
+    etaDeadline: performance.now() +
+      Math.max(0, Number(value.wait_seconds) || 0) * 1000
+  };
+}
+
+function pendingSeconds(job) {
+  return Math.max(
+    0,
+    Math.ceil(((job?.etaDeadline || 0) - performance.now()) / 1000)
+  );
+}
+
+function upsertPendingWithdrawal(value) {
+  if (!value?.withdraw_id) return;
+
+  const normalized = normalizeWithdrawal(value);
+  const index = state.pending_withdrawals.findIndex(
+    item => String(item.withdraw_id) === String(value.withdraw_id)
+  );
+
+  if (index >= 0) {
+    state.pending_withdrawals[index] = normalized;
+  } else {
+    state.pending_withdrawals.push(normalized);
+  }
+
+  if (
+    activeWithdrawal &&
+    String(activeWithdrawal.withdraw_id) === String(value.withdraw_id)
+  ) {
+    Object.assign(activeWithdrawal, normalized, { phase: "pending" });
+  }
+
+  renderWithdrawDashboard();
+}
+
+function removePendingWithdrawal(id) {
+  state.pending_withdrawals = state.pending_withdrawals.filter(
+    item => String(item.withdraw_id) !== String(id)
+  );
+  renderWithdrawDashboard();
+}
+
+function renderWithdrawDashboard() {
+  if (!hasUserData) return;
+
+  const items = state.pending_withdrawals;
+  const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
+  $("withdrawnTodayValue").textContent = fmt(state.withdrawn_today);
+  $("pendingTotalValue").textContent = fmt(total);
+  $("pendingCountText").textContent = items.length
+    ? `میو · ${items.length} درخواست`
+    : "میو";
+
+  $("pendingList").innerHTML = items.length
+    ? items.map(item => `
+      <button type="button" class="pending-item"
+        data-withdraw-id="${escapeText(item.withdraw_id)}">
+        <span class="pending-head">
+          <span>${item.withdraw_type === "card" ? "🏦 بانک میویی" : item.withdraw_type === "group" ? "📤 برداشت گپی" : "📤 برداشت با آیدی"}</span>
+          <strong>${fmt(item.amount)} میو</strong>
+        </span>
+        <span class="pending-meta">
+          <span>${item.processing ? "در حال انجام" : "در صف برداشت"}</span>
+          <span>${item.position ? `نفر ${Number(item.position)} در صف` : ""}</span>
+        </span>
+        <span class="pending-clock"
+          data-withdraw-clock="${escapeText(item.withdraw_id)}"></span>
+        <span class="pending-hint">برای دیدن جزئیات بزن؛ نیازی به ماندن در صفحهٔ صف نیست.</span>
+      </button>
+    `).join("")
+    : `<div class="pending-empty">درخواست برداشت در انتظاری نداری.</div>`;
+
+  $("pendingList").querySelectorAll("[data-withdraw-id]").forEach(button => {
+    button.onclick = () => {
+      const item = state.pending_withdrawals.find(
+        entry => String(entry.withdraw_id) === button.dataset.withdrawId
+      );
+
+      if (!item) return;
+
+      if (
+        !activeWithdrawal ||
+        String(activeWithdrawal.withdraw_id) !== String(item.withdraw_id)
+      ) {
+        activeWithdrawal = { ...item, phase: "pending" };
+      }
+
+      lastWithdrawMethod = item.withdraw_type === "card" ? "bank" : "id";
+      viewActiveWithdrawal();
+    };
+  });
+
+  $("homeReceiptBtn").hidden = !state.notifications.some(
+    item => item.type === "success"
+  );
+
+  updatePendingClocks();
+}
+
+function updatePendingClocks() {
+  $("pendingList").querySelectorAll("[data-withdraw-clock]").forEach(element => {
+    const item = state.pending_withdrawals.find(
+      entry => String(entry.withdraw_id) === element.dataset.withdrawClock
+    );
+
+    if (!item) return;
+
+    const seconds = pendingSeconds(item);
+
+    element.textContent = item.processing
+      ? "⚙️ در حال پردازش واریز"
+      : seconds > 0
+        ? `⏱ حدود ${humanDuration(seconds)} تا نوبت پردازش`
+        : "⏳ منتظر شروع پردازش یا دریافت وضعیت جدید";
+  });
+}
+
+setInterval(() => {
+  if (!document.hidden && currentView === "home") {
+    updatePendingClocks();
+  }
+}, 1000);
+
+$("homeReceiptBtn").onclick = requestReceipt;
+
 /* ================= NOTIFICATIONS ================= */
 
 const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
-
 let seenMemory = "";
 let previousFocus = null;
 let previousOverflow = "";
 
-function notificationKey(notification) {
-  return String(notification?.id || notification?.time || "");
+function notificationKey(item) {
+  return String(item?.id || item?.time || "");
 }
 
 function getSeen() {
-  try {
-    return localStorage.getItem(LAST_SEEN_KEY) || seenMemory;
-  } catch {
-    return seenMemory;
-  }
+  try { return localStorage.getItem(LAST_SEEN_KEY) || seenMemory; }
+  catch { return seenMemory; }
 }
 
 function setSeen(value) {
   seenMemory = value;
-
-  try {
-    localStorage.setItem(LAST_SEEN_KEY, value);
-  } catch {}
+  try { localStorage.setItem(LAST_SEEN_KEY, value); } catch {}
 }
 
 function renderNotifications() {
@@ -1846,33 +1232,26 @@ function renderNotifications() {
     return;
   }
 
-  state.notifications.forEach((notification, index) => {
-    const item = document.createElement("div");
-
-    item.className = "notif-item " +
-      (notification.type === "fail" ? "fail" : "success");
-
-    item.style.animationDelay = `${Math.min(index, 6) * 45}ms`;
+  state.notifications.forEach((item, index) => {
+    const element = document.createElement("div");
+    element.className = "notif-item " + (item.type === "fail" ? "fail" : "success");
+    element.style.animationDelay = `${Math.min(index, 6) * 45}ms`;
 
     const text = document.createElement("div");
-    text.textContent = String(notification.text || "");
+    text.textContent = String(item.text || "");
 
     const time = document.createElement("div");
     time.className = "t";
-    time.textContent = String(notification.time || "");
+    time.textContent = String(item.time || "");
 
-    item.append(text, time);
-    list.appendChild(item);
+    element.append(text, time);
+    list.appendChild(element);
   });
 }
 
 function updateBellDot() {
   const newest = notificationKey(state.notifications[0]);
-
-  $("bellDot").classList.toggle(
-    "show",
-    Boolean(newest && newest !== getSeen())
-  );
+  $("bellDot").classList.toggle("show", Boolean(newest && newest !== getSeen()));
 }
 
 function openNotifications() {
@@ -1881,18 +1260,17 @@ function openNotifications() {
 
   previousFocus = document.activeElement;
   previousOverflow = document.body.style.overflow;
-
   renderNotifications();
 
   overlay.inert = false;
   overlay.setAttribute("aria-hidden", "false");
   overlay.classList.add("show");
-
   $("bellBtn").setAttribute("aria-expanded", "true");
 
   document.body.style.overflow = "hidden";
   $("closeNotifBtn").focus({ preventScroll: true });
   app.inert = true;
+  $("bottomNav").inert = true;
 
   setSeen(notificationKey(state.notifications[0]));
   updateBellDot();
@@ -1903,13 +1281,11 @@ function closeNotifications() {
   if (!overlay.classList.contains("show")) return;
 
   app.inert = false;
+  $("bottomNav").inert = false;
   document.body.style.overflow = previousOverflow;
-
   $("bellBtn").setAttribute("aria-expanded", "false");
 
-  if (previousFocus?.isConnected) {
-    previousFocus.focus({ preventScroll: true });
-  }
+  if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
 
   overlay.classList.remove("show");
   overlay.setAttribute("aria-hidden", "true");
@@ -1918,20 +1294,15 @@ function closeNotifications() {
 
 $("bellBtn").onclick = openNotifications;
 $("closeNotifBtn").onclick = closeNotifications;
-
 $("notifOverlay").onclick = event => {
-  if (event.target === $("notifOverlay")) {
-    closeNotifications();
-  }
+  if (event.target === $("notifOverlay")) closeNotifications();
 };
 
 $("notifSheet").addEventListener("keydown", event => {
   if (event.key === "Escape") {
     event.preventDefault();
     closeNotifications();
-  }
-
-  if (event.key === "Tab") {
+  } else if (event.key === "Tab") {
     event.preventDefault();
     $("closeNotifBtn").focus();
   }
@@ -1948,12 +1319,9 @@ async function viewInvite() {
       <b class="gold-text">۴۰۰,۰۰۰ میو</b>
       به حساب شما واریز خواهد شد.
     </p>
-
     <div class="link-box">
       <span id="inviteLinkText">در حال دریافت لینک…</span>
-      <button type="button" class="copy-btn" id="copyBtn" disabled>
-        کپی
-      </button>
+      <button type="button" class="copy-btn" id="copyBtn" disabled>کپی</button>
     </div>
   `);
 
@@ -1961,7 +1329,6 @@ async function viewInvite() {
   if (version !== viewVersion) return;
 
   const link = typeof result.link === "string" ? result.link : "";
-
   $("inviteLinkText").textContent = link || "خطا در دریافت لینک";
   $("copyBtn").disabled = !link;
   $("copyBtn").onclick = () => copyText(link, $("copyBtn"));
@@ -1972,44 +1339,25 @@ async function viewInvite() {
 /* ================= WITHDRAW FORMS ================= */
 
 function viewWithdrawForm() {
-  if (activeWithdrawal) {
-    viewActiveWithdrawal();
-    return;
-  }
-
+  if (activeWithdrawal) return viewActiveWithdrawal();
   if (!ensureUserData()) return;
 
   lastWithdrawMethod = "id";
   showView("withdraw-form", "📤 برداشت با آیدی");
 
   paint(`
-    <p>
-      موجودی قابل برداشت شما:
+    <p>موجودی قابل برداشت شما:
       <b class="gold-text">${fmt(state.balance)} میو</b>
     </p>
-
     <p>آیدی تلگرام خود را وارد کنید و تأیید را بزنید.</p>
 
     <form id="withdrawForm" novalidate>
-      <label class="field-label" for="withdrawIdInput">
-        آیدی تلگرام
-      </label>
-
-      <input
-        class="id-input"
-        id="withdrawIdInput"
-        placeholder="@username"
-        autocomplete="off"
-        autocapitalize="off"
-        spellcheck="false"
-        aria-describedby="withdrawError"
-      >
-
+      <label class="field-label" for="withdrawIdInput">آیدی تلگرام</label>
+      <input class="id-input" id="withdrawIdInput" placeholder="@username"
+        autocomplete="off" autocapitalize="off" spellcheck="false"
+        aria-describedby="withdrawError">
       <div class="field-error" id="withdrawError" role="alert"></div>
-
-      <button type="submit" class="primary-btn rgb-btn">
-        ${confirmLabel()}
-      </button>
+      <button type="submit" class="primary-btn rgb-btn">${confirmLabel()}</button>
     </form>
   `);
 
@@ -2033,32 +1381,17 @@ function viewWithdrawForm() {
 }
 
 function viewBankWithdrawConfirm() {
-  if (activeWithdrawal) {
-    viewActiveWithdrawal();
-    return;
-  }
-
+  if (activeWithdrawal) return viewActiveWithdrawal();
   if (!ensureUserData()) return;
 
   lastWithdrawMethod = "bank";
   showView("bank-confirm", "🏦 بانک میویی");
 
   paint(`
-    <p>
-      شما می‌توانید
-      <b class="gold-text">${fmt(state.balance)} میو</b>
-      با بانک میویی برداشت کنید.
-    </p>
-
+    <p>شما می‌توانید <b class="gold-text">${fmt(state.balance)} میو</b> با بانک میویی برداشت کنید.</p>
     <p>برای ادامه روی تأیید بزنید.</p>
-
-    <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">
-      ${confirmLabel()}
-    </button>
-
-    <button type="button" class="ghost-btn" id="bankCancelBtn">
-      لغو
-    </button>
+    <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">${confirmLabel()}</button>
+    <button type="button" class="ghost-btn" id="bankCancelBtn">لغو</button>
   `);
 
   $("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
@@ -2066,11 +1399,7 @@ function viewBankWithdrawConfirm() {
 }
 
 function viewBankWithdrawCardInput() {
-  if (activeWithdrawal) {
-    viewActiveWithdrawal();
-    return;
-  }
-
+  if (activeWithdrawal) return viewActiveWithdrawal();
   if (!ensureUserData()) return;
 
   lastWithdrawMethod = "bank";
@@ -2078,30 +1407,13 @@ function viewBankWithdrawCardInput() {
 
   paint(`
     <p>شماره کارت میویی خود را وارد کنید:</p>
-
     <form id="bankCardForm" novalidate>
-      <label class="field-label" for="bankCardInput">
-        شماره کارت میویی
-      </label>
-
-      <input
-        class="id-input"
-        id="bankCardInput"
-        placeholder="مثلاً 232491826963"
-        inputmode="numeric"
-        autocomplete="off"
-        aria-describedby="bankCardError"
-      >
-
+      <label class="field-label" for="bankCardInput">شماره کارت میویی</label>
+      <input class="id-input" id="bankCardInput" placeholder="مثلاً 232491826963"
+        inputmode="numeric" autocomplete="off" aria-describedby="bankCardError">
       <div class="field-error" id="bankCardError" role="alert"></div>
-
-      <button type="submit" class="primary-btn rgb-btn">
-        ${confirmLabel()}
-      </button>
-
-      <button type="button" class="ghost-btn" id="bankCardBackBtn">
-        برگشت
-      </button>
+      <button type="submit" class="primary-btn rgb-btn">${confirmLabel()}</button>
+      <button type="button" class="ghost-btn" id="bankCardBackBtn">برگشت</button>
     </form>
   `);
 
@@ -2113,8 +1425,7 @@ function viewBankWithdrawCardInput() {
     const card = englishDigits($("bankCardInput").value.trim());
 
     if (!/^[0-9]{10,20}$/.test(card)) {
-      $("bankCardError").textContent =
-        "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
+      $("bankCardError").textContent = "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
       return;
     }
 
@@ -2127,23 +1438,14 @@ function viewBankWithdrawCardInput() {
   };
 }
 
-/* ================= WITHDRAW PROCESS ================= */
+/* ================= WITHDRAW WAITING / AUTO HOME ================= */
 
 function isWithdrawalView() {
-  return ["withdraw-waiting", "withdraw-unknown"].includes(currentView);
-}
-
-function viewWithdrawWaiting() {
-  showView("withdraw-waiting", "📤 برداشت");
-
-  paint(`
-    <div class="spinner" aria-hidden="true"></div>
-    <p class="muted-center" role="status">⏳ لطفاً منتظر بمانید…</p>
-    <p class="muted-center" id="queuePositionText"></p>
-    <p class="muted-center" id="queueWaitText"></p>
-  `);
-
-  updateWaitingInfo(activeWithdrawal || {});
+  return [
+    "withdraw-waiting",
+    "withdraw-unknown",
+    "bank-queued-notice"
+  ].includes(currentView);
 }
 
 function updateWaitingInfo(result) {
@@ -2156,8 +1458,96 @@ function updateWaitingInfo(result) {
   if ($("queueWaitText")) {
     $("queueWaitText").textContent = result.wait_text
       ? `⏱ ${result.wait_text}`
-      : "";
+      : result.processing
+        ? "⚙️ در حال پردازش برداشت"
+        : "در حال دریافت زمان صف…";
   }
+}
+
+function armBankAutoReturn() {
+  clearTimeout(bankScreenTimer);
+
+  const job = activeWithdrawal;
+
+  if (
+    !job ||
+    job.method !== "bank" ||
+    job.phase !== "pending" ||
+    !job.withdraw_id ||
+    currentView !== "withdraw-waiting"
+  ) {
+    return;
+  }
+
+  bankScreenTimer = setTimeout(() => {
+    if (
+      activeWithdrawal === job &&
+      currentView === "withdraw-waiting" &&
+      job.phase === "pending"
+    ) {
+      viewBankQueuedNotice(job);
+    }
+  }, BANK_QUEUE_SCREEN_MS);
+}
+
+function viewBankQueuedNotice(job) {
+  const version = showView("bank-queued-notice", "🏦 برداشت ثبت شد");
+  const seconds = pendingSeconds(job);
+
+  paint(`
+    <div class="result-icon">🏠</div>
+    <div class="bank-notice">
+      <p><b>لازم نیست اینجا منتظر بمانی ❤️</b></p>
+      <p id="bankNoticeMessage"></p>
+      <p>مقدار و زمان باقی‌مانده در بخش «در انتظار برداشت» خانه نمایش داده می‌شود.</p>
+      <p>بعد از ثبت نتیجه، اعلان دریافت می‌کنی.</p>
+    </div>
+    <button type="button" class="primary-btn" id="bankNoticeHome">رفتن به خانه</button>
+  `);
+
+  $("bankNoticeMessage").textContent = job.processing
+    ? "برداشت شما در حال پردازش است."
+    : seconds > 0
+      ? `درخواست شما در صف است؛ حدود ${humanDuration(seconds)} تا نوبت شروع پردازش باقی مانده.`
+      : "درخواست شما در صف است و منتظر شروع پردازش می‌ماند.";
+
+  $("bankNoticeHome").onclick = showHome;
+
+  bankNoticeTimer = setTimeout(() => {
+    if (
+      version === viewVersion &&
+      currentView === "bank-queued-notice"
+    ) {
+      showHome();
+    }
+  }, BANK_NOTICE_MS);
+}
+
+function viewWithdrawWaiting() {
+  const isBank = activeWithdrawal?.method === "bank";
+
+  showView("withdraw-waiting", isBank ? "🏦 صف بانک میویی" : "📤 برداشت");
+
+  paint(`
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="muted-center" role="status">⏳ درخواست شما در حال پیگیری است…</p>
+    <p class="muted-center" id="queuePositionText"></p>
+    <p class="muted-center" id="queueWaitText"></p>
+    ${isBank ? `
+      <p class="muted-center queue-help">
+        پس از ۲۰ ثانیه نمایش صف، به خانه برمی‌گردی؛ پیگیری برداشت ادامه دارد.
+      </p>
+      <button type="button" class="ghost-btn" id="queueHomeBtn">
+        همین حالا برو به خانه
+      </button>
+    ` : ""}
+  `);
+
+  updateWaitingInfo(activeWithdrawal || {});
+
+  if ($("queueHomeBtn")) $("queueHomeBtn").onclick = showHome;
+
+  armBankAutoReturn();
 }
 
 function viewActiveWithdrawal() {
@@ -2168,10 +1558,7 @@ function viewActiveWithdrawal() {
 
   viewWithdrawWaiting();
 
-  if (
-    activeWithdrawal?.phase === "pending" &&
-    !pollingWithdrawal
-  ) {
+  if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
     pollWithdrawStatus();
   }
 }
@@ -2182,7 +1569,8 @@ async function startWithdrawal(method, value) {
   const job = {
     method,
     phase: "submitting",
-    withdraw_id: null
+    withdraw_id: null,
+    amount: state.balance
   };
 
   activeWithdrawal = job;
@@ -2196,45 +1584,30 @@ async function startWithdrawal(method, value) {
   if (activeWithdrawal !== job) return;
 
   if (result.ok || result.error === "already_pending") {
-    Object.assign(job, result, { phase: "pending" });
+    Object.assign(job, normalizeWithdrawal(result), { phase: "pending" });
+    upsertPendingWithdrawal(job);
 
-    if (isWithdrawalView()) {
+    if (currentView === "withdraw-waiting") {
       updateWaitingInfo(job);
+      armBankAutoReturn();
     }
 
     pollWithdrawStatus();
     return;
   }
 
-  if (
-    ["network", "invalid_response", "database_unavailable", "server"]
-      .includes(result.error)
-  ) {
+  if (["network", "invalid_response", "database_unavailable", "server"].includes(result.error)) {
     job.phase = "unknown";
-
-    if (isWithdrawalView()) {
-      viewWithdrawUnknown();
-    } else {
-      showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
-    }
-
+    if (isWithdrawalView()) viewWithdrawUnknown();
+    else showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
     return;
   }
 
   activeWithdrawal = null;
-
-  if (isWithdrawalView()) {
-    viewWithdrawFailed(errorText(result.error));
-  } else {
-    showToast(errorText(result.error));
-  }
+  if (isWithdrawalView()) viewWithdrawFailed(errorText(result.error));
+  else showToast(errorText(result.error));
 }
 
-/*
- * نسخهٔ اصلاح‌شده:
- * بررسی صف بعد از ۴۰ بار یا دو دقیقه متوقف نمی‌شود.
- * تا مشخص‌شدن نتیجه، وضعیت و زمان انتظار از سرور دریافت می‌شود.
- */
 async function pollWithdrawStatus() {
   if (pollingWithdrawal || !activeWithdrawal) return;
 
@@ -2256,72 +1629,65 @@ async function pollWithdrawStatus() {
         if (user.ok === false) {
           if (user.error === "unauthorized") {
             job.phase = "unknown";
-
-            if (isWithdrawalView()) {
-              viewWithdrawUnknown();
-            }
-
+            if (isWithdrawalView()) viewWithdrawUnknown();
             showToast(errorText(user.error));
             return;
           }
 
           if ($("queueWaitText")) {
-            $("queueWaitText").textContent =
-              "ارتباط با سرور قطع شده؛ در حال بررسی دوباره…";
+            $("queueWaitText").textContent = "ارتباط با سرور قطع شده؛ در حال بررسی دوباره…";
           }
 
           continue;
         }
 
         if (user.pending_withdrawal?.withdraw_id) {
-          Object.assign(job, user.pending_withdrawal);
+          Object.assign(job, normalizeWithdrawal(user.pending_withdrawal), { phase: "pending" });
+          upsertPendingWithdrawal(job);
+          armBankAutoReturn();
         } else {
-          // درخواست نامشخص دوباره ارسال نمی‌شود.
           job.phase = "unknown";
-
-          if (isWithdrawalView()) {
-            viewWithdrawUnknown();
-          }
-
+          if (isWithdrawalView()) viewWithdrawUnknown();
           return;
         }
       }
 
       const result = await api(
-        "/withdraw-status?withdraw_id=" +
-        encodeURIComponent(job.withdraw_id)
+        "/withdraw-status?withdraw_id=" + encodeURIComponent(job.withdraw_id)
       );
 
       if (activeWithdrawal !== job) return;
 
       if (result.status === "success") {
         activeWithdrawal = null;
+        removePendingWithdrawal(job.withdraw_id);
+        clearBankNavigationTimers();
 
         if (isWithdrawalView()) {
           viewWithdrawSuccess();
         } else {
-          showToast("🎉 برداشت شما با موفقیت انجام شد.");
+          showToast(`🎉 برداشت ${fmt(result.amount || job.amount)} میو با موفقیت ثبت شد.`);
         }
 
-        refreshData(false);
+        await refreshData(false);
         return;
       }
 
       if (result.status === "failed") {
         activeWithdrawal = null;
+        removePendingWithdrawal(job.withdraw_id);
+        clearBankNavigationTimers();
 
-        if (isWithdrawalView()) {
-          viewWithdrawFailed();
-        } else {
-          showToast("برداشت ناموفق بود.");
-        }
+        if (isWithdrawalView()) viewWithdrawFailed();
+        else showToast("❌ برداشت ناموفق بود؛ اعلان‌ها را بررسی کن.");
 
-        refreshData(false);
+        await refreshData(false);
         return;
       }
 
       if (result.status === "pending") {
-        Object.assign(job, result, { phase: "pending" });
+        Object.assign(job, normalizeWithdrawal(result), { phase: "pending" });
+        upsertPendingWithdrawal(job);
 
         if (currentView === "withdraw-waiting") {
           updateWaitingInfo(job);
@@ -2330,35 +1696,29 @@ async function pollWithdrawStatus() {
         continue;
       }
 
-      if (result.error === "unauthorized") {
+      if (result.error === "unauthorized" || result.status === "none") {
         job.phase = "unknown";
+        clearBankNavigationTimers();
 
-        if (isWithdrawalView()) {
-          viewWithdrawUnknown();
-        }
-
-        showToast(errorText(result.error));
+        if (isWithdrawalView()) viewWithdrawUnknown();
+        if (result.error === "unauthorized") showToast(errorText(result.error));
         return;
       }
 
-      if (result.status === "none") {
-        job.phase = "unknown";
-
-        if (isWithdrawalView()) {
-          viewWithdrawUnknown();
-        }
-
-        return;
-      }
-
-      // قطعی موقت، برداشت را ناموفق نمی‌کند.
       if ($("queueWaitText")) {
-        $("queueWaitText").textContent =
-          "دریافت وضعیت با تأخیر مواجه شده؛ در حال بررسی دوباره…";
+        $("queueWaitText").textContent = "دریافت وضعیت با تأخیر مواجه شده؛ پیگیری ادامه دارد…";
       }
     }
   } finally {
     pollingWithdrawal = false;
+
+    if (
+      activeWithdrawal &&
+      activeWithdrawal !== job &&
+      activeWithdrawal.phase === "pending"
+    ) {
+      pollWithdrawStatus();
+    }
   }
 }
 
@@ -2367,27 +1727,15 @@ function viewWithdrawUnknown() {
 
   paint(`
     <div class="result-icon">⏳</div>
-
+    <p class="muted-center"><b>نتیجهٔ برداشت هنوز مشخص نشده است.</b></p>
     <p class="muted-center">
-      <b>نتیجهٔ برداشت هنوز مشخص نشده است.</b>
+      آخرین وضعیت و اعلان‌ها را بررسی کن. درخواست نامشخص دوباره ارسال نمی‌شود.
     </p>
-
-    <p class="muted-center">
-      آخرین وضعیت و موجودی را بررسی کن. اگر پاسخ ثبت درخواست قطع شده،
-      ممکن است نتیجه در اعلان‌ها نمایش داده شود.
-    </p>
-
-    <button type="button" class="primary-btn" id="checkWithdrawBtn">
-      بررسی دوباره
-    </button>
-
-    <button type="button" class="ghost-btn" id="withdrawHomeBtn">
-      بازگشت به خانه
-    </button>
+    <button type="button" class="primary-btn" id="checkWithdrawBtn">بررسی دوباره</button>
+    <button type="button" class="ghost-btn" id="withdrawHomeBtn">بازگشت به خانه</button>
   `);
 
   $("checkWithdrawBtn").onclick = () => {
-    refreshData(false);
     viewWithdrawWaiting();
     pollWithdrawStatus();
   };
@@ -2402,21 +1750,13 @@ function viewWithdrawFailed(message = "لطفاً دوباره تلاش کنید
     <div class="result-icon">❌</div>
     <p class="muted-center"><b>برداشت ناموفق بود</b></p>
     <p class="muted-center" id="withdrawFailMessage"></p>
-
-    <button type="button" class="primary-btn" id="retryBtn">
-      تلاش دوباره
-    </button>
+    <button type="button" class="primary-btn" id="retryBtn">تلاش دوباره</button>
   `);
 
   $("withdrawFailMessage").textContent = message;
-
-  $("retryBtn").onclick = () => {
-    if (lastWithdrawMethod === "bank") {
-      viewBankWithdrawCardInput();
-    } else {
-      viewWithdrawForm();
-    }
-  };
+  $("retryBtn").onclick = () => lastWithdrawMethod === "bank"
+    ? viewBankWithdrawCardInput()
+    : viewWithdrawForm();
 }
 
 function viewWithdrawSuccess() {
@@ -2424,20 +1764,10 @@ function viewWithdrawSuccess() {
 
   paint(`
     <div class="result-icon">🎉</div>
-
-    <p class="muted-center">
-      <b>میوهای شما با موفقیت واریز شد</b>
-    </p>
-
+    <p class="muted-center"><b>برداشت شما با موفقیت ثبت شد</b></p>
     <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
-
-    <button type="button" class="primary-btn" id="receiptYesBtn">
-      تأیید، رسید می‌خواهم
-    </button>
-
-    <button type="button" class="ghost-btn" id="receiptNoBtn">
-      فعلاً نه
-    </button>
+    <button type="button" class="primary-btn" id="receiptYesBtn">تأیید، رسید می‌خواهم</button>
+    <button type="button" class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
   `);
 
   $("receiptYesBtn").onclick = requestReceipt;
@@ -2457,23 +1787,15 @@ async function requestReceipt() {
   const result = await post("/receipt");
 
   if (version !== viewVersion) {
-    showToast(
-      result.ok
-        ? "درخواست رسید ثبت شد."
-        : errorText(result.error)
-    );
+    showToast(result.ok ? "درخواست رسید ثبت شد." : errorText(result.error));
     return;
   }
 
   if (!result.ok) {
     paint(`
       <p class="muted-center">ثبت درخواست رسید انجام نشد.</p>
-
-      <button type="button" class="primary-btn" id="receiptRetryBtn">
-        تلاش دوباره
-      </button>
+      <button type="button" class="primary-btn" id="receiptRetryBtn">تلاش دوباره</button>
     `);
-
     $("receiptRetryBtn").onclick = requestReceipt;
     return;
   }
@@ -2482,31 +1804,18 @@ async function requestReceipt() {
 
   paint(`
     <div class="result-icon">📨</div>
-
     <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
     <p class="muted-center">به اکانت زیر پیام بده:</p>
-
     <div class="link-box">
       <span style="text-align:center">@Pott5y6jg</span>
-      <button type="button" class="copy-btn" id="copyAccountBtn">
-        کپی
-      </button>
+      <button type="button" class="copy-btn" id="copyAccountBtn">کپی</button>
     </div>
-
     <p class="muted-center">و بنویس:</p>
-
-    <p class="muted-center">
-      <b class="gold-text">رسیدم رو بده ❤️</b>
-    </p>
-
-    <p class="muted-center">
-      🤖 رسید به صورت خودکار برات ارسال می‌شود.
-    </p>
+    <p class="muted-center"><b class="gold-text">رسیدم رو بده</b></p>
+    <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
   `);
 
-  $("copyAccountBtn").onclick = () => {
-    copyText("@Pott5y6jg", $("copyAccountBtn"));
-  };
+  $("copyAccountBtn").onclick = () => copyText("@Pott5y6jg", $("copyAccountBtn"));
 }
 
 /* ================= DAILY ================= */
@@ -2518,36 +1827,21 @@ function viewDaily() {
 
   if (state.daily_enabled) {
     paint(`
-      <div class="toggle-row">
-        <span class="status-text">روشن است ✅</span>
-      </div>
-
+      <div class="toggle-row"><span class="status-text">روشن است ✅</span></div>
       <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
     `);
-
     return;
   }
 
   paint(`
-    <p>
-      با روشن کردن این قابلیت، هر روز
-      <b class="gold-text">۳۴۰,۰۰۰ میو</b>
-      دریافت می‌کنید.
-    </p>
-
-    <button
-      type="button"
-      class="primary-btn"
-      id="enableDailyBtn"
-      ${enablingDaily ? "disabled" : ""}
-    >
+    <p>با روشن کردن این قابلیت، هر روز <b class="gold-text">۳۴۰,۰۰۰ میو</b> دریافت می‌کنید.</p>
+    <button type="button" class="primary-btn" id="enableDailyBtn" ${enablingDaily ? "disabled" : ""}>
       ${enablingDaily ? "در حال فعال‌سازی…" : "✅ فعال کن"}
     </button>
   `);
 
   $("enableDailyBtn").onclick = async () => {
     if (enablingDaily) return;
-
     enablingDaily = true;
     $("enableDailyBtn").disabled = true;
     $("enableDailyBtn").textContent = "در حال فعال‌سازی…";
@@ -2562,37 +1856,27 @@ function viewDaily() {
       showToast(errorText(result.error));
     }
 
-    if (currentView === "daily") {
-      viewDaily();
-    }
+    if (currentView === "daily") viewDaily();
   };
 }
 
-/* ================= GAME REQUEST PERSISTENCE ================= */
+/* ================= GAME ================= */
 
 const GAME_PENDING_KEY = `mio_game_pending_${TG_USER_ID}`;
 let pendingGameMemory = "";
 
 function getPendingGame() {
-  try {
-    return localStorage.getItem(GAME_PENDING_KEY) || pendingGameMemory;
-  } catch {
-    return pendingGameMemory;
-  }
+  try { return localStorage.getItem(GAME_PENDING_KEY) || pendingGameMemory; }
+  catch { return pendingGameMemory; }
 }
 
 function savePendingGame(id) {
   pendingGameMemory = id;
-
-  try {
-    localStorage.setItem(GAME_PENDING_KEY, id);
-  } catch {}
+  try { localStorage.setItem(GAME_PENDING_KEY, id); } catch {}
 }
 
 function clearPendingGame(id) {
-  if (pendingGameMemory === id) {
-    pendingGameMemory = "";
-  }
+  if (pendingGameMemory === id) pendingGameMemory = "";
 
   try {
     if (localStorage.getItem(GAME_PENDING_KEY) === id) {
@@ -2602,18 +1886,13 @@ function clearPendingGame(id) {
 }
 
 function makeRequestId() {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
+  if (crypto.randomUUID) return crypto.randomUUID();
 
   const bytes = crypto.getRandomValues(new Uint8Array(16));
-
   bytes[6] = (bytes[6] & 15) | 64;
   bytes[8] = (bytes[8] & 63) | 128;
 
-  const hex = [...bytes].map(
-    value => value.toString(16).padStart(2, "0")
-  );
+  const hex = [...bytes].map(value => value.toString(16).padStart(2, "0"));
 
   return [
     hex.slice(0, 4).join(""),
@@ -2624,8 +1903,6 @@ function makeRequestId() {
   ].join("-");
 }
 
-/* ================= GAME ================= */
-
 function acceptGameState(data) {
   gameState = {
     ...data,
@@ -2635,22 +1912,17 @@ function acceptGameState(data) {
 }
 
 function remainingGameSeconds() {
-  if (!gameState) return 0;
-
-  return Math.max(
-    0,
-    Math.ceil((gameState.deadline - performance.now()) / 1000)
-  );
+  return gameState
+    ? Math.max(0, Math.ceil((gameState.deadline - performance.now()) / 1000))
+    : 0;
 }
 
 function formatCountdown(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-
-  return [hours, minutes, secs]
-    .map(value => String(value).padStart(2, "0"))
-    .join(":");
+  return [
+    Math.floor(seconds / 3600),
+    Math.floor((seconds % 3600) / 60),
+    seconds % 60
+  ].map(value => String(value).padStart(2, "0")).join(":");
 }
 
 function canStartGame() {
@@ -2665,7 +1937,6 @@ async function viewGame() {
   if (!ensureUserData()) return;
 
   const version = showView("game", "🎰 بازی میویی");
-  setActiveNav("game");
 
   if (gameBusy && gameState) {
     renderGame();
@@ -2674,23 +1945,17 @@ async function viewGame() {
 
   paint(`
     <div class="spinner" aria-hidden="true"></div>
-    <p class="muted-center" role="status">
-      در حال دریافت وضعیت بازی…
-    </p>
+    <p class="muted-center" role="status">در حال دریافت وضعیت بازی…</p>
   `);
 
   const result = await api("/game/status");
-
   if (version !== viewVersion) return;
 
   if (!result.ok) {
     paint(`
       <p class="muted-center" id="gameLoadError"></p>
-      <button type="button" class="primary-btn" id="reloadGameBtn">
-        تلاش دوباره
-      </button>
+      <button type="button" class="primary-btn" id="reloadGameBtn">تلاش دوباره</button>
     `);
-
     $("gameLoadError").textContent = errorText(result.error);
     $("reloadGameBtn").onclick = viewGame;
     return;
@@ -2703,32 +1968,24 @@ async function viewGame() {
 
 function renderGame() {
   if (currentView !== "game" || !gameState) return;
-
   clearGameTimer();
 
   const lastRound = gameState.last_round;
-
   const symbols = Array.isArray(lastRound?.symbols)
     ? lastRound.symbols
     : ["seven", "grape", "lemon"];
-
   const payouts = gameState.payouts || DEFAULT_PAYOUTS;
 
-  const tableRows = ["seven", "grape", "lemon", "blank"]
-    .map(symbol => {
-      const values = payouts[symbol] || DEFAULT_PAYOUTS[symbol];
+  const rows = ["seven", "grape", "lemon", "blank"].map(symbol => {
+    const values = payouts[symbol] || DEFAULT_PAYOUTS[symbol];
 
-      return `
-        <tr>
-          <td aria-label="${SYMBOL_NAMES[symbol]}">
-            ${GAME_SYMBOLS[symbol]}
-          </td>
-          <td>${fmt(values[1])}</td>
-          <td>${fmt(values[2])}</td>
-          <td>${fmt(values[3])}</td>
-        </tr>
-      `;
-    }).join("");
+    return `<tr>
+      <td aria-label="${SYMBOL_NAMES[symbol]}">${GAME_SYMBOLS[symbol]}</td>
+      <td>${fmt(values[1])}</td>
+      <td>${fmt(values[2])}</td>
+      <td>${fmt(values[3])}</td>
+    </tr>`;
+  }).join("");
 
   paint(`
     <div class="game-intro">
@@ -2736,25 +1993,15 @@ function renderGame() {
       <p>روی دستگاه بزن و شانست رو امتحان کن ✨</p>
     </div>
 
-    <button
-      type="button"
-      class="slot-machine"
-      id="slotMachine"
-      aria-label="شروع بازی میویی"
-      disabled
-    >
+    <button type="button" class="slot-machine" id="slotMachine" aria-label="شروع بازی میویی" disabled>
       <span class="slot-heading">MIO LUCK</span>
-
       <span class="reels" aria-hidden="true">
         ${symbols.map((symbol, index) => `
           <span class="reel" id="reel${index}">
-            <span class="reel-symbol" id="reelSymbol${index}">
-              ${GAME_SYMBOLS[symbol] || "✖️"}
-            </span>
+            <span class="reel-symbol" id="reelSymbol${index}">${GAME_SYMBOLS[symbol] || "✖️"}</span>
           </span>
         `).join("")}
       </span>
-
       <span class="slot-footer">
         <span class="slot-light"></span>
         سه خانه، یک شانس تازه
@@ -2762,12 +2009,7 @@ function renderGame() {
       </span>
     </button>
 
-    <button
-      type="button"
-      class="primary-btn rgb-btn"
-      id="playGameBtn"
-      disabled
-    >
+    <button type="button" class="primary-btn rgb-btn" id="playGameBtn" disabled>
       <span class="btn-label" id="playGameLabel">بازی کن</span>
     </button>
 
@@ -2777,28 +2019,16 @@ function renderGame() {
       <div class="game-result">
         <small>آخرین نتیجهٔ ثبت‌شده</small>
         <strong>${fmt(lastRound.reward)} میو</strong>
-
-        <p>
-          ${Number(lastRound.reward) > 0
-            ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
-            : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀"}
-        </p>
+        <p>${Number(lastRound.reward) > 0
+          ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
+          : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀"}</p>
       </div>
     ` : ""}
 
     <table class="prize-table">
       <caption>جدول جایزه‌ها — به میو</caption>
-
-      <thead>
-        <tr>
-          <th scope="col">نماد</th>
-          <th scope="col">یک عدد</th>
-          <th scope="col">دو عدد</th>
-          <th scope="col">سه عدد</th>
-        </tr>
-      </thead>
-
-      <tbody>${tableRows}</tbody>
+      <thead><tr><th>نماد</th><th>یک عدد</th><th>دو عدد</th><th>سه عدد</th></tr></thead>
+      <tbody>${rows}</tbody>
     </table>
 
     <p class="game-note">
@@ -2806,9 +2036,7 @@ function renderGame() {
       مثلاً هفت + انگور + پوچ = ۱۳۰,۰۰۰ میو.
     </p>
 
-    <button type="button" class="ghost-btn" id="gameRefreshBtn">
-      بروزرسانی وضعیت بازی
-    </button>
+    <button type="button" class="ghost-btn" id="gameRefreshBtn">بروزرسانی وضعیت بازی</button>
   `);
 
   $("slotMachine").onclick = playGame;
@@ -2823,10 +2051,7 @@ function updateGameControls() {
   if (currentView !== "game" || !$("playGameBtn")) return;
 
   const pendingId = getPendingGame();
-
-  const canPlay = !gameBusy && (
-    Boolean(pendingId) || canStartGame()
-  );
+  const canPlay = !gameBusy && (Boolean(pendingId) || canStartGame());
 
   $("playGameBtn").disabled = !canPlay;
   $("slotMachine").disabled = !canPlay;
@@ -2840,8 +2065,7 @@ function updateGameControls() {
 
   if (pendingId) {
     $("playGameLabel").textContent = "بازیابی نتیجه";
-    $("gameStatus").textContent =
-      "پاسخ بازی قبلی کامل نرسیده؛ برای دریافت همان نتیجه بزن.";
+    $("gameStatus").textContent = "پاسخ بازی قبلی کامل نرسیده؛ برای دریافت همان نتیجه بزن.";
     return;
   }
 
@@ -2853,22 +2077,15 @@ function updateGameControls() {
   }
 
   if (gameState.withdrawal_pending) {
-    $("gameStatus").textContent =
-      "برداشتت در حال پردازش است؛ بعد از پایان آن وضعیت بازی را بروزرسانی کن.";
+    $("gameStatus").textContent = "بعد از پایان برداشت فعلی، وضعیت بازی را بروزرسانی کن.";
     return;
   }
 
   const remaining = remainingGameSeconds();
 
-  if (remaining > 0) {
-    $("gameStatus").innerHTML = `
-      بازی بعدی
-      <b>${formatCountdown(remaining)}</b>
-    `;
-  } else {
-    $("gameStatus").textContent =
-      "شانست آماده‌ست؛ بازی کاملاً رایگانه ✨";
-  }
+  $("gameStatus").innerHTML = remaining > 0
+    ? `بازی بعدی <b>${formatCountdown(remaining)}</b>`
+    : "شانست آماده‌ست؛ بازی کاملاً رایگانه ✨";
 }
 
 function startReelAnimation() {
@@ -2883,25 +2100,21 @@ function startReelAnimation() {
   if (!reduceMotion.matches) {
     reels.forEach(reel => {
       reel.box?.classList.add("rolling");
-
       reel.interval = setInterval(() => {
         if (reel.symbol) {
-          reel.symbol.textContent =
-            values[Math.floor(Math.random() * values.length)];
+          reel.symbol.textContent = values[Math.floor(Math.random() * values.length)];
         }
       }, 75);
     });
   }
 
-  function stopOne(index, finalSymbol) {
+  function stopOne(index, symbol) {
     const reel = reels[index];
-
     clearInterval(reel.interval);
     reel.box?.classList.remove("rolling");
 
-    if (reel.symbol && finalSymbol) {
-      reel.symbol.textContent =
-        GAME_SYMBOLS[finalSymbol] || "✖️";
+    if (reel.symbol && symbol) {
+      reel.symbol.textContent = GAME_SYMBOLS[symbol] || "✖️";
     }
   }
 
@@ -2909,15 +2122,11 @@ function startReelAnimation() {
     stop() {
       reels.forEach((_, index) => stopOne(index));
     },
-
     async finish(symbols) {
       for (let index = 0; index < 3; index++) {
         if (!reduceMotion.matches) {
-          await new Promise(resolve =>
-            setTimeout(resolve, index === 0 ? 500 : 350)
-          );
+          await new Promise(resolve => setTimeout(resolve, index === 0 ? 500 : 350));
         }
-
         stopOne(index, symbols[index]);
       }
     }
@@ -2928,7 +2137,6 @@ async function playGame() {
   if (gameBusy) return;
 
   let requestId = getPendingGame();
-
   if (!requestId && !canStartGame()) return;
 
   if (!requestId) {
@@ -2944,99 +2152,90 @@ async function playGame() {
 
   gameBusy = true;
   updateGameControls();
-
   const animation = startReelAnimation();
 
   try {
-    const result = await post("/game/play", {
-      request_id: requestId
-    });
+    const result = await post("/game/play", { request_id: requestId });
 
     if (result.ok && result.round) {
       acceptGameState(result);
-
       await animation.finish(result.round.symbols);
-
       clearPendingGame(requestId);
       setBalance(result.balance);
 
       const reward = Number(result.round.reward) || 0;
 
-      showToast(
-        result.replayed
-          ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
-          : reward > 0
-            ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
-            : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀"
-      );
+      showToast(result.replayed
+        ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
+        : reward > 0
+          ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
+          : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀");
 
       return;
     }
 
-    const definitiveErrors = [
-      "cooldown",
-      "withdrawal_pending",
-      "game_disabled",
-      "not_started",
-      "invalid_request_id"
-    ];
-
-    if (definitiveErrors.includes(result.error)) {
+    if (["cooldown", "withdrawal_pending", "game_disabled", "not_started", "invalid_request_id"].includes(result.error)) {
       clearPendingGame(requestId);
     }
 
     if (typeof result.remaining_seconds === "number") {
       acceptGameState(result);
-
-      if (typeof result.balance === "number") {
-        setBalance(result.balance);
-      }
+      if (typeof result.balance === "number") setBalance(result.balance);
     }
 
     showToast(errorText(result.error));
   } finally {
     animation.stop();
     gameBusy = false;
-
-    if (currentView === "game") {
-      renderGame();
-    }
+    if (currentView === "game") renderGame();
   }
 }
 
-/* ================= USER DATA / REFRESH ================= */
+/* ================= USER DATA ================= */
 
 function applyUserData(user) {
-  if (
-    !user ||
-    user.ok === false ||
-    !Number.isFinite(Number(user.balance))
-  ) {
+  if (!user || user.ok === false || !Number.isFinite(Number(user.balance))) {
     return false;
   }
 
   hasUserData = true;
   state.not_started = Boolean(user.not_started);
   state.daily_enabled = Boolean(user.daily_enabled);
-
+  state.withdrawn_today = Number(user.withdrawn_today) || 0;
   setBalance(user.balance);
 
   state.notifications = Array.isArray(user.notifications)
-    ? user.notifications.filter(
-        item => item && typeof item === "object"
-      )
+    ? user.notifications.filter(item => item && typeof item === "object")
     : [];
 
-  if (user.pending_withdrawal && !activeWithdrawal) {
+  const pending = Array.isArray(user.pending_withdrawals)
+    ? user.pending_withdrawals
+    : user.pending_withdrawal
+      ? [user.pending_withdrawal]
+      : [];
+
+  state.pending_withdrawals = pending
+    .filter(item => item && item.withdraw_id)
+    .map(normalizeWithdrawal);
+
+  if (activeWithdrawal?.withdraw_id) {
+    const matching = state.pending_withdrawals.find(
+      item => String(item.withdraw_id) === String(activeWithdrawal.withdraw_id)
+    );
+
+    if (matching) {
+      Object.assign(activeWithdrawal, matching);
+    }
+  }
+
+  if (!activeWithdrawal && state.pending_withdrawals.length) {
     activeWithdrawal = {
-      ...user.pending_withdrawal,
-      phase: "pending",
-      method: user.pending_withdrawal.withdraw_type === "card"
-        ? "bank"
-        : "id"
+      ...state.pending_withdrawals[0],
+      phase: "pending"
     };
   }
 
+  renderWithdrawDashboard();
   renderNotifications();
 
   if ($("notifOverlay").classList.contains("show")) {
@@ -3044,6 +2243,11 @@ function applyUserData(user) {
   }
 
   updateBellDot();
+
+  if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
+    pollWithdrawStatus();
+  }
+
   return true;
 }
 
@@ -3060,19 +2264,13 @@ async function refreshData(showError = true) {
     if (requestVersion !== userRequestVersion) return;
 
     if (!applyUserData(user)) {
-      if (showError) {
-        showToast(errorText(user.error));
-      }
+      if (showError) showToast(errorText(user.error));
       return;
     }
 
-    if (currentView === "daily") {
-      viewDaily();
-    }
-
-    if (currentView === "game" && !gameBusy) {
-      await viewGame();
-    }
+    if (currentView === "daily") viewDaily();
+    if (currentView === "profile") viewProfile();
+    if (currentView === "game" && !gameBusy) await viewGame();
   } finally {
     if (requestVersion === userRequestVersion) {
       refreshBtn.classList.remove("spinning");
@@ -3082,28 +2280,18 @@ async function refreshData(showError = true) {
   }
 }
 
-/* ================= TOUCH EFFECT ================= */
+/* ================= TOUCH / WIRING ================= */
 
 document.addEventListener("click", event => {
   if (!(event.target instanceof Element)) return;
 
-  const button = event.target.closest(
-    ".menu-btn,.primary-btn,.copy-btn"
-  );
-
+  const button = event.target.closest(".menu-btn,.primary-btn,.copy-btn");
   if (!button || button.disabled || reduceMotion.matches) return;
 
   const rect = button.getBoundingClientRect();
   const size = Math.hypot(rect.width, rect.height) * 2;
-
-  const x = event.detail
-    ? event.clientX - rect.left
-    : rect.width / 2;
-
-  const y = event.detail
-    ? event.clientY - rect.top
-    : rect.height / 2;
-
+  const x = event.detail ? event.clientX - rect.left : rect.width / 2;
+  const y = event.detail ? event.clientY - rect.top : rect.height / 2;
   const ripple = document.createElement("span");
 
   ripple.className = "ripple";
@@ -3120,115 +2308,65 @@ document.addEventListener("click", event => {
   setTimeout(() => ripple.remove(), 650);
 }, true);
 
-/* ================= WIRING ================= */
-
 $("btnInvite").onclick = viewInvite;
 $("btnWithdraw").onclick = viewWithdrawForm;
 $("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
 $("btnDaily").onclick = viewDaily;
 $("btnGame").onclick = viewGame;
 
-$("navHome").onclick = () => {
-  tinyHaptic("light");
-  showHome();
-};
-
-$("navTheme").onclick = () => {
-  tinyHaptic("light");
-  viewThemeSettings();
-};
-
-$("navGame").onclick = () => {
-  tinyHaptic("light");
-  viewGame();
-};
-
-$("navProfile").onclick = () => {
-  tinyHaptic("light");
-  viewProfile();
-};
+$("navHome").onclick = () => { tinyHaptic(); showHome(); };
+$("navTheme").onclick = () => { tinyHaptic(); viewThemeSettings(); };
+$("navGame").onclick = () => { tinyHaptic(); viewGame(); };
+$("navProfile").onclick = () => { tinyHaptic(); viewProfile(); };
 
 refreshBtn.onclick = () => refreshData(true);
 
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && currentView === "game") {
-    updateGameControls();
-  }
+  if (document.hidden) return;
+  if (currentView === "game") updateGameControls();
+  if (currentView === "home") updatePendingClocks();
+  if (hasUserData && !gameBusy) refreshData(false);
 });
 
 /* ================= INIT ================= */
 
 async function init() {
   const requestVersion = ++userRequestVersion;
-  const startedAt = performance.now();
   const userPromise = api("/user");
-
   let timeoutId;
 
   const timeoutPromise = new Promise(resolve => {
-    timeoutId = setTimeout(
-      () => resolve({ __timeout: true }),
-      4000
-    );
+    timeoutId = setTimeout(() => resolve(null), 4000);
   });
 
-  let first;
+  const first = await Promise.race([userPromise, timeoutPromise]);
+  clearTimeout(timeoutId);
+  $("skeletonSection").style.display = "none";
 
-  try {
-    first = await Promise.race([
-      userPromise,
-      timeoutPromise
-    ]);
-  } catch (error) {
-    console.error("Initial load failed:", error);
-    first = { ok: false, error: "network" };
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  const elapsed = performance.now() - startedAt;
-
-  if (elapsed < 650) {
-    await new Promise(resolve =>
-      setTimeout(resolve, 650 - elapsed)
-    );
-  }
+  // اگر کاربر پیش از پایان بارگذاری وارد صفحه دیگری شده، جابه‌جایش نمی‌کنیم.
+  if (currentView === "home") showHome();
 
   if (requestVersion !== userRequestVersion) return;
 
-  $("skeletonSection").style.display = "none";
-  showHome();
-
-  if (first && !first.__timeout) {
+  if (first) {
     if (!applyUserData(first)) {
       $("balanceValue").textContent = "—";
-      showToast(errorText(first?.error));
+      showToast(errorText(first.error));
     }
-
     return;
   }
 
-  userPromise
-    .then(user => {
-      if (requestVersion !== userRequestVersion) return;
+  userPromise.then(user => {
+    if (requestVersion !== userRequestVersion) return;
 
-      if (!applyUserData(user)) {
-        $("balanceValue").textContent = "—";
-        showToast(errorText(user?.error));
-      }
-    })
-    .catch(error => {
-      console.error("Late user load failed:", error);
-
-      if (requestVersion !== userRequestVersion) return;
-
+    if (!applyUserData(user)) {
       $("balanceValue").textContent = "—";
-      showToast("اطلاعات حساب دریافت نشد؛ بروزرسانی را بزن.");
-    });
+      showToast(errorText(user.error));
+    }
+  });
 }
 
 init();
 </script>
-
 </body>
 </html>
