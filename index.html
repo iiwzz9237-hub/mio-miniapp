@@ -843,10 +843,89 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
 .skel-game{height:106px;grid-column:1/-1;border-radius:22px}
 .skel-panel{height:140px}
 
-/* ===== Notifications ===== */
+/* ===== Notifications / meteor shower ===== */
 
-.sheet-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;background:rgba(2,10,25,.70);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s,visibility .25s}
+.sheet-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;
+  background:rgba(3,7,21,.93);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .25s,visibility .25s;
+}
 .sheet-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+
+.meteor-sky{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 75% 15%,rgba(80,59,153,.25),transparent 48%),
+    radial-gradient(ellipse at 10% 80%,rgba(21,81,142,.2),transparent 50%),
+    linear-gradient(160deg,#080d24,#030711 75%);
+}
+
+.meteor-sky::before,
+.meteor-sky::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle at 12% 16%,#d6e8ff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 72% 23%,#fff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 38% 63%,#bfcbff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 87% 78%,#d6e8ff 0 .8px,transparent 1.5px),
+    radial-gradient(circle at 51% 42%,#fff 0 .7px,transparent 1.4px);
+  background-size:211px 263px;
+  opacity:.65;
+}
+.meteor-sky::after{
+  background-size:337px 389px;
+  background-position:81px 119px;
+  opacity:.32;
+}
+
+.meteor{
+  position:absolute;
+  top:var(--meteor-top,0%);
+  left:var(--meteor-left,80%);
+  width:140px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#fff,rgba(153,197,255,.75) 12%,transparent);
+  box-shadow:0 0 7px rgba(140,191,255,.4);
+  opacity:0;
+  transform:rotate(-45deg);
+  transform-origin:left center;
+  animation:meteor-fall var(--meteor-duration,6s) linear infinite;
+  animation-delay:var(--meteor-delay,0s);
+  animation-play-state:paused;
+}
+
+.sheet-overlay.show:not(.meteors-paused) .meteor{
+  animation-play-state:running;
+}
+
+@keyframes meteor-fall{
+  0%{opacity:0;transform:translate3d(120px,-120px,0) rotate(-45deg)}
+  4%{opacity:.9}
+  23%{opacity:0;transform:translate3d(-520px,520px,0) rotate(-45deg)}
+  100%{opacity:0;transform:translate3d(-520px,520px,0) rotate(-45deg)}
+}
+
 .sheet{
   --text:#f5f5f7;
   --dim:#b6c8e8;
@@ -854,6 +933,8 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
   --border:rgba(255,255,255,.13);
   --danger:#ff8585;
   --success:#93d8ba;
+  position:relative;
+  z-index:1;
   color:var(--text);
   width:min(420px,100%);
   max-height:70vh;
@@ -861,9 +942,9 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
   overflow-y:auto;
   overscroll-behavior:contain;
   padding:18px;
-  border:1px solid var(--border);
+  border:1px solid rgba(162,185,249,.24);
   border-radius:26px;
-  background:linear-gradient(145deg,#0d4da8,#082c69);
+  background:linear-gradient(145deg,rgba(18,32,70,.89),rgba(9,17,39,.88));
   box-shadow:0 30px 90px rgba(0,0,0,.4);
   transform:translateY(-14px) scale(.975);
   transition:transform .35s var(--ease);
@@ -889,7 +970,6 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
 .bottom-nav .nav-withdraw{gap:3px}
 .bottom-nav .nav-withdraw.active .nav-withdraw-icon{background:linear-gradient(135deg,#446ed0,#7651aa);box-shadow:0 4px 15px rgba(78,100,202,.26)}
 
-/* نوار پایین هنگام نوشتن روی ورودی قرار نمی‌گیرد. */
 body.keyboard-open .bottom-nav{
   visibility:hidden;
   opacity:0;
@@ -992,6 +1072,8 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     transition:none!important;
     scroll-behavior:auto!important;
   }
+
+  .meteor{display:none}
 }
 </style>
 </head>
@@ -1179,7 +1261,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     </div>
 
     <div class="panel">
-      <p class="muted-center">🐾 <b id="welcomeText">خوش آمدید عزیز</b></p>
       <p class="muted-center">از منوی بالا انتخاب کنید</p>
     </div>
   </div>
@@ -1190,6 +1271,17 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 </div>
 
 <div class="sheet-overlay" id="notifOverlay" aria-hidden="true" inert>
+  <div class="meteor-sky" aria-hidden="true">
+    <span class="meteor" style="--meteor-left:90%;--meteor-top:-4%;--meteor-delay:0s;--meteor-duration:6.1s"></span>
+    <span class="meteor" style="--meteor-left:48%;--meteor-top:9%;--meteor-delay:-2.2s;--meteor-duration:7.3s"></span>
+    <span class="meteor" style="--meteor-left:115%;--meteor-top:29%;--meteor-delay:-4.7s;--meteor-duration:6.8s"></span>
+    <span class="meteor" style="--meteor-left:74%;--meteor-top:48%;--meteor-delay:-1.4s;--meteor-duration:8.2s"></span>
+    <span class="meteor" style="--meteor-left:27%;--meteor-top:40%;--meteor-delay:-5.4s;--meteor-duration:7.7s"></span>
+    <span class="meteor" style="--meteor-left:100%;--meteor-top:70%;--meteor-delay:-3.6s;--meteor-duration:9s"></span>
+    <span class="meteor" style="--meteor-left:65%;--meteor-top:-12%;--meteor-delay:-6.3s;--meteor-duration:8.7s"></span>
+    <span class="meteor" style="--meteor-left:120%;--meteor-top:3%;--meteor-delay:-7.5s;--meteor-duration:10.1s"></span>
+  </div>
+
   <div class="sheet" id="notifSheet" role="dialog"
     aria-modal="true" aria-labelledby="notificationTitle">
     <div class="sheet-header">
@@ -1253,6 +1345,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
   const BANK_QUEUE_SCREEN_MS = 20000;
   const BANK_NOTICE_MS = 3500;
+  const DEFAULT_BALANCE_CAP = 500000;
 
   const tg = window.Telegram?.WebApp;
   try { tg?.ready(); tg?.expand(); } catch {}
@@ -1266,7 +1359,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     : "خوش آمدید عزیز";
 
   $("topWelcome").textContent = greeting;
-  $("welcomeText").textContent = greeting;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const app = $("app");
@@ -1372,6 +1464,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       already_pending:"یک برداشت در حال پردازش داری.",
       withdrawal_pending:"بعد از پایان برداشت فعلی دوباره امتحان کن.",
       game_disabled:"بازی فعلاً غیرفعال است.",
+      balance_limit_reached:"موجودیت به سقف ۵۰۰ هزار میو رسیده؛ ابتدا برداشت کن. فرصت بازی‌ات مصرف نشده است.",
       cooldown:"هنوز زمان بازی بعدی نرسیده است.",
       invalid_target:"آیدی تلگرام معتبر وارد کن.",
       invalid_card:"شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.",
@@ -1590,7 +1683,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
         scale <= 1.05 &&
         shrink > Math.max(110,baseline*.18);
 
-      // هنگام فوکوس، پیش از کامل باز شدن کیبورد هم نوار مخفی می‌شود.
       const hideNav = Boolean(editor) || keyboardVisible;
 
       document.body.classList.toggle("keyboard-open",hideNav);
@@ -1834,7 +1926,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       <div class="settings-wrap">
         <div class="settings-card">
           <h3>رنگ دلخواه</h3>
-          <p>رنگ‌ها را انتخاب کن؛ نوشته و آیکون دکمه‌ها خودکار خوانا می‌مانند.</p>
 
           <div class="color-controls">
             <label class="color-field">
@@ -2057,6 +2148,10 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     syncWithdrawHub();
     setText($("profileBalance"),`${fmt(target)} Mio`);
 
+    if (currentView === "game") {
+      updateGameControls();
+    }
+
     if (reduceMotion.matches || displayedBalance === target) {
       displayedBalance = target;
       setText($("balanceValue"),fmt(target));
@@ -2126,7 +2221,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 
         <div class="withdraw-section-label">
           <h2>روش برداشت</h2>
-          <span>انتخاب با توست</span>
         </div>
 
         <div class="withdraw-methods">
@@ -2160,10 +2254,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
           <span id="hubPendingText">پیگیری برداشت‌ها در خانه</span>
           ${icon("chevron")}
         </button>
-
-        <p class="withdraw-footnote">
-          درخواستت را ثبت کن؛ وضعیت واریز را در خانه دنبال کن.
-        </p>
       </section>
     `);
 
@@ -2518,6 +2608,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 
     $("notifOverlay").inert = false;
     $("notifOverlay").setAttribute("aria-hidden","false");
+    $("notifOverlay").classList.toggle("meteors-paused",document.hidden);
     $("notifOverlay").classList.add("show");
     $("bellBtn").setAttribute("aria-expanded","true");
 
@@ -3094,8 +3185,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
           if (currentView === "withdraw-waiting") {
             updateWaitingInfo(job);
           }
-
-          // تایمر بازگشت ۲۰ ثانیه‌ای در هر پاسخ دوباره شروع نمی‌شود.
         } else if (
           result.error === "unauthorized" ||
           result.status === "none"
@@ -3406,10 +3495,23 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     ].map(value => String(value).padStart(2,"0")).join(":");
   }
 
+  function gameBalanceCap() {
+    const cap = Number(gameState?.balance_cap);
+
+    return Number.isFinite(cap) && cap > 0
+      ? cap
+      : DEFAULT_BALANCE_CAP;
+  }
+
+  function gameBalanceLimitReached() {
+    return Number(state.balance) >= gameBalanceCap();
+  }
+
   function canStartGame() {
     return Boolean(
       gameState?.enabled &&
       !gameState.withdrawal_pending &&
+      !gameBalanceLimitReached() &&
       remainingGameSeconds() === 0
     );
   }
@@ -3517,7 +3619,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
         <div class="game-intro">
           <span class="game-badge">یک بازی رایگان، هر ۴۸ ساعت</span>
           <h2>نوبت شانس توئه</h2>
-          <p>دسته رو بکش یا تأیید رو بزن؛ سه خانه منتظر توئن.</p>
         </div>
 
         <div class="machine-stage">
@@ -3597,11 +3698,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
           <tbody>${rows}</tbody>
         </table>
 
-        <p class="game-note">
-          جایزهٔ نمادهای مختلف با هم جمع می‌شود.
-          مثلاً هفت + انگور + پوچ = ۱۳۰,۰۰۰ میو.
-        </p>
-
         <button type="button" class="ghost-btn" id="gameRefreshBtn">
           بروزرسانی وضعیت بازی
         </button>
@@ -3616,7 +3712,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     syncGamePresentation();
     updateGameControls();
 
-    if (gameBusy && !document.hidden) {
+    if (gameBusy && !document.hidden && !gameBalanceLimitReached()) {
       activeGameAnimation = startReelAnimation(false);
     }
 
@@ -3634,12 +3730,13 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     if (round && !gameBusy) {
       setText($("gameReward"),`${fmt(round.reward)} میو`);
 
-      setText(
-        $("gameRewardNote"),
-        Number(round.reward) > 0
+      const note = round.reward_capped
+        ? `به‌دلیل سقف ${fmt(gameBalanceCap())} میو، فقط ${fmt(round.reward)} میو به موجودیت اضافه شد.`
+        : Number(round.reward) > 0
           ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
-          : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀"
-      );
+          : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀";
+
+      setText($("gameRewardNote"),note);
 
       if (reveal) {
         resultBox.classList.remove("reveal");
@@ -3684,6 +3781,8 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     ) return;
 
     const pending = getPendingGame();
+
+    // بازیابی نتیجهٔ قبلی در سقف موجودی هم مجاز است.
     const canPlay = !gameBusy && (
       Boolean(pending) || canStartGame()
     );
@@ -3698,7 +3797,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 
     if (gameBusy) {
       setText($("playGameLabel"),"در حال دریافت نتیجه…");
-      setText($("gameStatusText"),"چند لحظه صبر کن؛ چرخ‌ها در حرکت‌اند.");
+      setText($("gameStatusText"),"چند لحظه صبر کن؛ نتیجه در حال دریافت است.");
       return;
     }
 
@@ -3716,6 +3815,16 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 
     if (!gameState.enabled) {
       setText($("gameStatusText"),"بازی فعلاً غیرفعال است.");
+      return;
+    }
+
+    if (gameBalanceLimitReached()) {
+      setText($("playGameLabel"),"سقف موجودی تکمیل است");
+
+      setText(
+        $("gameStatusText"),
+        `موجودیت به سقف ${fmt(gameBalanceCap())} میو رسیده؛ برای بازی ابتدا برداشت کن.`
+      );
       return;
     }
 
@@ -3891,7 +4000,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
         );
       }
 
-      // محل توقف فقط از نتیجهٔ سرور گرفته می‌شود.
       sequence.push(finalSymbol);
       sequence.push(reel.cycle[(whole+landingIndex+1)%reel.cycle.length]);
 
@@ -3960,6 +4068,12 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 
     let id = getPendingGame();
 
+    if (!id && gameBalanceLimitReached()) {
+      updateGameControls();
+      showToast(errorText("balance_limit_reached"));
+      return;
+    }
+
     if (!id && !canStartGame()) return;
 
     if (!id) {
@@ -3980,7 +4094,11 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     updateGameControls();
     stopGameVisual();
 
-    if (currentView === "game" && !document.hidden) {
+    if (
+      currentView === "game" &&
+      !document.hidden &&
+      !gameBalanceLimitReached()
+    ) {
       activeGameAnimation = startReelAnimation(true);
     }
 
@@ -4006,7 +4124,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
           try {
             await animation.finish(result.round.symbols);
           } catch {
-            // اختلال انیمیشن نتیجهٔ ثبت‌شدهٔ سرور را از بین نمی‌برد.
             animation.stop();
           }
         }
@@ -4020,9 +4137,11 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
         showToast(
           result.replayed
             ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
-            : reward > 0
-              ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
-              : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀"
+            : result.round.reward_capped
+              ? `🎉 ${fmt(reward)} میو واریز شد؛ موجودیت به سقف ${fmt(gameBalanceCap())} رسید.`
+              : reward > 0
+                ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
+                : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀"
         );
 
         return;
@@ -4032,6 +4151,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
         "cooldown",
         "withdrawal_pending",
         "game_disabled",
+        "balance_limit_reached",
         "not_started",
         "invalid_request_id"
       ].includes(result.error)) {
@@ -4051,7 +4171,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       gameBusy = false;
 
       if (currentView === "game") {
-        // پس از نتیجه، کل صفحه و دستگاه دوباره ساخته نمی‌شوند.
         syncGamePresentation(completed);
         updateGameControls();
       }
@@ -4165,8 +4284,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       } else if (currentView === "game" && !gameBusy) {
         await viewGame();
       }
-
-      // خانه و تب برداشت هنگام بروزرسانی دوباره ساخته نمی‌شوند.
     } finally {
       if (requestVersion === userRequestVersion) {
         refreshBtn.classList.remove("spinning");
@@ -4262,6 +4379,11 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   },true);
 
   document.addEventListener("visibilitychange",() => {
+    $("notifOverlay").classList.toggle(
+      "meteors-paused",
+      document.hidden
+    );
+
     if (document.hidden) {
       stopGameVisual();
       return;
@@ -4273,7 +4395,12 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     if (currentView === "game") {
       updateGameControls();
 
-      if (gameBusy && !activeGameAnimation && $("reelTrack0")) {
+      if (
+        gameBusy &&
+        !activeGameAnimation &&
+        $("reelTrack0") &&
+        !gameBalanceLimitReached()
+      ) {
         activeGameAnimation = startReelAnimation(false);
       } else if (!gameBusy) {
         syncGamePresentation();
@@ -4299,7 +4426,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     reduceMotion.addListener(onMotionPreferenceChange);
   }
 
-  // فقط متن زمان عوض می‌شود؛ کارت صف بازسازی نمی‌شود.
   setInterval(() => {
     if (!document.hidden && currentView === "home") {
       updatePendingClocks();
@@ -4357,4 +4483,4 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 </script>
 
 </body>
-  </html>
+</html>
