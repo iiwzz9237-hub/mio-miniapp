@@ -4481,6 +4481,1909 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   init();
 })();
 </script>
+/* ================= Mio games / Doz ================= */
 
+.panel.doz-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.doz-root,
+.doz-dialog {
+  --text: #f4f6ff;
+  --dim: #b1bdd9;
+  --border: rgba(183, 198, 255, .16);
+  --wash: 255, 255, 255;
+  --action-bg: #6379ff;
+  --action-ink: #ffffff;
+  --highlight: #a5b2ff;
+
+  color: var(--text);
+  color-scheme: dark;
+}
+
+.doz-root {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 25px 20px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: #111520;
+}
+
+.doz-root h2,
+.doz-root h3,
+.doz-dialog h2 {
+  color: #f4f6ff;
+}
+
+.doz-root p,
+.doz-dialog p {
+  color: #b1bdd9;
+}
+
+.doz-kicker {
+  display: block;
+  margin-bottom: 12px;
+  color: #a5b2ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  direction: ltr;
+}
+
+.doz-lead {
+  text-align: center;
+}
+
+.doz-lead h2 {
+  margin: 0 0 10px;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.doz-lead p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.doz-games-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.doz-game-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 116px;
+  padding: 18px;
+  border: 1px solid rgba(185, 195, 255, .19);
+  border-radius: 22px;
+  background: linear-gradient(125deg, #252441, #191c2f);
+  color: #f5f6ff;
+  text-align: right;
+}
+
+.doz-game-card.casino-choice {
+  border-color: rgba(237, 194, 127, .22);
+  background: linear-gradient(125deg, #38212e, #211923);
+}
+
+.doz-choice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 57px;
+  height: 57px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, .05);
+  color: #ced4ff;
+  font-size: 28px;
+}
+
+.doz-choice-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.doz-game-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.doz-game-copy strong {
+  display: block;
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.doz-game-copy small {
+  display: block;
+  margin-top: 7px;
+  color: #b9bed4;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.doz-card-arrow {
+  color: #bfc6e6;
+  font-size: 26px;
+}
+
+.doz-game-card:active {
+  transform: scale(.98);
+}
+
+/* ================= Galaxy introduction ================= */
+
+.doz-lobby {
+  min-height: 560px;
+  background: #060b1b;
+}
+
+.doz-lobby > .meteor-sky {
+  z-index: -1;
+}
+
+.doz-lobby:not(.meteors-paused) .meteor {
+  animation-play-state: running;
+}
+
+.doz-lobby-content {
+  position: relative;
+  z-index: 1;
+}
+
+.doz-orbit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 142px;
+  height: 142px;
+  margin: 5px auto 24px;
+  border: 1px solid rgba(166, 178, 255, .18);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(104, 84, 234, .22),
+    rgba(53, 61, 119, .04) 70%
+  );
+  box-shadow:
+    0 0 0 15px rgba(128, 142, 234, .035),
+    0 0 0 31px rgba(128, 142, 234, .018);
+}
+
+.doz-orbit span {
+  font-family: Arial, sans-serif;
+  font-size: 54px;
+  font-weight: 700;
+}
+
+.doz-orbit span:first-child {
+  color: #76e1e4;
+  text-shadow: 0 0 23px rgba(75, 209, 231, .35);
+}
+
+.doz-orbit span:last-child {
+  color: #b6a0ff;
+  text-shadow: 0 0 23px rgba(162, 122, 255, .35);
+}
+
+.doz-rules {
+  display: grid;
+  gap: 10px;
+  margin: 25px 0 18px;
+}
+
+.doz-rule {
+  padding: 13px 15px;
+  border: 1px solid rgba(167, 184, 255, .15);
+  border-radius: 16px;
+  background: rgba(13, 23, 48, .72);
+  color: #d4def4;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.doz-rule strong {
+  color: #ffffff;
+}
+
+.doz-quota {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 19px 0 12px;
+  color: #c0cbea;
+  font-size: 12px;
+}
+
+.doz-quota b {
+  color: #e7ecff;
+  font-variant-numeric: tabular-nums;
+}
+
+.doz-countdown-box {
+  margin: 20px 0;
+  padding: 20px 10px;
+  border: 1px solid rgba(156, 176, 255, .2);
+  border-radius: 19px;
+  background: rgba(16, 26, 52, .78);
+  text-align: center;
+}
+
+.doz-countdown-box span {
+  display: block;
+  margin-bottom: 12px;
+  color: #c4cfed;
+  font-size: 12px;
+}
+
+.doz-countdown-box b {
+  display: block;
+  color: #eef0ff;
+  direction: ltr;
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.doz-fineprint {
+  margin-top: 15px !important;
+  color: #aebbd8 !important;
+  font-size: 10px !important;
+  line-height: 2 !important;
+  text-align: center;
+}
+
+/* ================= Dark game arena ================= */
+
+.doz-arena {
+  background: linear-gradient(150deg, #171b29, #0f131d);
+}
+
+.doz-players {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 8px 0 19px;
+}
+
+.doz-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(180, 195, 230, .12);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, .025);
+}
+
+.doz-player > b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(109, 218, 230, .08);
+  color: #76e1e4;
+  font-family: Arial, sans-serif;
+  font-size: 27px;
+}
+
+.doz-player.ai > b {
+  color: #b8a3ff;
+  background: rgba(171, 144, 255, .08);
+}
+
+.doz-player strong {
+  display: block;
+  color: #ecf0ff;
+  font-size: 12px;
+}
+
+.doz-player small {
+  display: block;
+  margin-top: 4px;
+  color: #9eabc7;
+  font-size: 9px;
+}
+
+.doz-turn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(177, 193, 238, .1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .025);
+  color: #d9e0f7;
+  font-size: 12px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.doz-board-shell {
+  position: relative;
+  width: 100%;
+  margin: 0 auto 23px;
+  direction: ltr;
+}
+
+.doz-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  direction: ltr;
+}
+
+.doz-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 16px;
+  border: 1px solid rgba(157, 181, 239, .14);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #232b3b, #1a202f);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+  color: #76e1e4;
+}
+
+.doz-cell:disabled {
+  opacity: 1;
+}
+
+.doz-cell:not(:disabled):active {
+  transform: scale(.96);
+  background: #293249;
+}
+
+.doz-cell[data-mark="X"] {
+  color: #b8a3ff;
+}
+
+.doz-cell.pending {
+  border-color: #a9b7ff;
+  box-shadow: inset 0 0 20px rgba(125, 151, 255, .1);
+}
+
+.doz-mark {
+  width: 100%;
+  height: 100%;
+  max-width: 67px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.doz-mark .doz-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: doz-draw .36s ease forwards;
+}
+
+.doz-mark .doz-stroke.second {
+  animation-delay: .14s;
+}
+
+.doz-win-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.doz-win-overlay line {
+  stroke: #fcdd98;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 3px rgba(255, 214, 125, .6));
+  animation: doz-draw .48s .12s ease forwards;
+}
+
+.doz-reward {
+  margin: 15px 0;
+  padding: 17px 13px;
+  border: 1px solid rgba(169, 186, 247, .15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .035);
+  text-align: center;
+}
+
+.doz-reward strong {
+  display: block;
+  margin-bottom: 9px;
+  color: #aee8d8;
+  font-size: 24px;
+}
+
+.doz-reward p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 2;
+}
+
+/* ================= Rock / paper / scissors ================= */
+
+.doz-dialog {
+  width: min(390px, calc(100vw - 30px));
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 23px 18px;
+  border: 1px solid rgba(177, 190, 255, .25);
+  border-radius: 25px;
+  background: linear-gradient(145deg, #202740, #111727);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .55);
+  text-align: center;
+  font-family: "Vazirmatn", sans-serif;
+}
+
+.doz-dialog::backdrop {
+  background: rgba(3, 7, 17, .8);
+  backdrop-filter: blur(7px);
+}
+
+.doz-dialog h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.doz-dialog p {
+  font-size: 12px;
+  line-height: 2;
+}
+
+.doz-rps-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin: 22px 0 15px;
+}
+
+.doz-rps-option {
+  padding: 17px 5px 13px;
+  border: 1px solid rgba(177, 190, 255, .17);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, .035);
+  color: #dce4ff;
+  font-size: 11px;
+}
+
+.doz-rps-option span {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 32px;
+}
+
+.doz-rps-option[aria-pressed="true"] {
+  border-color: #a4afff;
+  background: rgba(113, 129, 255, .2);
+  box-shadow: 0 0 0 2px rgba(144, 158, 255, .09);
+}
+
+.doz-rps-result {
+  padding: 15px 8px;
+  margin-top: 12px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .04);
+  color: #eef0ff;
+  font-size: 13px;
+  line-height: 2.2;
+}
+
+.doz-dialog .ghost-btn {
+  color: #dce4ff;
+}
+
+/* ================= Four-second result ================= */
+
+.doz-finale {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 25px;
+  background: rgba(5, 10, 22, .6);
+  pointer-events: none;
+}
+
+.doz-finale-card {
+  position: relative;
+  z-index: 2;
+  width: min(330px, 100%);
+  padding: 29px 20px;
+  border: 1px solid rgba(202, 211, 255, .2);
+  border-radius: 25px;
+  background: linear-gradient(140deg, #28314d, #141b2d);
+  box-shadow: 0 24px 65px rgba(0, 0, 0, .3);
+  color: #ffffff;
+  text-align: center;
+  animation: pop-in .4s var(--ease);
+}
+
+.doz-finale-card > span {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 58px;
+}
+
+.doz-finale-card strong {
+  display: block;
+  font-size: 27px;
+}
+
+.doz-finale-card small {
+  display: block;
+  margin-top: 13px;
+  color: #cbd5f1;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.doz-confetti {
+  position: absolute;
+  top: -20px;
+  left: var(--left);
+  width: 9px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--color);
+  animation: doz-confetti-fall var(--duration) var(--delay) linear forwards;
+}
+
+@keyframes doz-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes doz-confetti-fall {
+  from {
+    transform: translate3d(0, -25px, 0) rotate(0deg);
+    opacity: 1;
+  }
+
+  to {
+    transform: translate3d(var(--drift), 110vh, 0) rotate(700deg);
+    opacity: .2;
+  }
+}
+
+@media (max-width: 360px) {
+  .doz-root {
+    padding: 21px 14px;
+  }
+
+  .doz-cell {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .doz-game-card {
+    padding: 15px 12px;
+    gap: 11px;
+  }
+
+  .doz-choice-icon {
+    flex-basis: 46px;
+    height: 46px;
+  }
+
+  .doz-player {
+    padding: 10px 8px;
+    gap: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doz-mark .doz-stroke,
+  .doz-win-overlay line {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+
+  .doz-confetti,
+  .doz-lobby .meteor {
+    display: none;
+  }
+}(function installMioDozModule() {
+  "use strict";
+
+  const RPS = {
+    rock: {label: "سنگ", emoji: "✊"},
+    paper: {label: "کاغذ", emoji: "✋"},
+    scissors: {label: "قیچی", emoji: "✌️"}
+  };
+
+  const DOZ_ERRORS = {
+    doz_reward_unconfigured: "بازی دوز هنوز فعال نشده است.",
+    doz_cooldown: "پنج فرصت این سری تمام شده؛ منتظر سری بعد بمان.",
+    doz_old_request: "درخواست قبلی بسته شده؛ دوباره شروع را بزن.",
+    doz_round_changed: "وضعیت بازی تغییر کرده؛ بازی را بروزرسانی کن.",
+    doz_choice_locked: "انتخاب سنگ‌کاغذ‌قیچی قبلاً ثبت شده است.",
+    doz_invalid_choice: "یکی از گزینه‌های سنگ، کاغذ یا قیچی را انتخاب کن.",
+    doz_invalid_move: "این حرکت معتبر نیست.",
+    doz_stale_move: "حرکت قبلاً پردازش شده؛ وضعیت بازی را بروزرسانی کن.",
+    doz_occupied_cell: "این خانه قبلاً انتخاب شده است."
+  };
+
+  let host = null;
+  let data = null;
+  let shownRound = null;
+  let busy = false;
+  let celebrating = false;
+  let countdownTimer = null;
+  let finaleTimer = null;
+  let deadline = 0;
+  let pendingStartMemory = "";
+  let refreshingDeadline = false;
+
+  const celebratedRounds = new Set();
+
+  const sleep = milliseconds => new Promise(resolve => {
+    setTimeout(resolve, milliseconds);
+  });
+
+  const $ = id => document.getElementById(id);
+
+  function pendingKey() {
+    return `mio_doz_start_${host.userId}`;
+  }
+
+  function readPendingStart() {
+    try {
+      return localStorage.getItem(pendingKey()) || pendingStartMemory;
+    } catch {
+      return pendingStartMemory;
+    }
+  }
+
+  function savePendingStart(id) {
+    pendingStartMemory = id;
+
+    try {
+      localStorage.setItem(pendingKey(), id);
+    } catch {}
+  }
+
+  function clearPendingStart() {
+    pendingStartMemory = "";
+
+    try {
+      localStorage.removeItem(pendingKey());
+    } catch {}
+  }
+
+  function currentVersion() {
+    return host.getVersion();
+  }
+
+  function sameView(version) {
+    return currentVersion() === version;
+  }
+
+  function activeRound(round = data?.round) {
+    return Boolean(round && round.phase !== "finished");
+  }
+
+  function errorMessage(code) {
+    return DOZ_ERRORS[code] || host.errorText(code);
+  }
+
+  function accept(response) {
+    if (
+      !response ||
+      !Number.isInteger(response.remaining_rounds)
+    ) {
+      return false;
+    }
+
+    data = response;
+
+    deadline = performance.now() +
+      Math.max(0, Number(response.remaining_seconds) || 0) * 1000;
+
+    host.setBalance(response.balance);
+
+    if (
+      response.round &&
+      response.round.id === readPendingStart()
+    ) {
+      clearPendingStart();
+    }
+
+    return true;
+  }
+
+  function leave() {
+    clearInterval(countdownTimer);
+    clearTimeout(finaleTimer);
+
+    countdownTimer = null;
+    finaleTimer = null;
+    celebrating = false;
+    refreshingDeadline = false;
+
+    closeRps();
+    $("dozFinale")?.remove();
+
+    host?.panel.classList.remove("doz-panel");
+  }
+
+  function openView(name, title) {
+    const version = host.showView(name, title);
+
+    host.panel.classList.add("doz-panel");
+    host.setActiveNav("game");
+
+    return version;
+  }
+
+  function viewHub() {
+    if (!host.ensureUserData()) return;
+
+    openView("games", "بازی میویی");
+
+    host.paint(`
+      <section class="doz-root">
+        <div class="doz-lead">
+          <span class="doz-kicker">MIO PLAYROOM</span>
+          <h2>کدوم بازی؟</h2>
+          <p>بازی دلخواهت رو انتخاب کن و میو جایزه بگیر.</p>
+        </div>
+
+        <div class="doz-games-list">
+          <button type="button"
+            class="doz-game-card casino-choice"
+            id="dozCasinoChoice">
+            <span class="doz-choice-icon" aria-hidden="true">
+              ${host.icon("game")}
+            </span>
+
+            <span class="doz-game-copy">
+              <strong>کازینو</strong>
+              <small>سه خانه، یک شانس؛ بازی رایگان هر ۴۸ ساعت</small>
+            </span>
+
+            <span class="doz-card-arrow" aria-hidden="true">‹</span>
+          </button>
+
+          <button type="button"
+            class="doz-game-card"
+            id="dozTicTacToeChoice">
+            <span class="doz-choice-icon" aria-hidden="true">○×</span>
+
+            <span class="doz-game-copy">
+              <strong>بازی دوز</strong>
+              <small>تو و هوش مصنوعی؛ پنج دست در هر سری</small>
+            </span>
+
+            <span class="doz-card-arrow" aria-hidden="true">‹</span>
+          </button>
+        </div>
+      </section>
+    `);
+
+    $("dozCasinoChoice").onclick = host.viewCasino;
+    $("dozTicTacToeChoice").onclick = viewIntro;
+  }
+
+  async function loadView(kind) {
+    if (!host.ensureUserData()) return;
+
+    const version = openView(
+      kind === "intro" ? "doz-intro" : "doz-board",
+      "بازی دوز"
+    );
+
+    host.paint(`
+      <section class="doz-root">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="muted-center" role="status">
+          در حال دریافت وضعیت دوز…
+        </p>
+      </section>
+    `);
+
+    const response = await host.api("/doz/status");
+
+    if (!sameView(version)) return;
+
+    if (!response.ok || !accept(response)) {
+      host.paint(`
+        <section class="doz-root">
+          <p class="muted-center" id="dozLoadError"></p>
+
+          <button type="button"
+            class="primary-btn" id="dozRetryLoad">
+            تلاش دوباره
+          </button>
+
+          <button type="button"
+            class="ghost-btn" id="dozBackToGames">
+            بازگشت به بازی‌ها
+          </button>
+        </section>
+      `);
+
+      $("dozLoadError").textContent =
+        errorMessage(response.error || "invalid_response");
+
+      $("dozRetryLoad").onclick = () => loadView(kind);
+      $("dozBackToGames").onclick = viewHub;
+
+      return;
+    }
+
+    if (kind === "intro") {
+      renderIntro();
+      return;
+    }
+
+    if (!activeRound() && data.remaining_rounds === 0) {
+      viewIntro();
+      return;
+    }
+
+    renderArena(
+      activeRound() ? data.round : null
+    );
+  }
+
+  function viewIntro() {
+    return loadView("intro");
+  }
+
+  function viewArena() {
+    return loadView("board");
+  }
+
+  function galaxyMarkup() {
+    const existingSky = document.querySelector(
+      "#notifOverlay .meteor-sky"
+    );
+
+    if (existingSky) {
+      return existingSky.cloneNode(true).outerHTML;
+    }
+
+    return '<div class="meteor-sky" aria-hidden="true"></div>';
+  }
+
+  function countdownText(seconds) {
+    const values = [
+      Math.floor(seconds / 3600),
+      Math.floor(seconds % 3600 / 60),
+      seconds % 60
+    ];
+
+    return values.map(value =>
+      String(value).padStart(2, "0")
+    ).join(":");
+  }
+
+  function remainingSeconds() {
+    return Math.max(
+      0,
+      Math.ceil((deadline - performance.now()) / 1000)
+    );
+  }
+
+  function lobbyMessage() {
+    if (activeRound()) {
+      return "بازی نیمه‌تمامت ذخیره شده؛ از همان‌جا ادامه بده.";
+    }
+
+    if (!data.reward_configured) {
+      return "بازی دوز هنوز فعال نشده است.";
+    }
+
+    if (data.withdrawal_pending) {
+      return "پس از پایان برداشت فعلی می‌توانی بازی کنی.";
+    }
+
+    if (Number(data.balance) >= Number(data.balance_cap)) {
+      return "موجودیت به سقف رسیده؛ ابتدا برداشت کن.";
+    }
+
+    if (data.remaining_rounds === 0) {
+      return "این سری تمام شد؛ پس از پایان تایمر پنج فرصت تازه داری.";
+    }
+
+    return "برای شروع بازی روی دکمهٔ شروع بزن.";
+  }
+
+  function renderIntro() {
+    const resume = activeRound();
+
+    const winText = data.reward_configured
+      ? `${host.fmt(data.win_reward)} میو`
+      : "به‌زودی";
+
+    host.paint(`
+      <section class="doz-root doz-lobby
+        ${document.hidden ? "meteors-paused" : ""}">
+        ${galaxyMarkup()}
+
+        <div class="doz-lobby-content">
+          <div class="doz-orbit" aria-hidden="true">
+            <span>○</span>
+            <span>×</span>
+          </div>
+
+          <div class="doz-lead">
+            <span class="doz-kicker">MIO • TIC TAC TOE</span>
+            <h2>یک رقیب، نه خانه</h2>
+            <p>شما با هوش مصنوعی بازی می‌کنید.</p>
+          </div>
+
+          <div class="doz-rules">
+            <div class="doz-rule">
+              🏆 جایزهٔ برد:
+              <strong>${winText}</strong>
+            </div>
+
+            <div class="doz-rule">
+              🤝 اگر مساوی شوید،
+              <strong>۵٬۰۰۰ میو</strong>
+              به موجودی شما اضافه می‌شود.
+            </div>
+
+            <div class="doz-rule">
+              🎮 در هر سری <strong>۵ دست</strong> بازی داری.
+              پس از پایان دست پنجم باید
+              <strong>۲۴ ساعت</strong>
+              برای سری بعد صبر کنی.
+            </div>
+
+            <div class="doz-rule">
+              ✨ در هر سری دو دست آسان‌تر است.
+              قبل از هر دست، سنگ‌کاغذ‌قیچی
+              شروع‌کننده را مشخص می‌کند.
+            </div>
+          </div>
+
+          <div class="doz-quota">
+            <span>فرصت‌های شروع باقی‌مانده</span>
+            <b>${data.remaining_rounds} از ۵</b>
+          </div>
+
+          <div class="doz-countdown-box"
+            ${data.remaining_seconds > 0 ? "" : "hidden"}>
+            <span>تا پنج فرصت بعدی</span>
+            <b id="dozCountdown"
+              aria-label="زمان باقی‌مانده تا سری بعد">
+              ${countdownText(remainingSeconds())}
+            </b>
+          </div>
+
+          <p class="muted-center" id="dozLobbyStatus">
+            ${lobbyMessage()}
+          </p>
+
+          <button type="button"
+            class="primary-btn" id="dozEnterArena"
+            ${resume || data.can_start ? "" : "disabled"}>
+            ${resume ? "ادامهٔ بازی" : "شروع"}
+          </button>
+
+          <button type="button"
+            class="ghost-btn" id="dozLobbyRefresh">
+            بروزرسانی وضعیت
+          </button>
+
+          <button type="button"
+            class="ghost-btn" id="dozLobbyBack">
+            بازگشت به بازی‌ها
+          </button>
+
+          <p class="doz-fineprint">
+            جایزه‌ها تا سقف موجودی
+            ${host.fmt(data.balance_cap)} میو واریز می‌شوند.
+          </p>
+        </div>
+      </section>
+    `);
+
+    $("dozEnterArena").onclick = viewArena;
+    $("dozLobbyRefresh").onclick = viewIntro;
+    $("dozLobbyBack").onclick = viewHub;
+
+    clearInterval(countdownTimer);
+
+    const version = currentVersion();
+
+    countdownTimer = setInterval(() => {
+      if (!sameView(version)) return;
+
+      const seconds = remainingSeconds();
+
+      host.setText(
+        $("dozCountdown"),
+        countdownText(seconds)
+      );
+
+      if (
+        data.remaining_seconds > 0 &&
+        seconds === 0 &&
+        !refreshingDeadline &&
+        !document.hidden
+      ) {
+        refreshingDeadline = true;
+        viewIntro();
+      }
+    }, 1000);
+  }
+
+  function markMarkup(mark) {
+    if (mark === "O") {
+      return `
+        <svg class="doz-mark"
+          viewBox="0 0 80 80" aria-hidden="true">
+          <circle class="doz-stroke"
+            cx="40" cy="40" r="25" pathLength="1"></circle>
+        </svg>
+      `;
+    }
+
+    return `
+      <svg class="doz-mark"
+        viewBox="0 0 80 80" aria-hidden="true">
+        <path class="doz-stroke"
+          d="M19 19L61 61" pathLength="1"></path>
+        <path class="doz-stroke second"
+          d="M61 19L19 61" pathLength="1"></path>
+      </svg>
+    `;
+  }
+
+  function setCell(index, mark) {
+    const cell = $("dozCell" + index);
+
+    if (!cell || !mark || cell.dataset.mark === mark) return;
+
+    cell.dataset.mark = mark;
+    cell.innerHTML = markMarkup(mark);
+
+    cell.setAttribute(
+      "aria-label",
+      `ردیف ${Math.floor(index / 3) + 1}، ` +
+      `ستون ${index % 3 + 1}، ` +
+      (mark === "O" ? "دایرهٔ شما" : "ضربدر هوش مصنوعی")
+    );
+  }
+
+  function drawWinningLine(round) {
+    const overlay = $("dozWinningLine");
+
+    if (!overlay) return;
+
+    const line = round?.winning_line;
+
+    if (!Array.isArray(line) || line.length !== 3) {
+      overlay.replaceChildren();
+      return;
+    }
+
+    if (overlay.dataset.roundId === round.id) return;
+
+    const board = $("dozBoard");
+    const first = $("dozCell" + line[0]);
+    const last = $("dozCell" + line[2]);
+
+    if (!board || !first || !last) return;
+
+    const boardRect = board.getBoundingClientRect();
+    const a = first.getBoundingClientRect();
+    const b = last.getBoundingClientRect();
+
+    if (!boardRect.width || !boardRect.height) return;
+
+    const x1 = (
+      (a.left + a.width / 2 - boardRect.left) /
+      boardRect.width
+    ) * 100;
+
+    const y1 = (
+      (a.top + a.height / 2 - boardRect.top) /
+      boardRect.height
+    ) * 100;
+
+    const x2 = (
+      (b.left + b.width / 2 - boardRect.left) /
+      boardRect.width
+    ) * 100;
+
+    const y2 = (
+      (b.top + b.height / 2 - boardRect.top) /
+      boardRect.height
+    ) * 100;
+
+    overlay.dataset.roundId = round.id;
+
+    overlay.innerHTML = `
+      <line
+        x1="${x1}" y1="${y1}"
+        x2="${x2}" y2="${y2}"
+        pathLength="1">
+      </line>
+    `;
+  }
+
+  function resultTitle(round) {
+    if (round.outcome === "human") return "بردی! 🎉";
+    if (round.outcome === "ai") return "باختی 😔";
+    return "مساوی شد! 🤝";
+  }
+
+  function rewardNote(round) {
+    if (round.reward_capped) {
+      return (
+        `به‌دلیل سقف موجودی، ${host.fmt(round.reward)} میو ` +
+        `از جایزهٔ ${host.fmt(round.nominal_reward)} میویی واریز شد.`
+      );
+    }
+
+    if (Number(round.reward) > 0) {
+      return "جایزه به موجودی قابل برداشتت اضافه شد.";
+    }
+
+    return round.outcome === "ai"
+      ? "این دست جایزه‌ای نداشت."
+      : "نتیجهٔ این دست ثبت شد.";
+  }
+
+  function renderArena(round) {
+    shownRound = round;
+
+    host.paint(`
+      <section class="doz-root doz-arena">
+        <span class="doz-kicker">MIO • DUEL</span>
+
+        <div class="doz-players">
+          <div class="doz-player">
+            <b aria-hidden="true">○</b>
+            <div>
+              <strong>شما</strong>
+              <small>همیشه دایره</small>
+            </div>
+          </div>
+
+          <div class="doz-player ai">
+            <b aria-hidden="true">×</b>
+            <div>
+              <strong>هوش مصنوعی</strong>
+              <small>همیشه ضربدر</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="doz-turn" id="dozTurn"
+          role="status" aria-live="polite"></div>
+
+        <div class="doz-board-shell">
+          <div class="doz-board" id="dozBoard"
+            role="group" aria-label="صفحهٔ دوز سه در سه">
+            ${Array.from({length: 9}, (_, index) => `
+              <button type="button"
+                class="doz-cell"
+                id="dozCell${index}"
+                data-index="${index}"
+                aria-label="ردیف ${Math.floor(index / 3) + 1}، ستون ${index % 3 + 1}، خالی"
+                disabled>
+              </button>
+            `).join("")}
+          </div>
+
+          <svg class="doz-win-overlay"
+            id="dozWinningLine"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true">
+          </svg>
+        </div>
+
+        <div class="doz-reward" id="dozRewardBox" hidden>
+          <strong id="dozRewardAmount"></strong>
+          <p id="dozRewardNote"></p>
+        </div>
+
+        <div class="doz-quota">
+          <span>فرصت‌های شروع باقی‌مانده</span>
+          <b id="dozArenaQuota"></b>
+        </div>
+
+        <button type="button"
+          class="primary-btn" id="dozBoardStart">
+          شروع
+        </button>
+
+        <button type="button"
+          class="primary-btn" id="dozPlayAgain" hidden>
+          بازی دوباره
+        </button>
+
+        <button type="button"
+          class="ghost-btn" id="dozArenaRefresh">
+          بروزرسانی و بازیابی بازی
+        </button>
+
+        <button type="button"
+          class="ghost-btn" id="dozArenaBack">
+          بازگشت به صفحهٔ دوز
+        </button>
+      </section>
+    `);
+
+    for (let index = 0; index < 9; index++) {
+      $("dozCell" + index).onclick = () => playCell(index);
+    }
+
+    $("dozBoardStart").onclick = () => {
+      if (shownRound?.phase === "rps") {
+        openRps();
+      } else {
+        startRound();
+      }
+    };
+
+    $("dozPlayAgain").onclick = () => {
+      if (data.remaining_rounds > 0) {
+        renderArena(null);
+      } else {
+        viewIntro();
+      }
+    };
+
+    $("dozArenaRefresh").onclick = viewArena;
+    $("dozArenaBack").onclick = viewIntro;
+
+    if (round) {
+      round.board.forEach((mark, index) => setCell(index, mark));
+      drawWinningLine(round);
+    }
+
+    syncArena();
+  }
+
+  function syncArena() {
+    if (host.getView() !== "doz-board" || !$("dozBoard")) return;
+
+    const round = shownRound;
+    const playing = round?.phase === "playing";
+    const finished = round?.phase === "finished";
+    const awaitingRps = round?.phase === "rps";
+
+    host.setText(
+      $("dozArenaQuota"),
+      `${data?.remaining_rounds ?? 0} از ۵`
+    );
+
+    $("dozBoard").setAttribute("aria-busy", String(busy));
+
+    for (let index = 0; index < 9; index++) {
+      $("dozCell" + index).disabled = (
+        busy ||
+        !playing ||
+        Boolean(round?.board[index]) ||
+        Boolean(data?.withdrawal_pending)
+      );
+    }
+
+    const startButton = $("dozBoardStart");
+    startButton.hidden = Boolean(playing || finished);
+    startButton.disabled = (
+      busy ||
+      Boolean(data?.withdrawal_pending) ||
+      (!awaitingRps && !data?.can_start)
+    );
+
+    host.setText(
+      startButton,
+      awaitingRps ? "ادامهٔ سنگ‌کاغذ‌قیچی" : "شروع"
+    );
+
+    const again = $("dozPlayAgain");
+
+    again.hidden = !finished;
+    again.disabled = busy || celebrating;
+
+    host.setText(
+      again,
+      data.remaining_rounds > 0
+        ? `بازی دوباره • ${data.remaining_rounds} فرصت`
+        : "مشاهدهٔ زمان سری بعد"
+    );
+
+    $("dozArenaRefresh").disabled = busy;
+
+    if (!round) {
+      host.setText(
+        $("dozTurn"),
+        data.can_start
+          ? "روی دکمهٔ شروع بزن تا بازی شروع شود!"
+          : lobbyMessage()
+      );
+
+    } else if (finished) {
+      host.setText($("dozTurn"), resultTitle(round));
+
+    } else if (data.withdrawal_pending) {
+      host.setText(
+        $("dozTurn"),
+        "بازی ذخیره شده؛ پس از پایان برداشت ادامه بده."
+      );
+
+    } else if (awaitingRps) {
+      host.setText(
+        $("dozTurn"),
+        "شروع‌کننده را با سنگ‌کاغذ‌قیچی مشخص کن."
+      );
+
+    } else if (busy) {
+      host.setText(
+        $("dozTurn"),
+        "در حال بررسی حرکت…"
+      );
+
+    } else {
+      host.setText($("dozTurn"), "نوبت شماست؛ یک خانه را انتخاب کن.");
+    }
+
+    $("dozRewardBox").hidden = !finished;
+
+    if (finished) {
+      host.setText(
+        $("dozRewardAmount"),
+        `${host.fmt(round.reward)} میو`
+      );
+
+      host.setText(
+        $("dozRewardNote"),
+        rewardNote(round)
+      );
+    }
+
+    syncRpsControls();
+  }
+
+  async function runAction(action, payload, onSuccess) {
+    if (busy) return;
+
+    const version = currentVersion();
+    busy = true;
+    syncArena();
+
+    try {
+      const response = await host.post(
+        "/doz/" + action,
+        payload
+      );
+
+      if (!sameView(version)) return;
+
+      const accepted = accept(response);
+
+      if (!response.ok || !accepted) {
+        if (
+          action === "start" &&
+          [
+            "doz_old_request",
+            "invalid_request_id",
+            "not_started",
+            "balance_limit_reached",
+            "withdrawal_pending",
+            "doz_reward_unconfigured",
+            "doz_cooldown"
+          ].includes(response.error)
+        ) {
+          clearPendingStart();
+        }
+
+        host.showToast(
+          errorMessage(response.error || "invalid_response")
+        );
+
+        return;
+      }
+
+      if (action === "start") {
+        clearPendingStart();
+      }
+
+      await onSuccess(response, version);
+
+    } finally {
+      busy = false;
+
+      if (sameView(version)) {
+        document.querySelectorAll(".doz-cell.pending")
+          .forEach(cell => cell.classList.remove("pending"));
+
+        syncArena();
+      }
+    }
+  }
+
+  async function startRound() {
+    if (busy) return;
+
+    let requestId = readPendingStart();
+
+    if (!requestId) {
+      try {
+        requestId = host.makeRequestId();
+      } catch {
+        host.showToast("مینی‌اپ را داخل تلگرام باز کن.");
+        return;
+      }
+
+      savePendingStart(requestId);
+    }
+
+    await runAction(
+      "start",
+      {request_id: requestId},
+      async response => {
+        renderArena(response.round);
+
+        if (response.round?.phase === "rps") {
+          openRps();
+
+        } else if (response.round?.phase === "finished") {
+          finishRound(response.round);
+        }
+      }
+    );
+  }
+
+  function closeRps() {
+    const dialog = $("dozRpsDialog");
+
+    if (!dialog) return;
+
+    if (dialog.open) {
+      dialog.close();
+    }
+
+    dialog.remove();
+  }
+
+  function syncRpsControls() {
+    const dialog = $("dozRpsDialog");
+
+    if (!dialog) return;
+
+    const selected = dialog.dataset.choice;
+
+    dialog.querySelectorAll("[data-rps]").forEach(button => {
+      button.disabled = busy || dialog.dataset.result === "true";
+    });
+
+    const confirm = $("dozConfirmRps");
+
+    if (confirm) {
+      confirm.disabled = (
+        busy ||
+        !selected ||
+        dialog.dataset.result === "true" ||
+        Boolean(data?.withdrawal_pending)
+      );
+    }
+
+    const close = $("dozCancelRps");
+
+    if (close) {
+      close.disabled = busy;
+    }
+  }
+
+  function openRps() {
+    if (shownRound?.phase !== "rps") return;
+
+    closeRps();
+
+    const dialog = document.createElement("dialog");
+    dialog.id = "dozRpsDialog";
+    dialog.className = "doz-dialog";
+    dialog.dir = "rtl";
+    dialog.setAttribute("aria-labelledby", "dozRpsTitle");
+
+    dialog.innerHTML = `
+      <h2 id="dozRpsTitle">سنگ، کاغذ، قیچی</h2>
+
+      <p>
+        هرکس برنده شود، دوز را شروع می‌کند.
+        یکی را انتخاب کن و تأیید را بزن.
+      </p>
+
+      <div class="doz-rps-options"
+        role="group" aria-label="انتخاب سنگ‌کاغذ‌قیچی">
+        ${Object.entries(RPS).map(([key, value]) => `
+          <button type="button"
+            class="doz-rps-option"
+            data-rps="${key}"
+            aria-pressed="false">
+            <span aria-hidden="true">${value.emoji}</span>
+            ${value.label}
+          </button>
+        `).join("")}
+      </div>
+
+      <div id="dozRpsResult"
+        class="doz-rps-result"
+        role="status" hidden>
+      </div>
+
+      <button type="button"
+        class="primary-btn" id="dozConfirmRps" disabled>
+        تأیید انتخاب
+      </button>
+
+      <button type="button"
+        class="ghost-btn" id="dozCancelRps">
+        فعلاً برگرد
+      </button>
+
+      <p class="doz-fineprint">
+        فقط یک دست اجرا می‌شود؛ در تساوی، شروع‌کننده با قرعه
+        انتخاب می‌شود. در دو دست آسان، امتیاز شروع با شماست.
+      </p>
+    `;
+
+    document.body.append(dialog);
+
+    dialog.querySelectorAll("[data-rps]").forEach(button => {
+      button.onclick = () => {
+        if (busy) return;
+
+        dialog.dataset.choice = button.dataset.rps;
+
+        dialog.querySelectorAll("[data-rps]").forEach(item => {
+          item.setAttribute(
+            "aria-pressed",
+            String(item === button)
+          );
+        });
+
+        host.tinyHaptic();
+        syncRpsControls();
+      };
+    });
+
+    $("dozConfirmRps").onclick = async () => {
+      const choice = dialog.dataset.choice;
+
+      if (!RPS[choice] || busy) return;
+
+      await runAction(
+        "rps",
+        {
+          round_id: shownRound.id,
+          choice
+        },
+        async (response, version) => {
+          if (!dialog.isConnected) return;
+
+          const round = response.round;
+          const result = round.rps;
+
+          dialog.dataset.result = "true";
+          syncRpsControls();
+
+          const human = RPS[result.human];
+          const ai = RPS[result.ai];
+
+          const headline = result.winner === "human"
+            ? "برنده شدی؛ تو شروع می‌کنی."
+            : result.winner === "ai"
+              ? "هوش مصنوعی برنده شد و شروع می‌کند."
+              : result.starter === "O"
+                ? "مساوی شد؛ قرعهٔ شروع به شما رسید."
+                : "مساوی شد؛ قرعهٔ شروع به هوش مصنوعی رسید.";
+
+          const resultBox = $("dozRpsResult");
+
+          resultBox.hidden = false;
+          resultBox.innerHTML = `
+            شما: ${human.emoji} ${human.label}<br>
+            هوش مصنوعی: ${ai.emoji} ${ai.label}<br>
+            <strong>${headline}</strong>
+          `;
+
+          await sleep(1600);
+
+          if (!sameView(version)) return;
+
+          closeRps();
+          await animateRound(round, version);
+        }
+      );
+    };
+
+    $("dozCancelRps").onclick = () => {
+      if (!busy) closeRps();
+    };
+
+    dialog.addEventListener("cancel", event => {
+      if (busy) {
+        event.preventDefault();
+      }
+    });
+
+    dialog.addEventListener("close", () => {
+      if (dialog.isConnected) {
+        dialog.remove();
+      }
+
+      if (host.getView() === "doz-board") {
+        $("dozBoardStart")?.focus({preventScroll: true});
+      }
+    });
+
+    dialog.showModal();
+    syncRpsControls();
+  }
+
+  async function playCell(index) {
+    if (
+      busy ||
+      shownRound?.phase !== "playing" ||
+      shownRound.board[index] !== null
+    ) {
+      return;
+    }
+
+    const roundId = shownRound.id;
+    const version = shownRound.version;
+
+    $("dozCell" + index).classList.add("pending");
+
+    await runAction(
+      "move",
+      {
+        round_id: roundId,
+        index,
+        version
+      },
+      async (response, viewVersion) => {
+        await animateRound(response.round, viewVersion);
+      }
+    );
+  }
+
+  async function animateRound(round, version) {
+    const motionReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    for (const move of round.moves) {
+      if (!sameView(version)) return;
+
+      const cell = $("dozCell" + move.index);
+
+      if (!cell || cell.dataset.mark === move.player) continue;
+
+      if (move.player === "X") {
+        host.setText(
+          $("dozTurn"),
+          "هوش مصنوعی در حال انتخاب است…"
+        );
+
+        await sleep(motionReduced ? 0 : 550);
+
+        if (!sameView(version)) return;
+      }
+
+      setCell(move.index, move.player);
+      cell.classList.remove("pending");
+      host.tinyHaptic();
+
+      await sleep(motionReduced ? 0 : 260);
+    }
+
+    if (!sameView(version)) return;
+
+    shownRound = round;
+    drawWinningLine(round);
+
+    if (round.phase === "finished") {
+      finishRound(round);
+    }
+
+    syncArena();
+  }
+
+  function finishRound(round) {
+    if (celebratedRounds.has(round.id)) {
+      if (data.remaining_rounds === 0) {
+        viewIntro();
+      }
+
+      return;
+    }
+
+    celebratedRounds.add(round.id);
+    celebrating = true;
+
+    const version = currentVersion();
+    const finale = document.createElement("div");
+
+    finale.className = "doz-finale";
+    finale.id = "dozFinale";
+    finale.setAttribute("role", "status");
+
+    const emoji = round.outcome === "human"
+      ? "🎉"
+      : round.outcome === "ai"
+        ? "😔"
+        : "🤝";
+
+    finale.innerHTML = `
+      <div class="doz-finale-card">
+        <span aria-hidden="true">${emoji}</span>
+        <strong>${resultTitle(round)}</strong>
+        <small>
+          ${round.reward > 0
+            ? `${host.fmt(round.reward)} میو به موجودیت اضافه شد.`
+            : rewardNote(round)}
+        </small>
+      </div>
+    `;
+
+    if (round.outcome === "human") {
+      const colors = [
+        "#9e8aff",
+        "#77e4df",
+        "#ffd680",
+        "#ff99bd",
+        "#a5bcff"
+      ];
+
+      for (let index = 0; index < 42; index++) {
+        const confetti = document.createElement("i");
+        confetti.className = "doz-confetti";
+        confetti.setAttribute("aria-hidden", "true");
+
+        confetti.style.setProperty(
+          "--left",
+          `${Math.random() * 100}%`
+        );
+
+        confetti.style.setProperty(
+          "--color",
+          colors[index % colors.length]
+        );
+
+        confetti.style.setProperty(
+          "--duration",
+          `${2.1 + Math.random() * 1.5}s`
+        );
+
+        confetti.style.setProperty(
+          "--delay",
+          `${Math.random() * .65}s`
+        );
+
+        confetti.style.setProperty(
+          "--drift",
+          `${Math.random() * 180 - 90}px`
+        );
+
+        finale.append(confetti);
+      }
+    }
+
+    document.body.append(finale);
+
+    clearTimeout(finaleTimer);
+
+    finaleTimer = setTimeout(() => {
+      finale.remove();
+      celebrating = false;
+
+      if (!sameView(version)) return;
+
+      if (data.remaining_rounds === 0) {
+        viewIntro();
+      } else {
+        syncArena();
+      }
+    }, 4000);
+  }
+
+  function install(bridge) {
+    host = bridge;
+
+    $("btnGame").onclick = viewHub;
+
+    $("navGame").onclick = () => {
+      host.tinyHaptic();
+      viewHub();
+    };
+
+    $("backArrow").onclick = () => {
+      const view = host.getView();
+
+      if (view === "doz-board") {
+        viewIntro();
+
+      } else if (view === "doz-intro" || view === "game") {
+        viewHub();
+
+      } else {
+        host.showHome();
+      }
+    };
+
+    document.addEventListener("visibilitychange", () => {
+      document.querySelector(".doz-lobby")
+        ?.classList.toggle("meteors-paused", document.hidden);
+
+      if (document.hidden || busy) return;
+
+      const view = host.getView();
+
+      if (view === "doz-intro") {
+        viewIntro();
+
+      } else if (
+        view === "doz-board" &&
+        !$("dozRpsDialog") &&
+        !celebrating
+      ) {
+        viewArena();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      const overlay = $("dozWinningLine");
+
+      if (
+        host.getView() !== "doz-board" ||
+        !shownRound?.winning_line?.length ||
+        !overlay
+      ) {
+        return;
+      }
+
+      delete overlay.dataset.roundId;
+      drawWinningLine(shownRound);
+    }, {passive: true});
+  }
+
+  window.MioDoz = {
+    install,
+    leave
+  };
+})();
 </body>
 </html>
