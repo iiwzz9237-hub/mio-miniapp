@@ -33,8 +33,6 @@
   --danger:#ff8585;
   --success:#93d8ba;
   --keyboard-offset:0px;
-  --doz-viewport-height:100dvh;
-  --doz-board-size:260px;
   --ease:cubic-bezier(.22,1,.36,1);
 }
 
@@ -713,30 +711,7 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
 
 /* ===== Bottom navigation ===== */
 
-.bottom-nav{
-  position:fixed;
-  z-index:45;
-  right:50%;
-  bottom:calc(env(safe-area-inset-bottom,0px) + 10px);
-  width:min(448px,calc(100vw - 22px));
-  transform:translateX(50%);
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:3px;
-  padding:8px 6px;
-  border:1px solid var(--border);
-  border-radius:22px;
-  background:rgba(var(--nav-rgb),.94);
-  -webkit-backdrop-filter:blur(18px);
-  backdrop-filter:blur(18px);
-  box-shadow:0 18px 55px rgba(0,0,0,.2);
-  opacity:1;
-  visibility:visible;
-  transition:
-    transform .42s var(--ease),
-    opacity .3s ease,
-    visibility 0s;
-}
+.bottom-nav{position:fixed;z-index:45;right:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);width:min(448px,calc(100vw - 22px));transform:translateX(50%);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:8px 6px;border:1px solid var(--border);border-radius:22px;background:rgba(var(--nav-rgb),.94);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 18px 55px rgba(0,0,0,.2)}
 .bottom-nav button{min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:7px 1px;border:0;border-radius:15px;background:transparent;color:var(--dim);font-size:9px;font-weight:700;white-space:nowrap}
 .bottom-nav button.active{background:rgba(var(--wash),.075);color:var(--text)}
 .bottom-nav button.active>.nav-svg{color:var(--highlight)}
@@ -746,6 +721,25 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
 .bottom-nav .nav-withdraw.active .nav-withdraw-icon{background:linear-gradient(135deg,#446ed0,#7651aa);box-shadow:0 4px 15px rgba(78,100,202,.26)}
 body.keyboard-open .bottom-nav{visibility:hidden;opacity:0;pointer-events:none;transform:translate(50%,140%)}
 body.keyboard-open .toast{bottom:calc(var(--keyboard-offset) + 12px)}
+
+.bottom-nav{
+  opacity:1;
+  visibility:visible;
+  transition:
+    transform .42s var(--ease),
+    opacity .3s ease,
+    visibility 0s;
+}
+body.doz-nav-hidden .bottom-nav{
+  transform:translate(50%,calc(100% + env(safe-area-inset-bottom,0px) + 35px));
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:
+    transform .42s var(--ease),
+    opacity .3s ease,
+    visibility 0s .42s;
+}
 
 /* ===== Appearance settings / profile ===== */
 
@@ -784,7 +778,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 /* ===== Games hub / Doz ===== */
 
 .panel.doz-panel{padding:0;border:0;background:transparent}
-.doz-root,.doz-dialog,.doz-finale{
+.doz-root,.doz-dialog{
   --text:#f4f6ff;
   --dim:#b1bdd9;
   --border:rgba(183,198,255,.16);
@@ -857,9 +851,37 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 .doz-rps-option span{display:block;margin-bottom:12px;font-size:32px}
 .doz-rps-option[aria-pressed="true"]{border-color:#a4afff;background:rgba(113,129,255,.2);box-shadow:0 0 0 2px rgba(144,158,255,.09)}
 .doz-rps-result{padding:15px 8px;margin-top:12px;border-radius:15px;background:rgba(255,255,255,.04);color:#eef0ff;font-size:13px;line-height:2.2}
-.doz-rps-countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(177,190,255,.15);color:#cbd4ff;font-size:12px}
-.doz-rps-countdown b{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:rgba(120,141,255,.16);color:#fff;font-size:20px;font-variant-numeric:tabular-nums}
+
+.doz-rps-countdown{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:14px;
+  padding:12px 8px;
+  border:1px solid rgba(177,190,255,.15);
+  border-radius:15px;
+  background:rgba(113,129,255,.08);
+  color:#cbd4ff;
+  font-size:12px;
+}
+.doz-rps-countdown b{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  background:rgba(120,141,255,.16);
+  color:#fff;
+  font-size:21px;
+  font-variant-numeric:tabular-nums;
+}
+
 .doz-finale{
+  --action-bg:#6379ff;
+  --action-ink:#fff;
+  --highlight:#a5b2ff;
   position:fixed;
   inset:0;
   z-index:70;
@@ -875,7 +897,9 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   padding:25px;
   border:0;
   background:transparent;
+  color:#fff;
   font-family:"Vazirmatn",sans-serif;
+  color-scheme:dark;
 }
 .doz-finale[open]{display:flex}
 .doz-finale::backdrop{background:rgba(5,10,22,.75);backdrop-filter:blur(5px)}
@@ -889,240 +913,6 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 @keyframes doz-confetti-fall{
   from{transform:translate3d(0,-25px,0) rotate(0deg);opacity:1}
   to{transform:translate3d(var(--drift),110vh,0) rotate(700deg);opacity:.2}
-}
-
-/* ===== Doz viewport / fixed controls ===== */
-
-body.doz-focus{
-  height:var(--doz-viewport-height);
-  min-height:0;
-  overflow:hidden;
-}
-body.doz-focus .bottom-nav{
-  transform:translate(50%,calc(100% + env(safe-area-inset-bottom,0px) + 35px));
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:
-    transform .42s var(--ease),
-    opacity .3s ease,
-    visibility 0s .42s;
-}
-body.doz-focus .app{
-  display:grid;
-  grid-template-rows:44px 40px minmax(0,1fr);
-  gap:6px;
-  height:100%;
-  min-height:0;
-  padding:8px 12px;
-  animation:none;
-}
-body.doz-focus .topbar{padding:0}
-body.doz-focus .title-row{min-height:40px;margin:0}
-body.doz-focus .title{font-size:21px}
-body.doz-focus .back-arrow{width:40px;height:40px;flex-basis:40px}
-body.doz-focus #viewSection{
-  height:100%;
-  min-height:0;
-  min-width:0;
-  overflow:hidden;
-  animation:none;
-}
-body.doz-focus .panel.doz-panel{
-  height:100%;
-  min-height:0;
-  animation:none;
-}
-body.doz-focus .doz-root{
-  height:100%;
-  min-height:0;
-  padding:12px;
-  border-radius:22px;
-  overflow:auto;
-}
-body.doz-focus .toast{
-  bottom:calc(env(safe-area-inset-bottom,0px) + 12px);
-}
-body.doz-focus .doz-lobby{
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.doz-lobby-content{
-  flex:1 1 0;
-  min-height:0;
-  min-width:0;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  padding:12px 3px 4px;
-  scrollbar-width:thin;
-}
-body.doz-focus .doz-orbit{
-  width:104px;
-  height:104px;
-  margin:16px auto 18px;
-}
-body.doz-focus .doz-orbit span{font-size:44px}
-body.doz-focus .doz-rules{gap:8px;margin:14px 0 8px}
-body.doz-focus .doz-rule{padding:9px 12px;font-size:11px;line-height:1.9}
-.doz-lobby-controls{
-  flex:0 0 auto;
-  min-width:0;
-  padding-top:8px;
-  border-top:1px solid rgba(177,193,238,.12);
-}
-body.doz-focus .doz-lobby-controls .doz-quota{margin:2px 0 7px;font-size:11px}
-body.doz-focus .doz-lobby-controls .doz-countdown-box{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:9px 12px;
-  margin:7px 0;
-  border-radius:14px;
-}
-body.doz-focus .doz-countdown-box span{margin:0;font-size:10px}
-body.doz-focus .doz-countdown-box b{font-size:22px;letter-spacing:2px}
-body.doz-focus .doz-lobby-message{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:40px;
-  margin:0 0 7px;
-  padding:2px 0;
-  font-size:11px;
-  line-height:1.8;
-  text-align:center;
-}
-body.doz-focus .doz-lobby-controls>.primary-btn{
-  min-height:48px;
-  margin:0;
-  padding:10px;
-}
-.doz-secondary-actions{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
-  margin-top:8px;
-}
-.doz-secondary-actions .ghost-btn{
-  min-width:0;
-  min-height:48px;
-  height:100%;
-  margin:0;
-  padding:8px 6px;
-  border-radius:14px;
-  font-size:11px;
-  line-height:1.7;
-}
-body.doz-focus .doz-lobby-controls .doz-fineprint{
-  margin:7px 0 0!important;
-  font-size:9px!important;
-  line-height:1.7!important;
-}
-body.doz-focus .doz-arena{
-  display:grid;
-  grid-template-rows:14px 56px 64px minmax(0,1fr) 24px 104px;
-  gap:5px;
-  overflow:hidden;
-}
-body.doz-focus .doz-arena>.doz-kicker{
-  margin:0;
-  font-size:9px;
-  line-height:14px;
-}
-body.doz-focus .doz-players{
-  min-height:0;
-  gap:8px;
-  margin:0;
-}
-body.doz-focus .doz-player{
-  min-width:0;
-  padding:7px 9px;
-  gap:8px;
-  border-radius:14px;
-}
-body.doz-focus .doz-player strong{font-size:11px}
-body.doz-focus .doz-player small{font-size:9px;margin-top:2px}
-.doz-status-slot{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  min-height:0;
-  gap:7px;
-}
-body.doz-focus .doz-turn{
-  height:100%;
-  min-height:0;
-  margin:0;
-  padding:7px 9px;
-  overflow-y:auto;
-  font-size:11px;
-  line-height:1.8;
-  border-radius:14px;
-}
-body.doz-focus .doz-arena.is-finished .doz-status-slot{
-  grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);
-}
-body.doz-focus .doz-reward{
-  min-height:0;
-  margin:0;
-  padding:5px 7px;
-  overflow-y:auto;
-  border-radius:14px;
-}
-body.doz-focus .doz-reward strong{font-size:16px;margin-bottom:2px}
-body.doz-focus .doz-reward p{font-size:9px;line-height:1.6}
-.doz-board-area{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-}
-body.doz-focus .doz-board-shell{
-  flex:0 0 auto;
-  width:var(--doz-board-size);
-  height:var(--doz-board-size);
-  max-width:100%;
-  max-height:100%;
-  margin:0;
-}
-body.doz-focus .doz-board{
-  width:100%;
-  height:100%;
-  grid-template-rows:repeat(3,minmax(0,1fr));
-  gap:7px;
-}
-body.doz-focus .doz-cell{
-  min-height:0;
-  height:100%;
-  aspect-ratio:auto;
-  padding:10px;
-  border-radius:14px;
-}
-body.doz-focus .doz-arena>.doz-quota{
-  min-height:0;
-  margin:0;
-  font-size:11px;
-}
-.doz-arena-actions{
-  display:grid;
-  grid-template-rows:48px 48px;
-  gap:8px;
-  min-width:0;
-  min-height:0;
-}
-.doz-primary-slot{min-width:0;min-height:0}
-.doz-primary-slot .primary-btn{
-  min-height:48px;
-  height:100%;
-  margin:0;
-  padding:10px;
-}
-.doz-arena-actions .doz-secondary-actions{margin:0}
-body.doz-focus .doz-root button:focus-visible{
-  outline-offset:2px;
 }
 
 /* ===== Toast / motion ===== */
@@ -1165,51 +955,6 @@ body.doz-focus .doz-root button:focus-visible{
   .doz-game-card{padding:15px 12px;gap:11px}
   .doz-choice-icon{flex-basis:46px;height:46px}
   .doz-player{padding:10px 8px;gap:7px}
-  body.doz-focus .app{padding-inline:8px}
-  body.doz-focus .doz-root{padding:10px}
-  body.doz-focus .doz-player{padding-inline:6px;gap:5px}
-}
-@media(max-height:520px) and (min-width:600px){
-  body.doz-focus .app{
-    max-width:900px;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    grid-template-rows:44px minmax(0,1fr);
-    column-gap:18px;
-  }
-  body.doz-focus #viewSection{grid-column:1/-1}
-  body.doz-focus .doz-arena{
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    grid-template-rows:14px 50px 60px 24px minmax(104px,1fr);
-    column-gap:14px;
-  }
-  body.doz-focus .doz-arena>.doz-kicker{grid-column:1;grid-row:1}
-  body.doz-focus .doz-players{grid-column:1;grid-row:2}
-  body.doz-focus .doz-status-slot{grid-column:1;grid-row:3}
-  body.doz-focus .doz-board-area{grid-column:2;grid-row:1/-1}
-  body.doz-focus .doz-arena>.doz-quota{grid-column:1;grid-row:4}
-  body.doz-focus .doz-arena-actions{grid-column:1;grid-row:5;align-content:end}
-  body.doz-focus .doz-lobby{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    gap:16px;
-  }
-  body.doz-focus .doz-lobby-controls{
-    border-top:0;
-    padding-top:0;
-    align-self:center;
-  }
-  body.doz-focus .doz-lobby-content{height:100%}
-}
-@media(max-height:450px) and (max-width:599px){
-  body.doz-focus #viewSection{overflow-y:auto}
-  body.doz-focus .doz-arena{min-height:470px}
-  body.doz-focus .doz-lobby{min-height:360px}
-  body.doz-focus .doz-arena-actions{
-    position:sticky;
-    bottom:0;
-    z-index:3;
-    background:#111520;
-  }
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
@@ -1527,12 +1272,9 @@ body.doz-focus .doz-root button:focus-visible{
   let dozCelebrating = false;
   let dozStartMemory = "";
   let dozRpsCountdownCancel = null;
-  let dozBoardObserver = null;
-  let dozFitFrame = 0;
 
   const dozCelebrated = new Set();
   const DOZ_PENDING_KEY = `mio_doz_start_${TG_USER_ID}`;
-
   const RPS = {
     rock:{label:"سنگ",emoji:"✊"},
     paper:{label:"کاغذ",emoji:"✋"},
@@ -1759,7 +1501,7 @@ body.doz-focus .doz-root button:focus-visible{
       const keyboardVisible = editingSession && scale <= 1.05 &&
         shrink > Math.max(110,baseline*.18);
       const hideNav = Boolean(editor) || keyboardVisible;
-      const navHidden = hideNav || document.body.classList.contains("doz-focus");
+      const navHidden = hideNav || document.body.classList.contains("doz-nav-hidden");
 
       document.body.classList.toggle("keyboard-open",hideNav);
       nav.inert = navHidden || $("notifOverlay").classList.contains("show");
@@ -1820,122 +1562,6 @@ body.doz-focus .doz-root button:focus-visible{
   }
 
   const keyboard = setupKeyboard();
-
-  /* ================= Doz viewport ================= */
-
-  function updateDozViewport() {
-    if (!document.body.classList.contains("doz-focus")) return;
-
-    const stableHeight = Number(tg?.viewportStableHeight);
-    const visualHeight = Number(window.visualViewport?.height);
-    const height = stableHeight > 0
-      ? stableHeight
-      : visualHeight > 0
-        ? visualHeight
-        : window.innerHeight;
-
-    if (!Number.isFinite(height) || height <= 0) return;
-
-    document.documentElement.style.setProperty(
-      "--doz-viewport-height",
-      `${Math.floor(height)}px`
-    );
-
-    scheduleDozBoardFit();
-  }
-
-  function setDozLayout(active) {
-    const nav = $("bottomNav");
-
-    if (active && nav.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-
-    document.body.classList.toggle("doz-focus",active);
-
-    const hidden = active || document.body.classList.contains("keyboard-open");
-    nav.inert = hidden || $("notifOverlay").classList.contains("show");
-
-    if (hidden) nav.setAttribute("aria-hidden","true");
-    else nav.removeAttribute("aria-hidden");
-
-    if (active) {
-      updateDozViewport();
-      window.scrollTo({top:0,left:0,behavior:"auto"});
-      $("viewSection").scrollTop = 0;
-
-      const version = viewVersion;
-
-      requestAnimationFrame(() => {
-        if (version !== viewVersion || !currentView.startsWith("doz-")) return;
-        window.scrollTo({top:0,left:0,behavior:"auto"});
-        $("viewSection").scrollTop = 0;
-        scheduleDozBoardFit();
-      });
-    }
-
-    keyboard.update();
-  }
-
-  function fitDozBoard() {
-    dozFitFrame = 0;
-
-    if (currentView !== "doz-board") return;
-
-    const area = $("dozBoardArea");
-    const shell = $("dozBoardShell");
-
-    if (!area || !shell) return;
-
-    const size = Math.floor(Math.min(area.clientWidth,area.clientHeight));
-
-    if (size <= 0 || shell.dataset.size === String(size)) return;
-
-    shell.dataset.size = String(size);
-    shell.style.setProperty("--doz-board-size",`${size}px`);
-
-    const overlay = $("dozWinningLine");
-
-    if (overlay && dozRound?.winning_line?.length) {
-      delete overlay.dataset.roundId;
-      drawDozWinningLine(dozRound);
-    }
-  }
-
-  function scheduleDozBoardFit() {
-    if (!dozFitFrame) {
-      dozFitFrame = requestAnimationFrame(fitDozBoard);
-    }
-  }
-
-  function observeDozBoard() {
-    dozBoardObserver?.disconnect();
-    dozBoardObserver = null;
-
-    const area = $("dozBoardArea");
-    if (!area) return;
-
-    fitDozBoard();
-
-    if (typeof ResizeObserver === "function") {
-      dozBoardObserver = new ResizeObserver(scheduleDozBoardFit);
-      dozBoardObserver.observe(area);
-    }
-
-    scheduleDozBoardFit();
-  }
-
-  window.addEventListener("resize",updateDozViewport,{passive:true});
-  window.visualViewport?.addEventListener("resize",() => {
-    if ((window.visualViewport?.scale || 1) <= 1.05) updateDozViewport();
-  },{passive:true});
-
-  try {
-    tg?.onEvent("viewportChanged",event => {
-      if (event?.isStateStable === false) return;
-      updateDozViewport();
-    });
-  } catch {}
 
   /* ================= Appearance ================= */
 
@@ -2142,6 +1768,25 @@ body.doz-focus .doz-root button:focus-visible{
     });
   }
 
+  function syncDozNav() {
+    const hidden = currentView.startsWith("doz-");
+    const nav = $("bottomNav");
+
+    if (hidden && nav.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+
+    document.body.classList.toggle("doz-nav-hidden",hidden);
+
+    const navHidden = hidden || document.body.classList.contains("keyboard-open");
+    nav.inert = navHidden || $("notifOverlay").classList.contains("show");
+
+    if (navHidden) nav.setAttribute("aria-hidden","true");
+    else nav.removeAttribute("aria-hidden");
+
+    keyboard.update();
+  }
+
   function playEnter(element,className) {
     element.classList.remove("anim-in-right","anim-in-left");
     void element.offsetWidth;
@@ -2191,15 +1836,8 @@ body.doz-focus .doz-root button:focus-visible{
   function leaveDoz() {
     clearInterval(dozTimer);
     dozTimer = null;
-
     closeDozRps();
     closeDozFinale();
-
-    dozBoardObserver?.disconnect();
-    dozBoardObserver = null;
-
-    cancelAnimationFrame(dozFitFrame);
-    dozFitFrame = 0;
   }
 
   function showHome() {
@@ -2218,8 +1856,8 @@ body.doz-focus .doz-root button:focus-visible{
     $("backArrow").style.display = "none";
     app.classList.remove("view-active");
     panel.classList.remove("withdraw-panel","game-panel","doz-panel");
-    setDozLayout(false);
 
+    syncDozNav();
     setActiveNav("home");
     renderWithdrawDashboard();
     playEnter($("homeSection"),"anim-in-left");
@@ -2244,7 +1882,6 @@ body.doz-focus .doz-root button:focus-visible{
     panel.classList.toggle("withdraw-panel",name === "withdraw-hub");
     panel.classList.toggle("game-panel",name === "game");
     panel.classList.toggle("doz-panel",name === "games" || name.startsWith("doz-"));
-    setDozLayout(name.startsWith("doz-"));
 
     const navName = name === "games" || name.startsWith("doz-")
       ? "game"
@@ -2252,6 +1889,7 @@ body.doz-focus .doz-root button:focus-visible{
         ? name
         : (/^(withdraw|bank|receipt)/.test(name) ? "withdraw" : "home");
 
+    syncDozNav();
     setActiveNav(navName);
     playEnter($("viewSection"),"anim-in-right");
     keyboard.update();
@@ -2596,7 +2234,7 @@ body.doz-focus .doz-root button:focus-visible{
     $("notifOverlay").inert = true;
     $("bottomNav").inert =
       document.body.classList.contains("keyboard-open") ||
-      document.body.classList.contains("doz-focus");
+      document.body.classList.contains("doz-nav-hidden");
 
     keyboard.update();
   }
@@ -3739,39 +3377,33 @@ body.doz-focus .doz-root button:focus-visible{
     paint(`
       <section class="doz-root doz-lobby ${document.hidden ? "meteors-paused" : ""}">
         ${sky}
-        <div class="doz-lobby-content">
-          <div class="doz-orbit" aria-hidden="true"><span>○</span><span>×</span></div>
-          <div class="doz-lead">
-            <p>شما با هوش مصنوعی بازی می‌کنید.</p>
-          </div>
-          <div class="doz-rules">
-            <div class="doz-rule">🏆 جایزهٔ برد: <strong>${winText}</strong></div>
-            <div class="doz-rule">🤝 اگر مساوی شوید، <strong>۵٬۰۰۰ میو</strong> به موجودی شما اضافه می‌شود.</div>
-            <div class="doz-rule">
-              🎮 در هر سری <strong>۵ دست</strong> بازی داری.
-              پس از پایان دست پنجم باید <strong>۲۴ ساعت</strong> برای سری بعد صبر کنی.
-            </div>
+        <div class="doz-orbit" aria-hidden="true"><span>○</span><span>×</span></div>
+        <div class="doz-lead">
+          <p>شما با هوش مصنوعی بازی می‌کنید.</p>
+        </div>
+        <div class="doz-rules">
+          <div class="doz-rule">🏆 جایزهٔ برد: <strong>${winText}</strong></div>
+          <div class="doz-rule">🤝 اگر مساوی شوید، <strong>۵٬۰۰۰ میو</strong> به موجودی شما اضافه می‌شود.</div>
+          <div class="doz-rule">
+            🎮 در هر سری <strong>۵ دست</strong> بازی داری.
+            پس از پایان دست پنجم باید <strong>۲۴ ساعت</strong> برای سری بعد صبر کنی.
           </div>
         </div>
-        <div class="doz-lobby-controls">
-          <div class="doz-quota">
-            <span>فرصت‌های شروع باقی‌مانده</span><b>${dozState.remaining_rounds} از ۵</b>
-          </div>
-          <div class="doz-countdown-box" ${dozState.remaining_seconds > 0 ? "" : "hidden"}>
-            <span>تا پنج فرصت بعدی</span>
-            <b id="dozCountdown" aria-label="زمان باقی‌مانده تا سری بعد">${formatCountdown(dozSeconds())}</b>
-          </div>
-          <p class="doz-lobby-message">${dozLobbyMessage()}</p>
-          <button type="button" class="primary-btn" id="dozEnter"
-            ${resume || dozState.can_start ? "" : "disabled"}>
-            ${resume ? "ادامهٔ بازی" : "شروع"}
-          </button>
-          <div class="doz-secondary-actions">
-            <button type="button" class="ghost-btn" id="dozIntroRefresh">بروزرسانی وضعیت</button>
-            <button type="button" class="ghost-btn" id="dozIntroBack">بازگشت به بازی‌ها</button>
-          </div>
-          <p class="doz-fineprint">جایزه‌ها تا سقف موجودی ${fmt(dozState.balance_cap)} میو واریز می‌شوند.</p>
+        <div class="doz-quota">
+          <span>فرصت‌های شروع باقی‌مانده</span><b>${dozState.remaining_rounds} از ۵</b>
         </div>
+        <div class="doz-countdown-box" ${dozState.remaining_seconds > 0 ? "" : "hidden"}>
+          <span>تا پنج فرصت بعدی</span>
+          <b id="dozCountdown" aria-label="زمان باقی‌مانده تا سری بعد">${formatCountdown(dozSeconds())}</b>
+        </div>
+        <p class="muted-center">${dozLobbyMessage()}</p>
+        <button type="button" class="primary-btn" id="dozEnter"
+          ${resume || dozState.can_start ? "" : "disabled"}>
+          ${resume ? "ادامهٔ بازی" : "شروع"}
+        </button>
+        <button type="button" class="ghost-btn" id="dozIntroRefresh">بروزرسانی وضعیت</button>
+        <button type="button" class="ghost-btn" id="dozIntroBack">بازگشت به بازی‌ها</button>
+        <p class="doz-fineprint">جایزه‌ها تا سقف موجودی ${fmt(dozState.balance_cap)} میو واریز می‌شوند.</p>
       </section>
     `);
 
@@ -3824,7 +3456,6 @@ body.doz-focus .doz-root button:focus-visible{
 
     if (!Array.isArray(line) || line.length !== 3) {
       overlay.replaceChildren();
-      delete overlay.dataset.roundId;
       return;
     }
 
@@ -3860,7 +3491,7 @@ body.doz-focus .doz-root button:focus-visible{
     dozRound = round;
 
     paint(`
-      <section class="doz-root doz-arena" id="dozArena">
+      <section class="doz-root doz-arena">
         <span class="doz-kicker">MIO • DUEL</span>
         <div class="doz-players">
           <div class="doz-player">
@@ -3870,37 +3501,27 @@ body.doz-focus .doz-root button:focus-visible{
             <b aria-hidden="true">×</b><div><strong>هوش مصنوعی</strong><small>همیشه ضربدر</small></div>
           </div>
         </div>
-        <div class="doz-status-slot">
-          <div class="doz-turn" id="dozTurn" role="status" aria-live="polite"></div>
-          <div class="doz-reward" id="dozRewardBox" hidden>
-            <strong id="dozRewardAmount"></strong><p id="dozRewardNote"></p>
+        <div class="doz-turn" id="dozTurn" role="status" aria-live="polite"></div>
+        <div class="doz-board-shell">
+          <div class="doz-board" id="dozBoard" role="group" aria-label="صفحهٔ دوز سه در سه">
+            ${Array.from({length:9},(_,index) => `
+              <button type="button" class="doz-cell" id="dozCell${index}"
+                aria-label="ردیف ${Math.floor(index/3)+1}، ستون ${index%3+1}، خالی" disabled></button>
+            `).join("")}
           </div>
+          <svg class="doz-win-overlay" id="dozWinningLine"
+            viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
-        <div class="doz-board-area" id="dozBoardArea">
-          <div class="doz-board-shell" id="dozBoardShell">
-            <div class="doz-board" id="dozBoard" role="group" aria-label="صفحهٔ دوز سه در سه">
-              ${Array.from({length:9},(_,index) => `
-                <button type="button" class="doz-cell" id="dozCell${index}"
-                  aria-label="ردیف ${Math.floor(index/3)+1}، ستون ${index%3+1}، خالی" disabled></button>
-              `).join("")}
-            </div>
-            <svg class="doz-win-overlay" id="dozWinningLine"
-              viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-          </div>
+        <div class="doz-reward" id="dozRewardBox" hidden>
+          <strong id="dozRewardAmount"></strong><p id="dozRewardNote"></p>
         </div>
         <div class="doz-quota">
           <span>فرصت‌های شروع باقی‌مانده</span><b id="dozQuota"></b>
         </div>
-        <div class="doz-arena-actions">
-          <div class="doz-primary-slot">
-            <button type="button" class="primary-btn" id="dozStart">شروع</button>
-            <button type="button" class="primary-btn" id="dozAgain" hidden>بازی دوباره</button>
-          </div>
-          <div class="doz-secondary-actions">
-            <button type="button" class="ghost-btn" id="dozArenaRefresh">بروزرسانی و بازیابی بازی</button>
-            <button type="button" class="ghost-btn" id="dozArenaBack">بازگشت به صفحهٔ دوز</button>
-          </div>
-        </div>
+        <button type="button" class="primary-btn" id="dozStart">شروع</button>
+        <button type="button" class="primary-btn" id="dozAgain" hidden>بازی دوباره</button>
+        <button type="button" class="ghost-btn" id="dozArenaRefresh">بروزرسانی و بازیابی بازی</button>
+        <button type="button" class="ghost-btn" id="dozArenaBack">بازگشت به صفحهٔ دوز</button>
       </section>
     `);
 
@@ -3923,12 +3544,10 @@ body.doz-focus .doz-root button:focus-visible{
 
     if (round) {
       round.board.forEach((mark,index) => setDozCell(index,mark));
+      drawDozWinningLine(round);
     }
 
     syncDozArena();
-    observeDozBoard();
-
-    if (round) drawDozWinningLine(round);
   }
 
   function syncDozArena() {
@@ -3940,7 +3559,6 @@ body.doz-focus .doz-root button:focus-visible{
     const blocked = dozBusy || dozUncertain || dozCelebrating ||
       Boolean(dozState.withdrawal_pending);
 
-    $("dozArena").classList.toggle("is-finished",Boolean(finished));
     setText($("dozQuota"),`${dozState.remaining_rounds} از ۵`);
     $("dozBoard").setAttribute("aria-busy",String(dozBusy));
 
@@ -4550,7 +4168,6 @@ body.doz-focus .doz-root button:focus-visible{
     }
 
     keyboard.update();
-    updateDozViewport();
     updatePendingClocks();
 
     if (currentView === "game") {
@@ -4635,4 +4252,4 @@ body.doz-focus .doz-root button:focus-visible{
 </script>
 
 </body>
-  </html>
+      </html>
