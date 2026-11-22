@@ -2138,6 +2138,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     finishedWithdrawals.add(String(id));
 
     if (finishedWithdrawals.size > 100) {
+      finishedWithdrawals.values;
       finishedWithdrawals.delete(finishedWithdrawals.values().next().value);
     }
 
@@ -2683,7 +2684,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
       <p class="muted-center">به اکانت زیر پیام بده:</p>
       <div class="link-box">
-        <span style="text-align:center">@Pott5y6jg</span>
+        <span style="text-align:center">@freemewBank</span>
         <button type="button" class="copy-btn" id="copyAccountBtn">کپی</button>
       </div>
       <p class="muted-center">و بنویس:</p>
@@ -2691,7 +2692,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
       <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
     `);
 
-    $("copyAccountBtn").onclick = () => copyText("@Pott5y6jg",$("copyAccountBtn"));
+    $("copyAccountBtn").onclick = () => copyText("@freemewBank",$("copyAccountBtn"));
   }
 
   /* ================= Daily ================= */
@@ -3995,7 +3996,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
     finale.showModal();
 
     if (!dozBusy) {
-      $("dozResultConfirm").focus({preventScroll:true});
+      $("dozResultConfirm")?.focus({preventScroll:true});
     }
 
     syncDozArena();
@@ -4252,4 +4253,4 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 </script>
 
 </body>
-      </html>
+  </html>
