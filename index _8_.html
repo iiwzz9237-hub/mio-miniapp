@@ -1,0 +1,4464 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1016">
+<title>Free meowie</title>
+
+<script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="fontSheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400..800&amp;display=swap" rel="stylesheet" media="print">
+
+<style>
+:root{
+  --user-bg:#0d1016;
+  --user-card:#202027;
+  --user-accent:#4f8cff;
+  --text:#f5f5f7;
+  --dim:#b6c8e8;
+  --card-text:#fff;
+  --card-dim:#b6c8e8;
+  --card-end:#0d1016;
+  --border:rgba(255,255,255,.10);
+  --wash:255,255,255;
+  --nav-rgb:13,16,22;
+  --action-bg:#4f8cff;
+  --action-ink:#fff;
+  --highlight:#4f8cff;
+  --balance-ink:#4f8cff;
+  --gold:#f4cf77;
+  --danger:#ff8585;
+  --success:#93d8ba;
+  --keyboard-offset:0px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{min-height:100%;background:var(--user-bg);color-scheme:dark}
+body{
+  margin:0;
+  min-height:100vh;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+  background:var(--user-bg);
+  color:var(--text);
+  font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 88% 0%,rgba(255,255,255,.065),transparent 46%),
+    radial-gradient(ellipse at 0% 68%,rgba(91,135,220,.075),transparent 50%),
+    var(--user-bg);
+}
+button,input{font-family:inherit}
+button{
+  color:inherit;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+button:disabled{opacity:.55;cursor:not-allowed}
+button:focus-visible,input:focus-visible{
+  outline:2px solid var(--highlight);
+  outline-offset:4px;
+}
+.app{
+  position:relative;
+  z-index:1;
+  max-width:480px;
+  margin:auto;
+  padding:20px 20px 122px;
+  
+}
+
+/* ===== Top bar ===== */
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 12px}
+.brand{flex:1;min-width:0;text-align:center;font-size:12px;font-weight:600;line-height:1.9;color:var(--text);overflow-wrap:anywhere}
+.icon-btn{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 44px;
+  width:44px;
+  height:44px;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:rgba(var(--wash),.055);
+  color:var(--text);
+  transition:transform .2s var(--ease),background .2s ease;
+}
+.icon{
+  display:block;
+  flex-shrink:0;
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.refresh-btn .icon{transform-box:view-box;transform-origin:50% 50%}
+.refresh-btn.spinning .icon{animation:spin .85s linear infinite}
+.bell-dot{
+  position:absolute;
+  top:8px;
+  left:9px;
+  display:none;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--user-accent);
+  box-shadow:0 0 0 3px var(--user-bg);
+}
+.bell-dot.show{display:block;animation:pop-in .4s var(--ease) backwards}
+.title-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;margin:24px 0 28px}
+.title{margin:0;text-align:center;font-size:clamp(24px,7vw,34px);font-weight:800;letter-spacing:-.8px}
+.home-brand{
+  direction:ltr;
+  unicode-bidi:isolate;
+  white-space:pre;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(2rem,9vw,2.7rem);
+  line-height:1.3;
+  font-weight:400;
+  letter-spacing:.015em;
+}
+.back-arrow{position:absolute;right:0;display:none}
+.view-active .title-row{padding-inline:49px}
+.view-active .title{font-size:clamp(19px,5.8vw,28px);line-height:1.6}
+
+/* ===== Balance ===== */
+
+.balance-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding:32px 20px 36px;
+  margin-bottom:22px;
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.075),transparent 72%),
+    linear-gradient(135deg,var(--user-card),var(--card-end));
+  box-shadow:0 18px 44px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
+
+}
+.balance-card::before{
+  content:"";
+  position:absolute;
+  inset:0 18% auto;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--user-accent),transparent);
+  pointer-events:none;
+}
+.balance-card::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:-95px;
+  bottom:-105px;
+  width:170px;
+  height:170px;
+  border:1px solid rgba(122,195,255,.11);
+  border-radius:50%;
+  box-shadow:0 0 0 22px rgba(88,170,255,.045),0 0 0 44px rgba(88,170,255,.025);
+  pointer-events:none;
+}
+.balance-label{margin-bottom:18px;font-size:13px;color:var(--card-dim)}
+.balance-value{
+  display:inline-block;
+  max-width:100%;
+  direction:ltr;
+  font-size:clamp(30px,9vw,46px);
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  line-height:1.3;
+  letter-spacing:-1.5px;
+  color:var(--balance-ink);
+  overflow-wrap:anywhere;
+}
+.balance-unit{margin-inline-start:6px;font-size:17px;font-weight:700;color:var(--balance-ink)}
+
+/* ===== Withdrawal summary ===== */
+
+.withdraw-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.summary-card{min-width:0;padding:16px 10px;border:1px solid var(--border);border-radius:19px;background:rgba(var(--wash),.04);text-align:center}
+.summary-card>span{display:block;font-size:11px;color:var(--dim)}
+.summary-card>strong{display:block;margin:9px 0 4px;direction:ltr;font-size:clamp(18px,5vw,24px);font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.summary-card>small{display:block;color:var(--dim);font-size:10px;line-height:1.9}
+.pending-list{display:grid;gap:10px;margin-bottom:18px;overflow-anchor:none}
+.pending-list:empty{margin-bottom:8px}
+.pending-item{
+  display:block;
+  width:100%;
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:19px;
+  background:rgba(var(--wash),.035);
+  color:var(--text);
+  text-align:right;
+  animation:none;
+  transform:none;
+  transition:border-color .2s ease,background .2s ease;
+}
+.pending-item:active{background:rgba(var(--wash),.075)}
+.pending-head,.pending-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pending-head strong{font-size:13px}
+.pending-head b{direction:rtl;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pending-meta{margin-top:10px;color:var(--dim);font-size:11px}
+.pending-clock{
+  display:flex;
+  align-items:center;
+  min-height:3.8em;
+  margin-top:7px;
+  font-size:12px;
+  line-height:1.9;
+  color:var(--text);
+  font-variant-numeric:tabular-nums;
+}
+.pending-hint{display:block;min-height:3.8em;font-size:10px;line-height:1.9;color:var(--dim)}
+.home-receipt{margin:0 0 18px!important}
+
+/* ===== Menu ===== */
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.menu-btn{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  min-width:0;
+  min-height:132px;
+  padding:22px 10px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(var(--wash),.06),rgba(var(--wash),.022));
+  color:var(--text);
+  text-align:center;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.7;
+  transition:transform .25s var(--ease),border-color .25s ease,box-shadow .25s ease;
+  animation:none;
+}
+.menu-icon{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:16px;background:rgba(255,255,255,.10);color:#d6edff;transition:transform .3s var(--ease)}
+#btnInvite .menu-icon{background:rgba(141,174,246,.16);color:#d8e7ff}
+#btnBankWithdraw .menu-icon{background:rgba(136,213,181,.14);color:#a8ead0}
+#btnDaily .menu-icon{background:rgba(192,156,238,.14);color:#dbc6f7}
+#btnGame .menu-icon{background:rgba(176,133,255,.10);color:#d7c2fb}
+.menu-btn.game-menu{grid-column:1/-1;flex-direction:row;justify-content:flex-start;gap:16px;min-height:106px;padding:20px;text-align:right}
+.game-menu .menu-icon{width:54px;height:54px;flex-shrink:0}
+.game-menu .menu-icon .icon{width:27px;height:27px}
+.menu-copy{flex:1;min-width:0}
+.menu-copy strong{display:block;font-size:16px}
+.menu-copy small{display:block;margin-top:5px;color:var(--dim);font-size:12px;font-weight:400}
+.game-menu>.icon{color:var(--dim)}
+body[data-bright="true"] .menu-icon,
+body[data-bright="true"] #btnInvite .menu-icon,
+body[data-bright="true"] #btnBankWithdraw .menu-icon,
+body[data-bright="true"] #btnDaily .menu-icon,
+body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0,0,0,.065)}
+
+/* ===== Panels / fields ===== */
+
+.panel{min-height:140px;padding:25px 21px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(145deg,rgba(var(--wash),.06),rgba(var(--wash),.022))}
+#homeSection>.panel{min-height:0;padding:9px 16px;background:transparent;border-style:dashed}
+#homeSection>.panel p{padding:3px 0;margin:0;font-size:12px}
+.panel h2{margin:0 0 12px;font-size:19px}
+.panel p{margin:0 0 10px;color:var(--dim);font-size:14px;line-height:2}
+.muted-center{text-align:center;padding:10px 0 4px}
+.panel b{color:var(--text)}
+.gold-text{color:var(--highlight)!important}
+.link-box{display:flex;align-items:center;gap:8px;margin:14px 0 18px;padding:12px;border:1px solid var(--border);border-radius:17px;background:rgba(var(--wash),.035)}
+.link-box>span{flex:1;min-width:0;overflow-x:auto;direction:ltr;text-align:left;white-space:nowrap;font-size:13px}
+.field-label{display:block;margin-top:14px;color:var(--text);font-size:13px}
+.id-input{
+  width:100%;
+  margin:10px 0 6px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:rgba(var(--wash),.035);
+  color:var(--text);
+  direction:ltr;
+  text-align:left;
+  font-size:16px;
+  scroll-margin-block:24px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.id-input::placeholder{color:var(--dim);opacity:.8}
+.id-input:focus{outline:none;border-color:var(--highlight);box-shadow:0 0 0 3px rgba(var(--wash),.06)}
+.field-error{min-height:20px;margin-bottom:6px;color:var(--danger);font-size:12px;line-height:1.8}
+
+/* ===== Buttons ===== */
+
+.primary-btn,.ghost-btn,.copy-btn{position:relative;overflow:hidden;border:none;font-weight:700;transition:transform .2s var(--ease),opacity .2s,background .2s}
+.primary-btn{width:100%;margin-top:10px;padding:16px;border-radius:17px;background:var(--action-bg);color:var(--action-ink);font-size:15px;font-weight:800}
+.ghost-btn{width:100%;margin-top:10px;padding:14px;border:1px solid var(--border);border-radius:17px;background:rgba(var(--wash),.025);color:var(--text);font-size:14px}
+.copy-btn{flex-shrink:0;padding:9px 14px;border-radius:11px;background:var(--action-bg);color:var(--action-ink);font-size:12px;white-space:nowrap}
+.copy-btn.copied{background:#92d7ad;color:#143322}
+.primary-btn.rgb-btn{
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:64px;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(110deg,#ff356f,#a855f7 22%,#4f6cff 44%,#06b6d4 65%,#22c55e 82%,#ff356f);
+  background-size:350% 350%;
+  color:#fff;
+  box-shadow:0 8px 25px rgba(109,80,230,.20);
+  animation:rgb-flow 2.4s ease-out 1;
+}
+.rgb-btn .btn-label{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;padding:7px 20px;border:1px solid rgba(255,255,255,.20);border-radius:11px;background:#111625;color:#fff;font-size:15px;font-weight:800;line-height:1.6;pointer-events:none}
+.btn-label .icon{width:18px;height:18px;stroke-width:2.2}
+.menu-btn:active,.primary-btn:active,.ghost-btn:active,.copy-btn:active,.icon-btn:active{transform:scale(.965)}
+.spinner{width:38px;height:38px;margin:8px auto 16px;border:2px solid rgba(var(--wash),.12);border-top-color:var(--highlight);border-radius:50%;animation:spin .9s linear infinite}
+.result-icon{text-align:center;font-size:42px;margin:4px 0 18px;animation:pop-in .6s var(--ease) backwards}
+.toggle-row{margin:16px 0 12px;padding:14px 16px;border:1px solid var(--border);border-radius:17px;background:rgba(var(--wash),.035)}
+.status-text{color:var(--success);font-size:15px;font-weight:700}
+
+/* ===== Exclusive withdrawal page ===== */
+
+.panel.withdraw-panel{padding:0;border:0;background:transparent}
+.withdraw-hub{
+  position:relative;
+  isolation:isolate;
+  padding:1px;
+  --hub-text:#f5f7ff;
+  --hub-dim:#bdc8e0;
+  color:var(--hub-text);
+}
+.withdraw-hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:259px;
+  padding:25px;
+  border:1px solid rgba(157,178,255,.23);
+  border-radius:29px;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(93,128,255,.33),transparent 58%),
+    radial-gradient(ellipse at 0% 100%,rgba(111,71,204,.24),transparent 57%),
+    linear-gradient(125deg,#172848,#12182e 58%,#191c36);
+  box-shadow:0 20px 45px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.09);
+}
+.withdraw-hero::before{
+  content:"";
+  position:absolute;
+  width:240px;
+  height:240px;
+  left:-105px;
+  top:-67px;
+  z-index:-1;
+  border:1px solid rgba(169,190,255,.17);
+  border-radius:50%;
+  box-shadow:0 0 0 27px rgba(169,190,255,.035),0 0 0 55px rgba(169,190,255,.022);
+}
+.withdraw-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.055) 49%,transparent 68%);
+  background-size:250% 100%;
+  animation:wallet-sheen 2s ease-out 1;
+}
+.withdraw-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.withdraw-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid rgba(164,185,255,.18);border-radius:999px;background:rgba(255,255,255,.045);font-size:10px;color:#dce6ff}
+.withdraw-chip>span{width:5px;height:5px;border-radius:50%;background:#99dfd6;box-shadow:0 0 10px rgba(153,223,214,.4)}
+.withdraw-emblem{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid rgba(175,194,255,.18);border-radius:14px;background:rgba(255,255,255,.055);color:#b4c8ff;transform:rotate(-8deg)}
+.panel .withdraw-eyebrow{margin:0 0 8px;color:#bdc8e0;font-size:12px}
+.withdraw-total{display:flex;align-items:baseline;gap:10px;margin-bottom:25px}
+.withdraw-total strong{direction:ltr;font-size:clamp(28px,9vw,42px);font-weight:800;line-height:1.3;letter-spacing:-1px;color:#f7faff;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.withdraw-total>span{font-size:14px;color:#b8c9ee}
+.withdraw-hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:17px;border-top:1px solid rgba(175,194,255,.13)}
+.withdraw-hero-bottom small{display:block;margin-bottom:5px;color:#bdc8e0;font-size:10px}
+.withdraw-hero-bottom strong{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:#b1e5d8}
+.withdraw-today-icon{display:flex;align-items:center;justify-content:center;width:33px;height:33px;border-radius:50%;background:rgba(128,225,189,.09);color:#a9dfcd}
+.withdraw-today-icon .icon{width:17px;height:17px}
+.withdraw-section-label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:25px 3px 13px;color:var(--text)}
+.withdraw-section-label h2{margin:0;font-size:15px}
+.withdraw-section-label>span{font-size:10px;color:var(--dim)}
+.withdraw-methods{display:grid;gap:12px}
+.withdraw-method{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:100%;
+  min-height:103px;
+  padding:19px 16px;
+  border:1px solid rgba(175,194,255,.17);
+  border-radius:23px;
+  text-align:right;
+  color:#f5f7ff;
+  background:linear-gradient(120deg,#17213a,#171a2b);
+  box-shadow:0 8px 22px rgba(0,0,0,.11);
+  transition:transform .2s var(--ease),border-color .2s,box-shadow .2s;
+}
+.bank-method{background:radial-gradient(ellipse at 100% 50%,rgba(107,101,213,.18),transparent 70%),linear-gradient(120deg,#1e2240,#171b30)}
+.id-method{background:radial-gradient(ellipse at 100% 50%,rgba(61,148,187,.14),transparent 70%),linear-gradient(120deg,#162b37,#171d2e)}
+.withdraw-method::before{
+  content:"";
+  position:absolute;
+  inset:14px 0 14px auto;
+  width:2px;
+  background:linear-gradient(transparent,#a7adff,transparent);
+  opacity:.8;
+  pointer-events:none;
+}
+.id-method::before{background:linear-gradient(transparent,#99dcea,transparent)}
+.withdraw-method-icon{display:flex;align-items:center;justify-content:center;flex:0 0 49px;width:49px;height:49px;border:1px solid rgba(188,181,255,.16);border-radius:16px;background:rgba(168,147,250,.10);color:#c7beff}
+.id-method .withdraw-method-icon{background:rgba(107,210,230,.08);border-color:rgba(133,222,239,.14);color:#b1e8ef}
+.withdraw-method-copy{flex:1;min-width:0}
+.withdraw-method-copy strong{display:block;font-size:14px;font-weight:700}
+.withdraw-method-copy small{display:block;margin-top:7px;font-size:10px;line-height:1.8;color:#c0cae0}
+.withdraw-method-arrow{display:flex;align-items:center;justify-content:center;flex:0 0 27px;width:27px;height:27px;border-radius:50%;background:rgba(255,255,255,.045);color:#cad6f0}
+.withdraw-method-arrow .icon{width:16px;height:16px}
+.withdraw-method:active{transform:scale(.979)}
+.withdraw-home-link{display:flex;align-items:center;gap:9px;width:100%;margin-top:18px;padding:14px 13px;border:1px solid var(--border);border-radius:16px;background:rgba(var(--wash),.035);color:var(--text);text-align:right;font-size:11px;line-height:1.8}
+.withdraw-home-link>span:nth-child(2){flex:1}
+.withdraw-home-link>.icon{width:16px;height:16px;color:var(--dim)}
+.withdraw-pending-dot{flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--highlight)}
+.panel .withdraw-footnote{margin:14px 5px 0;text-align:center;color:var(--dim);font-size:10px;line-height:1.9}
+.withdraw-hub button:focus-visible{outline-color:#92b2ff}
+
+/* ===== Game / slot machine ===== */
+
+.panel.game-panel{padding:0;border:0;background:transparent}
+.casino{
+  --text:#fff4dc;
+  --dim:#d6c1b6;
+  --wash:255,255,255;
+  --border:rgba(247,214,153,.16);
+  --highlight:#f4cf77;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding:24px 17px 20px;
+  border:1px solid rgba(231,179,93,.22);
+  border-radius:30px;
+  background:
+    radial-gradient(ellipse at 50% 8%,rgba(191,51,66,.24),transparent 48%),
+    radial-gradient(ellipse at 90% 80%,rgba(125,65,31,.15),transparent 55%),
+    linear-gradient(155deg,#29131d,#120e17 58%,#21151c);
+  color:var(--text);
+  box-shadow:0 22px 50px rgba(0,0,0,.23);
+}
+.casino::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:.22;
+  pointer-events:none;
+  background-image:radial-gradient(rgba(255,223,157,.3) .7px,transparent .7px);
+  background-size:16px 16px;
+}
+.game-intro{text-align:center}
+.game-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 12px;
+  margin-bottom:13px;
+  border:1px solid rgba(244,207,119,.22);
+  border-radius:999px;
+  background:rgba(244,207,119,.065);
+  color:#f1d9a4;
+  font-size:10px;
+}
+.game-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:#f4cf77;box-shadow:0 0 10px rgba(244,207,119,.5)}
+.casino .game-intro h2{margin:0 0 6px;color:#fff2d7;font-size:24px;font-weight:800}
+.casino .game-intro p{color:#cdb7b3;font-size:12px}
+.machine-stage{position:relative;direction:ltr;margin:24px 0 21px;padding-right:34px}
+.slot-machine{
+  position:relative;
+  isolation:isolate;
+  padding:5px;
+  border:1px solid #dfb26c;
+  border-radius:28px 28px 20px 20px;
+  background:linear-gradient(120deg,#ffe5a2,#8e5c2e 28%,#f1ca82 49%,#936435 77%,#ffe7ac);
+  box-shadow:0 18px 32px rgba(0,0,0,.38),inset 0 1px 0 #fff0c8,0 0 24px rgba(232,161,70,.08);
+}
+.machine-cabinet{
+  position:relative;
+  overflow:hidden;
+  padding:15px 10px 13px;
+  border:1px solid rgba(255,224,155,.38);
+  border-radius:23px 23px 15px 15px;
+  background:
+    linear-gradient(110deg,rgba(255,255,255,.14),transparent 25%,transparent 75%,rgba(0,0,0,.2)),
+    linear-gradient(#ae2b40,#71192c 45%,#99263a 78%,#531724);
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.13);
+}
+.machine-marquee{position:relative;padding:4px 0 10px;text-align:center;color:#ffe4a0}
+.machine-marquee strong{
+  display:block;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(24px,7vw,33px);
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:3px;
+  text-shadow:0 2px 0 #662013,0 0 17px rgba(255,202,95,.24);
+}
+.machine-marquee small{display:block;margin-top:5px;color:#f3c2a3;font-family:Arial,sans-serif;font-size:7px;letter-spacing:3px}
+.machine-lights{display:flex;align-items:center;justify-content:space-around;gap:5px;padding:7px 7px 10px}
+.machine-lights i{display:block;width:5px;height:5px;border-radius:50%;background:#ffe6a3;box-shadow:0 0 7px #ffbf65,0 0 13px rgba(255,174,55,.32)}
+.slot-machine.is-spinning .machine-lights i{animation:bulb-pulse .65s ease-in-out infinite alternate}
+.slot-machine.is-spinning .machine-lights i:nth-child(even){animation-delay:.32s}
+.reel-trigger{display:block;width:100%;padding:0;border:0;border-radius:13px;background:transparent}
+.reel-trigger:disabled{opacity:1}
+.reel-trigger:focus-visible{outline-color:#ffe0a0}
+.reel-trim{
+  display:block;
+  padding:6px;
+  border:1px solid #e4bd76;
+  border-radius:14px;
+  background:linear-gradient(130deg,#fbe4a8,#a36d32 34%,#f2d38b 64%,#97632c);
+  box-shadow:0 5px 12px rgba(35,0,0,.4),inset 0 1px 0 #fff1c3;
+}
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;direction:ltr;padding:3px;border:1px solid #39221e;border-radius:9px;background:#2b171a}
+.reel-window{position:relative;display:block;height:104px;min-width:0;overflow:hidden;border-radius:5px;background:linear-gradient(#c2b8a6,#fff9e8 30%,#fffdf2 60%,#c6bba7)}
+.reel-window::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(rgba(36,21,17,.32),transparent 29%,transparent 70%,rgba(36,21,17,.31));box-shadow:inset 0 1px 5px rgba(0,0,0,.22)}
+.reel-track{position:relative;display:block;width:100%;transform:translate3d(0,0,0)}
+.reel-window.rolling .reel-track{will-change:transform;filter:blur(.35px)}
+.reel-cell{display:flex;align-items:center;justify-content:center;width:100%;height:104px;flex-shrink:0}
+.slot-symbol{display:block;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:clamp(32px,10.5vw,51px);line-height:1;user-select:none}
+.symbol-seven{
+  color:#dc233b;
+  font-family:Arial,Helvetica,sans-serif;
+  font-weight:900;
+  font-style:italic;
+  font-size:clamp(45px,15vw,69px);
+  padding-right:5px;
+  text-shadow:0 1px 0 #ff9b92,0 3px 0 #8e1026,0 5px 7px rgba(104,22,30,.22);
+}
+.symbol-blank{color:#d3243c;font-family:Arial,Helvetica,sans-serif;font-size:clamp(42px,14vw,64px);font-weight:900;text-shadow:0 2px 0 #8e1429,0 4px 7px rgba(104,22,30,.2)}
+.machine-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 6px 1px}
+.machine-bottom small{color:#f0c3a5;font-size:8px;letter-spacing:2px;font-family:Arial,sans-serif}
+.coin-slot{display:block;width:46px;height:12px;padding:3px 5px;border:1px solid #ddbb85;border-radius:4px;background:linear-gradient(#cfbd9d,#8d7e68);box-shadow:0 2px 3px rgba(0,0,0,.2)}
+.coin-slot::before{content:"";display:block;height:4px;border-radius:2px;background:#26191b;box-shadow:inset 0 1px 2px #000}
+.machine-base{width:88%;height:10px;margin:0 auto;border:1px solid #9c733c;border-top:0;border-radius:0 0 8px 8px;background:linear-gradient(#7e502c,#d4a962);box-shadow:0 6px 10px rgba(0,0,0,.25)}
+.slot-lever{position:absolute;z-index:3;right:-6px;top:63px;width:48px;height:157px;padding:0;border:0;background:transparent;perspective:300px}
+.slot-lever:disabled{opacity:1}
+.lever-socket{position:absolute;left:0;bottom:18px;width:28px;height:37px;border:1px solid #a98859;border-radius:0 9px 9px 0;background:linear-gradient(90deg,#775239,#e6c18a 48%,#92714a);box-shadow:2px 3px 6px rgba(0,0,0,.3)}
+.lever-arm{position:absolute;left:17px;bottom:35px;width:9px;height:105px;border:1px solid #c8bba3;border-radius:6px;background:linear-gradient(90deg,#756b63,#fff0d5 43%,#a59984 75%,#5d5147);transform-origin:50% 100%;transform:rotate(8deg);box-shadow:2px 0 4px rgba(0,0,0,.25)}
+.lever-knob{position:absolute;top:-12px;left:50%;width:27px;height:27px;border:1px solid #f06663;border-radius:50%;background:radial-gradient(circle at 32% 25%,#ffb19a,#eb3f4b 28%,#a6132b 67%,#5e0d21);transform:translateX(-50%);box-shadow:0 3px 6px rgba(0,0,0,.34),inset 0 1px 2px rgba(255,255,255,.45)}
+.casino-spin-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:58px;
+  margin-top:0;
+  border:1px solid #f6dc9b;
+  border-radius:16px;
+  background:linear-gradient(120deg,#ffe6a1,#d8a84f 54%,#f1ca76);
+  color:#382318;
+  box-shadow:0 5px 0 #81552c,0 11px 24px rgba(0,0,0,.25),inset 0 1px 0 #fff2c8;
+}
+.casino-spin-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #81552c,0 6px 16px rgba(0,0,0,.2)}
+.casino-spin-btn:disabled{opacity:.55}
+.casino-spin-btn .icon{width:21px;height:21px}
+.game-status{min-height:79px;margin:18px 0 4px;text-align:center;color:#d6c1b6;font-size:12px;line-height:1.9}
+.game-status>span{display:block}
+.casino .game-status b{display:block;margin:8px auto 0;direction:ltr;color:#f8db9d;font-size:23px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:2px}
+.game-result{padding:17px 12px;margin:14px 0;border:1px solid rgba(244,207,119,.23);border-radius:19px;background:linear-gradient(135deg,rgba(244,207,119,.08),rgba(244,207,119,.02));text-align:center}
+.game-result small{display:block;color:#d6c1b6;font-size:11px}
+.game-result strong{display:block;margin:8px 0;font-size:28px;color:#f4cf77;font-variant-numeric:tabular-nums}
+.casino .game-result p{font-size:12px;margin:0;color:#d6c1b6}
+.game-result.reveal{animation:result-reveal .5s var(--ease)}
+.slot-machine.winner{box-shadow:0 18px 32px rgba(0,0,0,.38),0 0 26px rgba(255,205,105,.3),inset 0 1px 0 #fff0c8}
+.prize-table{width:100%;margin-top:20px;border-collapse:collapse;text-align:center;font-size:12px}
+.prize-table caption{padding-bottom:12px;text-align:right;color:#f4ddaf;font-size:13px;font-weight:700}
+.prize-table th,.prize-table td{padding:12px 3px;border-bottom:1px solid rgba(247,214,153,.13)}
+.prize-table th{color:#d6c1b6;font-size:10px;font-weight:500}
+.prize-table td{font-variant-numeric:tabular-nums;color:#f4e6d4}
+.prize-table .slot-symbol{font-size:24px}
+.prize-table .symbol-seven,.prize-table .symbol-blank{font-size:29px}
+.casino .game-note{margin-top:14px;font-size:11px;color:#d6c1b6}
+.casino .ghost-btn{border-color:rgba(247,214,153,.18);color:#f4ddaf;background:rgba(255,255,255,.03)}
+
+/* ===== Skeleton ===== */
+
+.skel{border-radius:28px;background:linear-gradient(100deg,rgba(var(--wash),.055) 30%,rgba(var(--wash),.13) 50%,rgba(var(--wash),.055) 70%);background-size:220% 100%;animation:shimmer 1.8s ease-in-out infinite}
+.skel-card{height:176px;margin-bottom:22px}
+.skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.skel-btn{height:132px;border-radius:22px}
+.skel-game{height:106px;grid-column:1/-1;border-radius:22px}
+.skel-panel{height:140px}
+
+/* ===== Notifications / meteor shower ===== */
+
+.sheet-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 76px) 16px 20px;
+  background:rgba(3,7,21,.93);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .25s,visibility .25s;
+}
+.sheet-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.meteor-sky{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 75% 15%,rgba(80,59,153,.25),transparent 48%),
+    radial-gradient(ellipse at 10% 80%,rgba(21,81,142,.2),transparent 50%),
+    linear-gradient(160deg,#080d24,#030711 75%);
+}
+.meteor-sky::before,.meteor-sky::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle at 12% 16%,#d6e8ff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 72% 23%,#fff 0 1px,transparent 1.6px),
+    radial-gradient(circle at 38% 63%,#bfcbff 0 1px,transparent 1.5px),
+    radial-gradient(circle at 87% 78%,#d6e8ff 0 .8px,transparent 1.5px),
+    radial-gradient(circle at 51% 42%,#fff 0 .7px,transparent 1.4px);
+  background-size:211px 263px;
+  opacity:.65;
+}
+.meteor-sky::after{background-size:337px 389px;background-position:81px 119px;opacity:.32}
+.meteor{
+  position:absolute;
+  top:var(--meteor-top,0%);
+  left:var(--meteor-left,80%);
+  width:140px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#fff,rgba(153,197,255,.75) 12%,transparent);
+  box-shadow:0 0 7px rgba(140,191,255,.4);
+  opacity:0;
+  transform:rotate(-45deg);
+  transform-origin:left center;
+  animation:meteor-fall var(--meteor-duration,6s) linear infinite;
+  animation-delay:var(--meteor-delay,0s);
+  animation-play-state:paused;
+}
+.sheet-overlay.show:not(.meteors-paused) .meteor{animation-play-state:running}
+@keyframes meteor-fall{
+  0%{opacity:0;transform:translate3d(120px,-120px,0) rotate(-45deg)}
+  4%{opacity:.9}
+  23%{opacity:0;transform:translate3d(-520px,520px,0) rotate(-45deg)}
+  100%{opacity:0;transform:translate3d(-520px,520px,0) rotate(-45deg)}
+}
+.sheet{
+  --text:#f5f5f7;
+  --dim:#b6c8e8;
+  --wash:255,255,255;
+  --border:rgba(255,255,255,.13);
+  --danger:#ff8585;
+  --success:#93d8ba;
+  position:relative;
+  z-index:1;
+  color:var(--text);
+  width:min(420px,100%);
+  max-height:70vh;
+  max-height:70dvh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:18px;
+  border:1px solid rgba(162,185,249,.24);
+  border-radius:26px;
+  background:linear-gradient(145deg,rgba(18,32,70,.89),rgba(9,17,39,.88));
+  box-shadow:0 30px 90px rgba(0,0,0,.4);
+  transform:translateY(-14px) scale(.975);
+  transition:transform .35s var(--ease);
+}
+.sheet-overlay.show .sheet{transform:translateY(0) scale(1)}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.sheet h3{margin:0;font-size:16px}
+.close-btn{width:34px;height:34px;flex-basis:34px;border-radius:11px}
+.notif-item{margin-bottom:8px;padding:12px 14px;border:1px solid rgba(255,255,255,.07);border-radius:15px;background:rgba(255,255,255,.06);font-size:14px;line-height:1.9;overflow-wrap:anywhere}
+.notif-item.success{border-inline-start:3px solid var(--success)}
+.notif-item.fail{border-inline-start:3px solid var(--danger)}
+.notif-item .t{margin-top:5px;direction:ltr;text-align:right;color:var(--dim);font-size:11px}
+.notif-empty{padding:24px 0;text-align:center;color:var(--dim);font-size:14px}
+
+/* ===== Bottom navigation ===== */
+
+.bottom-nav{position:fixed;z-index:45;right:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);width:min(448px,calc(100vw - 22px));transform:translateX(50%);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:8px 6px;border:1px solid var(--border);border-radius:22px;background:rgba(var(--nav-rgb),.94);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 18px 55px rgba(0,0,0,.2)}
+.bottom-nav button{min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:7px 1px;border:0;border-radius:15px;background:transparent;color:var(--dim);font-size:9px;font-weight:700;white-space:nowrap}
+.bottom-nav button.active{background:rgba(var(--wash),.075);color:var(--text)}
+.bottom-nav button.active>.nav-svg{color:var(--highlight)}
+.nav-svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-withdraw-icon{display:flex;align-items:center;justify-content:center;width:35px;height:31px;border:1px solid rgba(180,196,255,.20);border-radius:11px;background:linear-gradient(135deg,#334e8d,#47376e);color:#fff;box-shadow:0 4px 12px rgba(41,60,120,.17)}
+.bottom-nav .nav-withdraw{gap:3px}
+.bottom-nav .nav-withdraw.active .nav-withdraw-icon{background:linear-gradient(135deg,#446ed0,#7651aa);box-shadow:0 4px 15px rgba(78,100,202,.26)}
+body.keyboard-open .bottom-nav{visibility:hidden;opacity:0;pointer-events:none;transform:translate(50%,140%)}
+body.keyboard-open .toast{bottom:calc(var(--keyboard-offset) + 12px)}
+
+.bottom-nav{
+  opacity:1;
+  visibility:visible;
+  transition:
+    transform .42s var(--ease),
+    opacity .3s ease,
+    visibility 0s;
+}
+body.doz-nav-hidden .bottom-nav{
+  transform:translate(50%,calc(100% + env(safe-area-inset-bottom,0px) + 35px));
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:
+    transform .42s var(--ease),
+    opacity .3s ease,
+    visibility 0s .42s;
+}
+
+/* ===== Appearance settings / profile ===== */
+
+.settings-wrap{display:grid;gap:12px}
+.settings-card{padding:16px;border:1px solid var(--border);border-radius:19px;background:rgba(var(--wash),.03)}
+.settings-card h3{margin:0 0 7px;font-size:14px}
+.settings-card p{margin:0;color:var(--dim);font-size:12px;line-height:1.9}
+.color-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+.color-field{padding:10px 7px;border:1px solid var(--border);border-radius:14px;background:rgba(var(--wash),.025);text-align:center;color:var(--text);font-size:10px}
+.color-field input{display:block;width:100%;height:40px;margin-top:7px;padding:0;border:0;border-radius:9px;background:transparent;cursor:pointer}
+.layout-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.layout-choice{padding:11px 5px;border:1px solid var(--border);border-radius:13px;background:rgba(var(--wash),.025);color:var(--text);font-size:11px;font-weight:700}
+.layout-choice.active{border-color:var(--highlight);background:rgba(var(--wash),.065)}
+.theme-preview{padding:17px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(145deg,var(--user-card),var(--card-end));color:var(--card-text)}
+.theme-preview strong{display:block;margin-bottom:5px}
+.theme-preview small{display:block;color:var(--card-dim);line-height:1.8}
+.preview-accent{display:inline-block;margin-top:11px;padding:8px 13px;border-radius:10px;background:var(--action-bg);color:var(--action-ink);font-size:11px;font-weight:800}
+.profile-box{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:15px;border:1px solid var(--border);border-radius:19px;background:rgba(var(--wash),.03)}
+.profile-avatar{display:flex;align-items:center;justify-content:center;width:58px;height:58px;flex:0 0 58px;overflow:hidden;border:1px solid var(--border);border-radius:50%;background:rgba(var(--wash),.06);font-size:22px;font-weight:800}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-box strong{display:block;font-size:15px}
+.profile-box small{display:block;margin-top:4px;color:var(--dim);direction:ltr;text-align:right;font-size:11px}
+.profile-list{display:grid;gap:8px}
+.profile-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:15px;background:rgba(var(--wash),.025);font-size:12px}
+.profile-row span{color:var(--dim)}
+.profile-row b{direction:ltr;text-align:left}
+body.layout-compact .app{padding-inline:13px}
+body.layout-compact .grid{gap:8px}
+body.layout-compact .menu-btn{min-height:108px;padding:16px 8px}
+body.layout-compact .balance-card{padding:25px 16px 28px}
+body.layout-list .grid{grid-template-columns:1fr}
+body.layout-list .menu-btn{min-height:84px;flex-direction:row;justify-content:flex-start;padding:14px 16px;text-align:right}
+body.layout-list .menu-btn.game-menu{grid-column:auto}
+body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;height:46px;flex:0 0 46px}
+
+/* ===== Games hub / Doz ===== */
+
+.panel.doz-panel{padding:0;border:0;background:transparent}
+.doz-root,.doz-dialog{
+  --text:#f4f6ff;
+  --dim:#b1bdd9;
+  --border:rgba(183,198,255,.16);
+  --wash:255,255,255;
+  --action-bg:#6379ff;
+  --action-ink:#fff;
+  --highlight:#a5b2ff;
+  color:var(--text);
+  color-scheme:dark;
+}
+.doz-root{position:relative;isolation:isolate;overflow:hidden;padding:25px 20px;border:1px solid var(--border);border-radius:28px;background:#111520}
+.doz-kicker{display:block;margin-bottom:12px;color:#a5b2ff;font-size:10px;font-weight:700;letter-spacing:2px;direction:ltr}
+.doz-lead{text-align:center}
+.panel .doz-lead h2{margin:0 0 10px;color:#f4f6ff;font-size:27px;font-weight:800}
+.panel .doz-lead p{margin:0;font-size:12px;line-height:2}
+.doz-game-list{display:grid;gap:14px;margin-top:26px}
+.doz-game-card{display:flex;align-items:center;gap:15px;width:100%;min-height:116px;padding:18px;border:1px solid rgba(185,195,255,.19);border-radius:22px;background:linear-gradient(125deg,#252441,#191c2f);color:#f5f6ff;text-align:right}
+.doz-game-card.casino-choice{border-color:rgba(237,194,127,.22);background:linear-gradient(125deg,#38212e,#211923)}
+.doz-choice-icon{display:flex;align-items:center;justify-content:center;flex:0 0 57px;height:57px;border:1px solid rgba(255,255,255,.13);border-radius:19px;background:rgba(255,255,255,.05);color:#ced4ff;font-size:28px}
+.doz-choice-icon .icon{width:30px;height:30px}
+.doz-choice-copy{flex:1;min-width:0}
+.doz-choice-copy strong{display:block;color:#fff;font-size:17px}
+.doz-choice-copy small{display:block;margin-top:7px;color:#b9bed4;font-size:11px;line-height:1.9}
+.doz-game-card:active{transform:scale(.98)}
+.doz-lobby{min-height:560px;background:#060b1b}
+.doz-lobby>.meteor-sky{z-index:-1}
+.doz-lobby:not(.meteors-paused) .meteor{animation-play-state:running}
+.doz-orbit{display:flex;align-items:center;justify-content:center;gap:15px;width:142px;height:142px;margin:5px auto 24px;border:1px solid rgba(166,178,255,.18);border-radius:50%;background:radial-gradient(circle,rgba(104,84,234,.22),rgba(53,61,119,.04) 70%);box-shadow:0 0 0 15px rgba(128,142,234,.035),0 0 0 31px rgba(128,142,234,.018)}
+.doz-orbit span{font-family:Arial,sans-serif;font-size:54px;font-weight:700}
+.doz-orbit span:first-child{color:#76e1e4;text-shadow:0 0 23px rgba(75,209,231,.35)}
+.doz-orbit span:last-child{color:#b6a0ff;text-shadow:0 0 23px rgba(162,122,255,.35)}
+.doz-rules{display:grid;gap:10px;margin:25px 0 18px}
+.doz-rule{padding:13px 15px;border:1px solid rgba(167,184,255,.15);border-radius:16px;background:rgba(13,23,48,.72);color:#d4def4;font-size:12px;line-height:2}
+.doz-rule strong{color:#fff}
+.doz-quota{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:19px 0 12px;color:#c0cbea;font-size:12px}
+.doz-quota b{color:#e7ecff;font-variant-numeric:tabular-nums}
+.doz-countdown-box{margin:20px 0;padding:20px 10px;border:1px solid rgba(156,176,255,.2);border-radius:19px;background:rgba(16,26,52,.78);text-align:center}
+.doz-countdown-box span{display:block;margin-bottom:12px;color:#c4cfed;font-size:12px}
+.doz-countdown-box b{display:block;color:#eef0ff;direction:ltr;font-size:32px;letter-spacing:4px;font-variant-numeric:tabular-nums}
+.doz-fineprint{margin-top:15px!important;color:#aebbd8!important;font-size:10px!important;line-height:2!important;text-align:center}
+.doz-arena{background:linear-gradient(150deg,#171b29,#0f131d)}
+.doz-players{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 19px}
+.doz-player{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid rgba(180,195,230,.12);border-radius:17px;background:rgba(255,255,255,.025)}
+.doz-player>b{display:flex;align-items:center;justify-content:center;flex:0 0 34px;height:34px;border-radius:11px;background:rgba(109,218,230,.08);color:#76e1e4;font-family:Arial,sans-serif;font-size:27px}
+.doz-player.ai>b{color:#b8a3ff;background:rgba(171,144,255,.08)}
+.doz-player strong{display:block;color:#ecf0ff;font-size:12px}
+.doz-player small{display:block;margin-top:4px;color:#9eabc7;font-size:9px}
+.doz-turn{display:flex;align-items:center;justify-content:center;min-height:58px;padding:10px;margin-bottom:16px;border:1px solid rgba(177,193,238,.1);border-radius:16px;background:rgba(255,255,255,.025);color:#d9e0f7;font-size:12px;line-height:1.9;text-align:center}
+.doz-board-shell{position:relative;width:100%;margin:0 auto 23px;direction:ltr}
+.doz-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;direction:ltr}
+.doz-cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;width:100%;aspect-ratio:1;padding:16px;border:1px solid rgba(157,181,239,.14);border-radius:18px;background:linear-gradient(145deg,#232b3b,#1a202f);box-shadow:inset 0 1px 0 rgba(255,255,255,.035);color:#76e1e4}
+.doz-cell:disabled{opacity:1}
+.doz-cell:not(:disabled):active{transform:scale(.96);background:#293249}
+.doz-cell[data-mark="X"]{color:#b8a3ff}
+.doz-cell.pending{border-color:#a9b7ff;box-shadow:inset 0 0 20px rgba(125,151,255,.1)}
+.doz-mark{width:100%;height:100%;max-width:67px;overflow:visible;fill:none;stroke:currentColor;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.doz-mark .doz-stroke{stroke-dasharray:1;stroke-dashoffset:1;animation:doz-draw .36s ease forwards}
+.doz-mark .doz-stroke.second{animation-delay:.14s}
+.doz-win-overlay{position:absolute;inset:0;z-index:2;width:100%;height:100%;overflow:visible;pointer-events:none}
+.doz-win-overlay line{stroke:#fcdd98;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 3px rgba(255,214,125,.6));animation:doz-draw .48s .12s ease forwards}
+.doz-reward{margin:15px 0;padding:17px 13px;border:1px solid rgba(169,186,247,.15);border-radius:18px;background:rgba(255,255,255,.035);text-align:center}
+.doz-reward strong{display:block;margin-bottom:9px;color:#aee8d8;font-size:24px}
+.doz-reward p{margin:0;font-size:11px;line-height:2}
+.doz-dialog{width:min(390px,calc(100vw - 30px));max-height:calc(100dvh - 40px);overflow-y:auto;padding:23px 18px;border:1px solid rgba(177,190,255,.25);border-radius:25px;background:linear-gradient(145deg,#202740,#111727);box-shadow:0 28px 90px rgba(0,0,0,.55);text-align:center;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif}
+.doz-dialog::backdrop{background:rgba(3,7,17,.8);backdrop-filter:blur(7px)}
+.doz-dialog h2{margin:0 0 10px;color:#f4f6ff;font-size:20px}
+.doz-dialog p{color:#b1bdd9;font-size:12px;line-height:2}
+.doz-rps-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:22px 0 15px}
+.doz-rps-option{padding:17px 5px 13px;border:1px solid rgba(177,190,255,.17);border-radius:17px;background:rgba(255,255,255,.035);color:#dce4ff;font-size:11px}
+.doz-rps-option span{display:block;margin-bottom:12px;font-size:32px}
+.doz-rps-option[aria-pressed="true"]{border-color:#a4afff;background:rgba(113,129,255,.2);box-shadow:0 0 0 2px rgba(144,158,255,.09)}
+.doz-rps-result{padding:15px 8px;margin-top:12px;border-radius:15px;background:rgba(255,255,255,.04);color:#eef0ff;font-size:13px;line-height:2.2}
+
+.doz-rps-countdown{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:14px;
+  padding:12px 8px;
+  border:1px solid rgba(177,190,255,.15);
+  border-radius:15px;
+  background:rgba(113,129,255,.08);
+  color:#cbd4ff;
+  font-size:12px;
+}
+.doz-rps-countdown b{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  background:rgba(120,141,255,.16);
+  color:#fff;
+  font-size:21px;
+  font-variant-numeric:tabular-nums;
+}
+
+.doz-finale{
+  --action-bg:#6379ff;
+  --action-ink:#fff;
+  --highlight:#a5b2ff;
+  position:fixed;
+  inset:0;
+  z-index:70;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  margin:0;
+  overflow:hidden;
+  padding:25px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;
+  color-scheme:dark;
+}
+.doz-finale[open]{display:flex}
+.doz-finale::backdrop{background:rgba(5,10,22,.75);backdrop-filter:blur(5px)}
+.doz-finale-card{position:relative;z-index:2;width:min(330px,100%);max-height:100%;overflow-y:auto;padding:29px 20px;border:1px solid rgba(202,211,255,.2);border-radius:25px;background:linear-gradient(140deg,#28314d,#141b2d);box-shadow:0 24px 65px rgba(0,0,0,.3);color:#fff;text-align:center;animation:pop-in .4s var(--ease)}
+.doz-finale-card>span{display:block;margin-bottom:15px;font-size:58px}
+.doz-finale-card strong{display:block;font-size:27px}
+.doz-finale-card small{display:block;margin-top:13px;color:#cbd5f1;font-size:12px;line-height:2}
+.doz-finale-card .primary-btn{min-height:48px;margin-top:22px}
+.doz-confetti{position:absolute;top:-20px;left:var(--left);width:9px;height:16px;border-radius:2px;background:var(--color);pointer-events:none;animation:doz-confetti-fall var(--duration) var(--delay) linear forwards}
+@keyframes doz-draw{to{stroke-dashoffset:0}}
+@keyframes doz-confetti-fall{
+  from{transform:translate3d(0,-25px,0) rotate(0deg);opacity:1}
+  to{transform:translate3d(var(--drift),110vh,0) rotate(700deg);opacity:.2}
+}
+
+/* ===== Toast / motion ===== */
+
+.toast{position:fixed;z-index:100;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);left:50%;width:max-content;max-width:calc(100vw - 40px);padding:12px 18px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:#0a3a83;color:#fff;box-shadow:0 12px 36px rgba(0,0,0,.3);text-align:center;font-size:13px;line-height:1.9;opacity:0;visibility:hidden;transform:translate(-50%,14px);pointer-events:none;transition:opacity .25s,transform .3s var(--ease),visibility .25s}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.ripple{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;animation:ripple-out .6s var(--ease) forwards}
+
+@media(hover:hover) and (pointer:fine){
+  .menu-btn:hover{transform:translateY(-4px);border-color:var(--highlight);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+  .menu-btn:hover .menu-icon{transform:translateY(-2px) rotate(-5deg)}
+  .primary-btn:not(:disabled):hover{transform:translateY(-2px)}
+  .icon-btn:hover,.ghost-btn:hover{background:rgba(var(--wash),.10)}
+  .withdraw-method:hover{transform:translateY(-3px);border-color:rgba(175,194,255,.4);box-shadow:0 12px 25px rgba(0,0,0,.18)}
+}
+@media(max-width:360px){
+  .app{padding-inline:14px}
+  .brand{font-size:11px}
+  .menu-btn{font-size:13px;padding-inline:7px}
+  .panel{padding-inline:16px}
+  .menu-btn.game-menu{padding:16px;gap:12px}
+  .bottom-nav{width:calc(100vw - 14px);gap:1px;padding-inline:4px}
+  .bottom-nav button{font-size:9px}
+  .withdraw-hero{padding:21px}
+  .withdraw-method{padding:17px 12px;gap:10px}
+  .withdraw-method-copy strong{font-size:12px}
+  .withdraw-method-copy small{font-size:9px}
+  .pending-item{padding:13px}
+  .pending-head strong,.pending-head b{font-size:12px}
+  .casino{padding-inline:12px}
+  .machine-cabinet{padding-inline:7px}
+  .reel-window,.reel-cell{height:88px}
+  .machine-stage{padding-right:30px}
+  .prize-table{font-size:11px}
+  .doz-root{padding:21px 14px}
+  .doz-cell{padding:13px;border-radius:14px}
+  .doz-game-card{padding:15px 12px;gap:11px}
+  .doz-choice-icon{flex-basis:46px;height:46px}
+  .doz-player{padding:10px 8px;gap:7px}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes rgb-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes ripple-out{from{opacity:.16;transform:scale(0)}to{opacity:0;transform:scale(1)}}
+@keyframes wallet-sheen{0%,20%{background-position:140% 0}70%,100%{background-position:-100% 0}}
+@keyframes bulb-pulse{from{opacity:.35;box-shadow:0 0 2px #ffbf65}to{opacity:1;box-shadow:0 0 10px #ffbf65,0 0 17px rgba(255,174,55,.4)}}
+@keyframes result-reveal{from{opacity:.4;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* Home and wallet surfaces share the user's three palette colours. */
+body::before{background:radial-gradient(ellipse at 100% 0%,rgba(var(--accent-rgb,79,140,255),.10),transparent 46%),var(--user-bg)}
+.title-row{margin:11px 0 17px}
+.home-brand{font-size:clamp(2rem,8vw,2.6rem);letter-spacing:-.035em}
+.title-row:has(.home-brand:not([hidden]))::before,.title-row:has(.home-brand:not([hidden]))::after{
+  content:"";width:24px;height:1px;margin:0 13px;background:var(--highlight);opacity:.5
+}
+.balance-card{
+  text-align:start;display:flex;flex-direction:column;justify-content:center;
+  min-height:148px;padding:24px;margin-bottom:12px;padding-inline-end:36%;
+  background:radial-gradient(ellipse at 12% 100%,rgba(var(--accent-rgb),.19),transparent 65%),linear-gradient(125deg,var(--card-end),var(--user-card));
+}
+.balance-card::after{width:160px;height:160px;left:-42px;bottom:-66px;border-color:rgba(var(--accent-rgb),.25);box-shadow:0 0 0 13px rgba(var(--accent-rgb),.04),0 0 0 26px rgba(var(--accent-rgb),.035)}
+.balance-card::before{inset:0 6% auto 32%;background:linear-gradient(90deg,transparent,var(--user-accent),transparent)}
+.balance-label{display:flex;align-items:center;gap:7px;margin:0 0 9px;color:var(--card-dim);font-weight:600}
+.balance-value{color:var(--card-text);vertical-align:middle;font-size:clamp(28px,8vw,42px)}
+.balance-unit{display:inline-block;font-size:14px;vertical-align:baseline}
+.float-emoji,.cat-star{display:inline-block;animation:float-soft 5s ease-in-out infinite alternate}
+@keyframes float-soft{from{transform:translate(-2px,1px) scale(.98)}to{transform:translate(2px,-3px) scale(1.04)}}
+.night-window{position:absolute;direction:ltr;left:4%;bottom:14%;width:94px;height:110px;pointer-events:none}
+.cat-moon{position:absolute;top:5px;left:5px;width:24px;height:24px;border-radius:50%;box-shadow:-6px 4px 0 1px #f1cf99;transform:rotate(-19deg)}
+.cat-star{position:absolute;right:11px;top:6px;color:#f3d6a1;font:18px/1 Georgia,serif}
+.cat-body{position:absolute;bottom:2px;right:7px;width:56px;height:46px;border-radius:60% 70% 30% 24%;background:linear-gradient(115deg,#f4d9b4,#ce9c77)}
+.cat-tail{position:absolute;left:-19px;bottom:0;width:48px;height:16px;border-radius:80% 10% 50% 60%;background:repeating-linear-gradient(105deg,#ce9c77 0 8px,#f2d5b1 9px 16px);transform:rotate(6deg)}
+.cat-face{position:absolute;bottom:28px;left:16px;width:57px;height:41px;border-radius:45% 47% 48% 48%;background:radial-gradient(ellipse at 22% 68%,#eab29b 0 4px,transparent 5px),radial-gradient(ellipse at 79% 68%,#eab29b 0 4px,transparent 5px),linear-gradient(115deg,#ffe7c8,#eac59e);transform:rotate(-5deg)}
+.cat-ear{position:absolute;z-index:-1;top:-10px;left:3px;width:20px;height:23px;background:linear-gradient(135deg,#e3b992 48%,#d89f91 50%);border-radius:3px 90% 0 35%;transform:rotate(-7deg)}
+.cat-ear+.cat-ear{left:auto;right:2px;transform:scaleX(-1) rotate(-7deg)}
+.cat-eyes::before,.cat-eyes::after{content:"";position:absolute;top:18px;left:11px;width:10px;height:6px;border-radius:0 0 70% 70%;border-bottom:2px solid #574142}
+.cat-eyes::after{left:36px}
+.cat-nose{position:absolute;top:25px;left:26px;width:6px;height:4px;border-radius:50% 50% 75% 75%;background:#9b6864}
+.cat-whiskers::before,.cat-whiskers::after{content:"";position:absolute;top:25px;left:-5px;width:13px;height:1px;background:#aa8876;box-shadow:0 4px #aa8876;transform:rotate(8deg)}
+.cat-whiskers::after{left:auto;right:-5px;transform:rotate(-8deg)}
+.summary-card{text-align:start;padding:12px 14px;background:rgba(var(--wash),.035)}
+.summary-card>strong{text-align:start;direction:inherit;margin:5px 0 1px}
+.summary-symbol{font-size:12px;font-style:normal}
+.grid{gap:10px}
+.menu-btn{align-items:flex-start;justify-content:space-between;gap:12px;min-height:99px;padding:13px 16px;border-radius:18px;text-align:start;font-size:13px}
+.menu-icon{width:34px;height:34px;border-radius:11px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.menu-icon .icon{width:19px;height:19px}
+.menu-btn.game-menu{align-items:center;min-height:77px;padding:13px 16px;background:linear-gradient(120deg,rgba(var(--accent-rgb),.14),rgba(var(--wash),.035))}
+.game-menu .menu-icon{width:43px;height:43px}
+.game-menu .menu-copy small{margin-top:2px}
+body.layout-list .menu-btn{align-items:center}
+body.layout-compact .balance-card{padding-inline-end:35%}
+body.layout-compact .menu-btn{min-height:76px;padding:10px 13px;gap:5px}
+.bottom-nav{background:var(--user-bg);backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:21px;box-shadow:0 7px 25px rgba(0,0,0,.25),inset 0 1px rgba(var(--wash),.05)}
+.bottom-nav button.active{background:rgba(var(--accent-rgb),.13);color:var(--highlight)}
+.nav-withdraw-icon,.bottom-nav .nav-withdraw.active .nav-withdraw-icon{background:var(--user-accent);color:var(--accent-ink);border:0}
+.primary-btn:not(.rgb-btn){box-shadow:inset 0 1px rgba(255,255,255,.16)}
+.connection-note{margin:0 0 12px;padding:9px 13px;border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:12px}
+html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert] *,#app[inert] *::after,#app[inert] *::before{animation-play-state:paused!important}
+@media(max-width:350px){.night-window{left:1%;transform:scale(.82);transform-origin:left bottom}.summary-card{padding:11px}.menu-btn{padding:12px}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .meteor,.doz-confetti,.ripple{display:none}
+  .doz-mark .doz-stroke,.doz-win-overlay line{stroke-dashoffset:0}
+}
+</style>
+</head>
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-bell" viewBox="0 0 24 24">
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>
+  </symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24">
+    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5"/>
+  </symbol>
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <path d="m9 5 7 7-7 7M16 12H4"/>
+  </symbol>
+  <symbol id="i-withdraw" viewBox="0 0 24 24">
+    <path d="M12 16V3m-5 5 5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
+  </symbol>
+  <symbol id="i-invite" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"/>
+    <path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M21 21v-2a6 6 0 0 0-4-5.66"/>
+  </symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24">
+    <path d="m3 9 9-6 9 6H3Zm2 3v6m7-6v6m7-6v6M3 21h18"/>
+  </symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24">
+    <rect x="3" y="8" width="18" height="4" rx="1"/>
+    <path d="M5 12v9h14v-9M12 8v13M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24">
+    <path d="m3 11 9-8 9 8M5 10v10h14V10M9 20v-6h6v6"/>
+  </symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24">
+    <path d="M12 3a9 9 0 1 0 0 18h1.5a2.5 2.5 0 0 0 0-5H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-9h-3Z"/>
+    <circle cx="7.5" cy="10" r=".7"/>
+    <circle cx="9" cy="6.5" r=".7"/>
+    <circle cx="13" cy="6" r=".7"/>
+  </symbol>
+  <symbol id="i-user" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 21a8 8 0 0 1 16 0"/>
+  </symbol>
+  <symbol id="i-game" viewBox="0 0 24 24">
+    <rect x="2" y="5" width="17" height="15" rx="3"/>
+    <path d="M2 9h17M7.5 9v7M13.5 9v7M2 16h17M7 20v1h7v-1M19 15h3V7"/>
+    <circle cx="22" cy="5" r="1.5"/>
+    <path d="M5 12h.01M10.5 12h.01M16 12h.01"/>
+  </symbol>
+</svg>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <button type="button" class="icon-btn" id="bellBtn"
+      aria-label="اعلان‌ها" aria-haspopup="dialog"
+      aria-controls="notifOverlay" aria-expanded="false">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"></use></svg>
+      <span class="bell-dot" id="bellDot" aria-hidden="true"></span>
+    </button>
+
+    <span class="brand" id="topWelcome">خوش آمدید عزیز</span>
+
+    <button type="button" class="icon-btn refresh-btn"
+      id="refreshBtn" aria-label="بروزرسانی">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg>
+    </button>
+  </div>
+
+  <div class="title-row">
+    <button type="button" class="icon-btn back-arrow" id="backArrow" aria-label="بازگشت">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"></use></svg>
+    </button>
+    <h1 class="title home-brand" id="homeTitle" lang="en" dir="ltr" aria-label="Free meowie" hidden>𝑭𝒓𝒆𝒆 𝒎𝒆𝒐𝒘𝒊𝒆</h1>
+    <h1 class="title" id="pageTitle" hidden></h1>
+  </div>
+
+  <p class="connection-note" id="connectionNote" role="status" hidden>اتصال اینترنت قطع است. پس از اتصال، وضعیت حساب بررسی می‌شود.</p>
+  <div id="skeletonSection" aria-label="در حال دریافت اطلاعات">
+    <div class="skel skel-card"></div>
+    <div class="skel-grid">
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-btn"></div>
+      <div class="skel skel-game"></div>
+    </div>
+    <div class="skel skel-panel"></div>
+  </div>
+
+  <div id="homeSection" style="display:none">
+    <div class="balance-card">
+      <div class="night-window" aria-hidden="true">
+        <i class="cat-moon"></i><i class="cat-star">✦</i>
+        <span class="cat-body"><i class="cat-tail"></i></span>
+        <span class="cat-face"><i class="cat-ear"></i><i class="cat-ear"></i>
+          <i class="cat-eyes"></i><i class="cat-nose"></i><i class="cat-whiskers"></i>
+        </span>
+      </div>
+      <div class="balance-label"><span class="float-emoji" aria-hidden="true">💎</span> موجودی شما</div>
+      <div>
+        <span class="balance-value" id="balanceValue">…</span>
+        <span class="balance-unit">میو</span>
+      </div>
+    </div>
+
+    <div class="withdraw-summary">
+      <div class="summary-card">
+        <span><i class="summary-symbol" aria-hidden="true">✅</i> برداشت‌شده امروز</span>
+        <strong id="withdrawnTodayValue">—</strong>
+        <small>میو</small>
+      </div>
+      <div class="summary-card">
+        <span><i class="summary-symbol" aria-hidden="true">⏳</i> در انتظار برداشت</span>
+        <strong id="pendingTotalValue">—</strong>
+        <small>میو · <span id="pendingCountText">— درخواست در صف</span></small>
+      </div>
+    </div>
+
+    <div class="pending-list" id="pendingList"></div>
+
+    <button type="button" class="ghost-btn home-receipt" id="homeReceiptBtn" hidden>
+      📨 دریافت رسید آخرین برداشت
+    </button>
+
+    <div class="grid">
+      <button type="button" class="menu-btn" id="btnWithdraw">
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-withdraw"></use></svg>
+        </span>
+        <span>برداشت با آیدی</span>
+      </button>
+
+      <button type="button" class="menu-btn" id="btnInvite">
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-invite"></use></svg>
+        </span>
+        <span>لینک دعوت</span>
+      </button>
+
+      <button type="button" class="menu-btn" id="btnBankWithdraw">
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-bank"></use></svg>
+        </span>
+        <span>برداشت با بانک میویی</span>
+      </button>
+
+      <button type="button" class="menu-btn" id="btnDaily">
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-gift"></use></svg>
+        </span>
+        <span>میو روزانه</span>
+      </button>
+
+      <button type="button" class="menu-btn game-menu" id="btnGame">
+        <span class="menu-icon" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#i-game"></use></svg>
+        </span>
+        <span class="menu-copy">
+          <strong>بازی میویی</strong>
+          <small>بازی کن و پوینت جایزه بگیر!!</small>
+        </span>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"></use></svg>
+      </button>
+    </div>
+
+    <div class="panel">
+      <p class="muted-center">از منوی بالا انتخاب کنید</p>
+    </div>
+  </div>
+
+  <div id="viewSection" style="display:none">
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+
+<div class="sheet-overlay" id="notifOverlay" aria-hidden="true" inert>
+  <div class="meteor-sky" aria-hidden="true">
+    <span class="meteor" style="--meteor-left:90%;--meteor-top:-4%;--meteor-delay:0s;--meteor-duration:6.1s"></span>
+    <span class="meteor" style="--meteor-left:48%;--meteor-top:9%;--meteor-delay:-2.2s;--meteor-duration:7.3s"></span>
+    <span class="meteor" style="--meteor-left:115%;--meteor-top:29%;--meteor-delay:-4.7s;--meteor-duration:6.8s"></span>
+    <span class="meteor" style="--meteor-left:74%;--meteor-top:48%;--meteor-delay:-1.4s;--meteor-duration:8.2s"></span>
+    <span class="meteor" style="--meteor-left:27%;--meteor-top:40%;--meteor-delay:-5.4s;--meteor-duration:7.7s"></span>
+    <span class="meteor" style="--meteor-left:100%;--meteor-top:70%;--meteor-delay:-3.6s;--meteor-duration:9s"></span>
+    <span class="meteor" style="--meteor-left:65%;--meteor-top:-12%;--meteor-delay:-6.3s;--meteor-duration:8.7s"></span>
+    <span class="meteor" style="--meteor-left:120%;--meteor-top:3%;--meteor-delay:-7.5s;--meteor-duration:10.1s"></span>
+  </div>
+
+  <div class="sheet" id="notifSheet" role="dialog"
+    aria-modal="true" aria-labelledby="notificationTitle">
+    <div class="sheet-header">
+      <h3 id="notificationTitle">🔔 اعلان‌ها</h3>
+      <button type="button" class="icon-btn close-btn" id="closeNotifBtn" aria-label="بستن اعلان‌ها">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"></use></svg>
+      </button>
+    </div>
+    <div id="notifList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<nav class="bottom-nav" id="bottomNav" aria-label="منوی اصلی">
+  <button type="button" id="navHome" class="active" aria-current="page">
+    <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"></use></svg>
+    <span>خانه</span>
+  </button>
+  <button type="button" id="navTheme">
+    <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-palette"></use></svg>
+    <span>تنظیمات رنگ</span>
+  </button>
+  <button type="button" id="navWithdraw" class="nav-withdraw">
+    <span class="nav-withdraw-icon">
+      <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-withdraw"></use></svg>
+    </span>
+    <span>برداشت</span>
+  </button>
+  <button type="button" id="navGame">
+    <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-game"></use></svg>
+    <span>بازی میویی</span>
+  </button>
+  <button type="button" id="navProfile">
+    <svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"></use></svg>
+    <span>پروفایل</span>
+  </button>
+</nav>
+
+<script>
+document.addEventListener("DOMContentLoaded",function mioApp() {
+  "use strict";
+
+  const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
+  const BANK_QUEUE_SCREEN_MS = 20000;
+  const BANK_NOTICE_MS = 3500;
+  const DEFAULT_BALANCE_CAP = 500000;
+  const DOZ_RPS_RESULT_MS = 5000;
+
+  const tg = window.Telegram?.WebApp;
+  try { tg?.ready(); tg?.expand(); } catch {}
+
+  const $ = id => document.getElementById(id);
+  const fontSheet = $("fontSheet");
+  if (fontSheet.sheet) fontSheet.media = "all";
+  else fontSheet.addEventListener("load",() => { fontSheet.media = "all"; },{once:true});
+
+  const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
+  const TG_FIRST_NAME = tg?.initDataUnsafe?.user?.first_name || "";
+
+  $("topWelcome").textContent = TG_FIRST_NAME
+    ? `خوش آمدید ${TG_FIRST_NAME} عزیز`
+    : "خوش آمدید عزیز";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const app = $("app");
+  const panel = $("panel");
+  const refreshBtn = $("refreshBtn");
+  const pageTitle = $("pageTitle");
+  const homeTitle = $("homeTitle");
+  const homeBrand = homeTitle.textContent;
+  function showHomeTitle() {
+    pageTitle.hidden = true;
+    homeTitle.hidden = false;
+  }
+
+  const state = {
+    balance:null,
+    daily_enabled:false,
+    notifications:[],
+    not_started:false,
+    withdrawn_today:null,
+    queueKnown:false,
+    pending_withdrawals:[]
+  };
+
+  let hasUserData = false;
+  let currentView = "home";
+  let viewVersion = 0;
+  let statusReadVersion = 0;
+  let userRequestVersion = 0;
+  let activeWithdrawal = null;
+  let pollingWithdrawal = false;
+  let lastWithdrawMethod = "id";
+  let enablingDaily = false;
+  let bankScreenTimer = null;
+  let bankNoticeTimer = null;
+  let gameState = null;
+  let gameBusy = false;
+  let clockTimer = null;
+  let activeGameAnimation = null;
+  let toastTimer;
+
+  const finishedWithdrawals = new Set();
+
+  const GAME_SYMBOLS = {
+    seven:"7",
+    grape:"🍇",
+    lemon:"🍋",
+    blank:"×"
+  };
+
+  const SYMBOL_KEYS = ["seven","grape","lemon","blank"];
+  const SYMBOL_NAMES = {seven:"هفت",grape:"انگور",lemon:"لیمو",blank:"پوچ"};
+  const DEFAULT_PAYOUTS = {
+    seven:[0,100000,200000,400000],
+    grape:[0,30000,60000,80000],
+    lemon:[0,10000,20000,30000],
+    blank:[0,0,0,0]
+  };
+
+  let dozState = null;
+  let dozRound = null;
+  let dozBusy = false;
+  let dozUncertain = false;
+  let dozDeadline = 0;
+  let pollTimer = null;
+  let receiptBusy = false;
+  let pageSuspended = false;
+  let dozResultTimer = null;
+  let dozCelebrating = false;
+  let dozStartMemory = "";
+  let dozRpsCountdownCancel = null;
+
+  const dozCelebrated = new Set();
+  const DOZ_PENDING_KEY = `mio_doz_start_${TG_USER_ID}`;
+  const RPS = {
+    rock:{label:"سنگ",emoji:"✊"},
+    paper:{label:"کاغذ",emoji:"✋"},
+    scissors:{label:"قیچی",emoji:"✌️"}
+  };
+
+  // Share only in-flight reads. Mutations establish a new snapshot boundary.
+  const pendingReads = new Map();
+  const responseOrder = new WeakMap();
+  let order = 0;
+  let epoch = 0;
+  let pendingWrite = null;
+  let balanceOrder = 0;
+  let queueOrder = 0;
+
+  function amount(value) {
+    if (typeof value !== "number" && (typeof value !== "string" || !value.trim())) return null;
+    const n = Number(value);
+    return Number.isFinite(n) && n >= 0 ? n : null;
+  }
+
+  function validId(id) {
+    return typeof id === "string" ? id.trim().length > 0 : Number.isSafeInteger(id) && id > 0;
+  }
+
+  function foreground() {
+    return !pageSuspended && !document.hidden;
+  }
+
+  function canRead() {
+    return foreground() && navigator.onLine !== false;
+  }
+
+  function canSubmit() {
+    if (!ensureUserData()) return false;
+    if (navigator.onLine === false || pendingWrite) {
+      showToast(errorText(pendingWrite ? "operation_busy" : "network"));
+      return false;
+    }
+    return true;
+  }
+
+  async function request(path,options,sequence,controller = new AbortController()) {
+    const timeout = setTimeout(() => controller.abort(),25000);
+    try {
+      const response = await fetch(API_BASE+path,{
+        ...options,cache:"no-store",signal:controller.signal,
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":"tma "+(tg?.initData || "")
+        }
+      });
+      let data;
+      try { data = await response.json(); }
+      catch { return {ok:false,error:"invalid_response"}; }
+      if (!data || typeof data !== "object" || Array.isArray(data) ||
+          (data.ok !== undefined && typeof data.ok !== "boolean")) {
+        return {ok:false,error:"invalid_response"};
+      }
+      if (!response.ok || data.error) {
+        data = {...data,ok:false,error:data.error || "server",http_status:response.status};
+      }
+      responseOrder.set(data,sequence);
+      return data;
+    } catch {
+      return {ok:false,error:"network"};
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  async function api(path) {
+    while (pendingWrite) await pendingWrite;
+    if (!canRead()) return {ok:false,error:"network"};
+    const generation = epoch;
+    const key = generation+" "+path;
+    if (!pendingReads.has(key)) {
+      const controller = new AbortController();
+      const read = request(path,{method:"GET"},++order,controller).then(result =>
+        generation === epoch || path === "/invite-link" ? result : {ok:false,error:"state_changed"}
+      ).finally(() => pendingReads.delete(key));
+      pendingReads.set(key,{read,controller,path});
+    }
+    return pendingReads.get(key).read;
+  }
+
+  function post(path,data = {}) {
+    ++epoch;
+    pendingWrite = request(path,{method:"POST",body:JSON.stringify(data)},++order)
+      .finally(() => { ++epoch; pendingWrite = null; });
+    return pendingWrite;
+  }
+
+  function errorText(code) {
+    return ({
+      state_changed:"وضعیت حساب تغییر کرد؛ وضعیت تازه را بررسی کن.",
+      operation_busy:"یک درخواست در حال ثبت است. پس از دریافت پاسخ دوباره تلاش کن.",
+      unauthorized:"مینی‌اپ را ببند و دوباره از داخل تلگرام باز کن.",
+      not_started:"ابتدا ربات را استارت کن، سپس دوباره وارد شو.",
+      zero_balance:"موجودی قابل برداشت شما صفر است.",
+      already_pending:"یک برداشت در حال پردازش داری.",
+      withdrawal_pending:"بعد از پایان برداشت فعلی دوباره امتحان کن.",
+      game_disabled:"بازی فعلاً غیرفعال است.",
+      balance_limit_reached:"موجودیت به سقف ۵۰۰ هزار میو رسیده؛ ابتدا برداشت کن. فرصت بازی جدید مصرف نشده است.",
+      cooldown:"هنوز زمان بازی بعدی نرسیده است.",
+      invalid_target:"آیدی تلگرام معتبر وارد کن.",
+      invalid_card:"شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.",
+      database_unavailable:"ارتباط با سرور برقرار نشد؛ دوباره تلاش کن.",
+      network:"ارتباط قطع شد؛ دوباره تلاش کن.",
+      invalid_response:"پاسخ سرور کامل دریافت نشد.",
+      invalid_request_id:"شناسهٔ درخواست معتبر نیست؛ دوباره تلاش کن.",
+      bot_username_not_configured:"لینک دعوت هنوز تنظیم نشده است.",
+      doz_reward_unconfigured:"بازی دوز هنوز فعال نشده است.",
+      doz_cooldown:"پنج فرصت این سری تمام شده؛ منتظر سری بعد بمان.",
+      doz_old_request:"درخواست قبلی بسته شده؛ دوباره شروع را بزن.",
+      doz_round_changed:"وضعیت بازی تغییر کرده؛ بازیابی بازی را بزن.",
+      doz_choice_locked:"انتخاب سنگ‌کاغذ‌قیچی قبلاً ثبت شده است.",
+      doz_invalid_choice:"یکی از گزینه‌های سنگ، کاغذ یا قیچی را انتخاب کن.",
+      doz_invalid_move:"این حرکت معتبر نیست.",
+      doz_stale_move:"وضعیت بازی تغییر کرده؛ بازیابی بازی را بزن.",
+      doz_occupied_cell:"این خانه قبلاً انتخاب شده است."
+    })[code] || "عملیات انجام نشد؛ دوباره تلاش کن.";
+  }
+
+  const numberFormat = new Intl.NumberFormat("en-US");
+  function fmt(value) {
+    const n = amount(value);
+    return n === null ? "—" : numberFormat.format(n);
+  }
+
+  function escapeText(value) {
+    const map = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};
+    return String(value ?? "").replace(/[&<>"']/g,ch => map[ch]);
+  }
+
+  function icon(name) {
+    return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <use href="#i-${name}"></use>
+    </svg>`;
+  }
+
+  function confirmLabel(text = "تأیید") {
+    return `<span class="btn-label">${icon("check")}<span>${text}</span></span>`;
+  }
+
+  function englishDigits(value) {
+    return value
+      .replace(/[۰-۹]/g,d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+      .replace(/[٠-٩]/g,d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+  }
+
+  function setText(element,value) {
+    if (!element) return;
+    const text = String(value ?? "");
+    if (element.textContent !== text) element.textContent = text;
+  }
+
+  function humanDuration(seconds) {
+    seconds = Math.max(0,Math.ceil(seconds));
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds % 3600 / 60);
+    const rest = seconds % 60;
+    const parts = [];
+
+    if (hours) parts.push(`${hours} ساعت`);
+    if (minutes) parts.push(`${minutes} دقیقه`);
+    if (rest || !parts.length) parts.push(`${rest} ثانیه`);
+
+    return parts.join(" و ");
+  }
+
+  function ensureUserData() {
+    if (!hasUserData) {
+      showToast("اطلاعات حساب هنوز دریافت نشده؛ بروزرسانی را بزن.");
+      return false;
+    }
+    if (state.not_started) {
+      showToast(errorText("not_started"));
+      return false;
+    }
+    return true;
+  }
+
+  function showToast(message) {
+    clearTimeout(toastTimer);
+    setText($("toast"),message);
+    $("toast").classList.add("show");
+    toastTimer = setTimeout(() => $("toast").classList.remove("show"),5000);
+  }
+
+  function tinyHaptic() {
+    try { tg?.HapticFeedback?.impactOccurred("light"); } catch {}
+  }
+
+  const copyTimers = new WeakMap();
+  async function copyText(text,button) {
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      if (!button?.isConnected) return;
+
+      button.textContent = "کپی شد ✓";
+      button.classList.add("copied");
+
+      clearTimeout(copyTimers.get(button));
+      copyTimers.set(button,setTimeout(() => {
+        copyTimers.delete(button);
+        if (!button.isConnected) return;
+        button.textContent = "کپی";
+        button.classList.remove("copied");
+      },1800));
+    } catch {
+      showToast("کپی انجام نشد؛ متن را دستی کپی کن.");
+    }
+  }
+
+  /* ================= Keyboard ================= */
+
+  function setupKeyboard() {
+    const viewport = window.visualViewport;
+    const nav = $("bottomNav");
+
+    let baseline = Math.max(window.innerHeight,viewport?.height || 0);
+    let lastWidth = window.innerWidth;
+    let editingSession = false;
+    let frame = 0;
+    let settleTimer = null;
+
+    function focusedEditor() {
+      const element = document.activeElement;
+      if (!(element instanceof HTMLElement)) return null;
+      if (element.isContentEditable) return element;
+
+      if (element instanceof HTMLTextAreaElement) {
+        return !element.disabled && !element.readOnly ? element : null;
+      }
+
+      if (element instanceof HTMLInputElement) {
+        const supported = ["text","search","tel","url","email","password","number"];
+        return supported.includes(element.type) && !element.disabled && !element.readOnly
+          ? element : null;
+      }
+
+      return null;
+    }
+
+    function availableHeight() {
+      if (viewport) return viewport.height;
+      const telegramHeight = Number(tg?.viewportHeight);
+      return telegramHeight > 0
+        ? Math.min(window.innerHeight,telegramHeight)
+        : window.innerHeight;
+    }
+
+    function scrollEditorIntoView(element) {
+      if (!element?.isConnected) return;
+      const rect = element.getBoundingClientRect();
+      const top = viewport?.offsetTop || 0;
+      const bottom = top + availableHeight();
+      let delta = 0;
+
+      if (rect.bottom > bottom - 24) delta = rect.bottom - bottom + 24;
+      else if (rect.top < top + 18) delta = rect.top - top - 18;
+
+      if (Math.abs(delta) > 1) window.scrollBy({top:delta,behavior:"auto"});
+    }
+
+    function update() {
+      frame = 0;
+      const editor = focusedEditor();
+      const height = availableHeight();
+      const scale = viewport?.scale || 1;
+
+      if (Math.abs(window.innerWidth-lastWidth) > 80) {
+        lastWidth = window.innerWidth;
+        baseline = Math.max(
+          window.innerHeight,height,Number(tg?.viewportStableHeight) || 0
+        );
+      }
+
+      if (editor) editingSession = true;
+
+      const shrink = baseline-height;
+      const keyboardVisible = editingSession && scale <= 1.05 &&
+        shrink > Math.max(110,baseline*.18);
+      const hideNav = Boolean(editor) || keyboardVisible;
+      const navHidden = hideNav || document.body.classList.contains("doz-nav-hidden");
+
+      document.body.classList.toggle("keyboard-open",hideNav);
+      nav.inert = navHidden || $("notifOverlay").classList.contains("show");
+
+      if (navHidden) nav.setAttribute("aria-hidden","true");
+      else nav.removeAttribute("aria-hidden");
+
+      const offset = Math.max(
+        0,window.innerHeight-(height+(viewport?.offsetTop || 0))
+      );
+
+      document.documentElement.style.setProperty("--keyboard-offset",`${offset}px`);
+
+      if (!hideNav) {
+        editingSession = false;
+        baseline = Math.max(window.innerHeight,height);
+      }
+
+      if (editor && scale <= 1.05) scrollEditorIntoView(editor);
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+
+    function settle() {
+      schedule();
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(schedule,450);
+    }
+
+    function blur() {
+      const editor = focusedEditor();
+      if (editor) editor.blur();
+      schedule();
+    }
+
+    document.addEventListener("focusin",() => {
+      if (!focusedEditor()) return;
+      editingSession = true;
+      document.body.classList.add("keyboard-open");
+      nav.inert = true;
+      nav.setAttribute("aria-hidden","true");
+      settle();
+    });
+    document.addEventListener("focusout",() => { if (editingSession) settle(); });
+
+    window.addEventListener("resize",schedule,{passive:true});
+    viewport?.addEventListener("resize",schedule,{passive:true});
+    viewport?.addEventListener("scroll",schedule,{passive:true});
+    try { tg?.onEvent("viewportChanged",schedule); } catch {}
+
+    schedule();
+    return {update:schedule,blur};
+  }
+
+  const keyboard = setupKeyboard();
+
+  /* ================= Appearance ================= */
+
+  const THEME_KEY = `mio_theme_${TG_USER_ID}`;
+  const DEFAULT_THEME = {
+    bg:"#0d1016",card:"#202027",accent:"#4f8cff",layout:"normal"
+  };
+
+  function validHex(value,fallback) {
+    return /^#[0-9a-f]{6}$/i.test(String(value || ""))
+      ? String(value).toLowerCase() : fallback;
+  }
+
+  function readTheme() {
+    try {
+      const data = JSON.parse(localStorage.getItem(THEME_KEY) || "{}");
+      return data && typeof data === "object" && !Array.isArray(data) ? data : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function writeTheme(data) {
+    try { localStorage.setItem(THEME_KEY,JSON.stringify(data)); } catch {}
+  }
+
+  function rgb(hex) {
+    return [1,3,5].map(start => parseInt(hex.slice(start,start+2),16));
+  }
+
+  function mixHex(base,ink,fraction) {
+    const a = rgb(base);
+    const b = rgb(ink);
+    return "#" + a.map((value,index) =>
+      Math.round(value+(b[index]-value)*fraction).toString(16).padStart(2,"0")
+    ).join("");
+  }
+
+  function luminance(hex) {
+    const values = rgb(hex).map(value => {
+      value /= 255;
+      return value <= .04045 ? value / 12.92 : ((value+.055)/1.055)**2.4;
+    });
+    return values[0]*.2126+values[1]*.7152+values[2]*.0722;
+  }
+
+  function contrast(a,b) {
+    const x = luminance(a);
+    const y = luminance(b);
+    return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
+  }
+
+  function inkFor(background) {
+    return contrast(background,"#000000") > contrast(background,"#ffffff")
+      ? "#000000" : "#ffffff";
+  }
+
+  function themePalette(raw = {}) {
+    const bg = validHex(raw.bg,DEFAULT_THEME.bg);
+    const card = validHex(raw.card,DEFAULT_THEME.card);
+    const accent = validHex(raw.accent,DEFAULT_THEME.accent);
+    const layout = ["normal","compact","list"].includes(raw.layout) ? raw.layout : "normal";
+    const defaults = bg === DEFAULT_THEME.bg && card === DEFAULT_THEME.card &&
+      accent === DEFAULT_THEME.accent;
+    const bright = inkFor(bg) === "#000000";
+    const text = defaults ? "#f5f5f7" : inkFor(bg);
+    const cardText = inkFor(card);
+    const action = bright ? "#141821" : accent;
+
+    return {
+      bg,card,accent,layout,bright,defaults,text,
+      dim:defaults ? "#b6c8e8" : mixHex(bg,text,.78),
+      cardText,
+      cardDim:defaults ? "#b6c8e8" : mixHex(card,cardText,.78),
+      action,
+      actionInk:inkFor(action),
+      highlight:contrast(bg,accent) >= 4.5 ? accent : text,
+      balanceInk:defaults ? accent : (contrast(card,accent) >= 4.5 ? accent : cardText),
+      cardEnd:defaults ? bg : mixHex(card,bg,.12),
+      wash:bright ? "0,0,0" : "255,255,255",
+      nav:rgb(bg).join(",")
+    };
+  }
+
+  function applyTheme(raw = readTheme()) {
+    const p = themePalette(raw);
+    const root = document.documentElement;
+    const properties = {
+      "--user-bg":p.bg,
+      "--user-card":p.card,
+      "--user-accent":p.accent,
+      "--accent-rgb":rgb(p.accent).join(","),
+      "--accent-ink":inkFor(p.accent),
+      "--text":p.text,
+      "--dim":p.dim,
+      "--card-text":p.cardText,
+      "--card-dim":p.cardDim,
+      "--action-bg":p.action,
+      "--action-ink":p.actionInk,
+      "--highlight":p.highlight,
+      "--balance-ink":p.balanceInk,
+      "--card-end":p.cardEnd,
+      "--wash":p.wash,
+      "--nav-rgb":p.nav,
+      "--border":`rgba(${p.wash},${p.bright ? ".18" : ".10"})`,
+      "--danger":p.bright ? "#a20d2c" : "#ff8585",
+      "--success":p.bright ? "#09633c" : "#93d8ba"
+    };
+
+    Object.entries(properties).forEach(([key,value]) => root.style.setProperty(key,value));
+    root.style.colorScheme = p.bright ? "light" : "dark";
+    document.body.dataset.bright = String(p.bright);
+    document.body.classList.remove("theme-light");
+    document.body.classList.toggle("layout-compact",p.layout === "compact");
+    document.body.classList.toggle("layout-list",p.layout === "list");
+    document.querySelector('meta[name="theme-color"]').setAttribute("content",p.bg);
+  }
+
+  function viewThemeSettings() {
+    const p = themePalette(readTheme());
+    showView("theme","🎨 تنظیمات رنگ");
+
+    paint(`
+      <div class="settings-wrap">
+        <div class="settings-card">
+          <h3>رنگ دلخواه</h3>
+          <div class="color-controls">
+            <label class="color-field">پس‌زمینه
+              <input id="bgPicker" type="color" value="${p.bg}">
+            </label>
+            <label class="color-field">کارت‌ها
+              <input id="cardPicker" type="color" value="${p.card}">
+            </label>
+            <label class="color-field">رنگ اصلی
+              <input id="accentPicker" type="color" value="${p.accent}">
+            </label>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h3>چیدمان صفحه اصلی</h3>
+          <p>نمای کارت‌ها را هرطور راحت‌تری انتخاب کن.</p>
+          <div class="layout-choices">
+            ${[["normal","عادی"],["compact","فشرده"],["list","لیستی"]].map(([value,label]) => `
+              <button type="button"
+                class="layout-choice ${p.layout === value ? "active" : ""}"
+                data-layout="${value}" aria-pressed="${p.layout === value}">
+                ${label}
+              </button>
+            `).join("")}
+          </div>
+        </div>
+        <div class="theme-preview">
+          <strong>پیش‌نمایش</strong>
+          <small>تغییرات همان لحظه اعمال و روی همین دستگاه ذخیره می‌شوند.</small>
+          <span class="preview-accent">${homeBrand}</span>
+        </div>
+        <button type="button" class="ghost-btn" id="resetThemeBtn">بازنشانی ظاهر</button>
+      </div>
+    `);
+
+    [["bgPicker","bg"],["cardPicker","card"],["accentPicker","accent"]].forEach(([id,key]) => {
+      $(id).oninput = event => {
+        const next = {...readTheme(),[key]:event.target.value};
+        delete next.mode;
+        writeTheme(next);
+        applyTheme(next);
+      };
+    });
+
+    panel.querySelectorAll("[data-layout]").forEach(button => {
+      button.onclick = () => {
+        const next = {...readTheme(),layout:button.dataset.layout};
+        delete next.mode;
+        writeTheme(next);
+        applyTheme(next);
+        tinyHaptic();
+
+        panel.querySelectorAll("[data-layout]").forEach(item => {
+          const selected = item.dataset.layout === next.layout;
+          item.classList.toggle("active",selected);
+          item.setAttribute("aria-pressed",String(selected));
+        });
+      };
+    });
+
+    $("resetThemeBtn").onclick = () => {
+      writeTheme({});
+      applyTheme({});
+      viewThemeSettings();
+      showToast("ظاهر به حالت اولیه برگشت.");
+    };
+  }
+
+  /* ================= Navigation ================= */
+
+  function setActiveNav(name) {
+    const ids = {
+      home:"navHome",theme:"navTheme",withdraw:"navWithdraw",
+      game:"navGame",profile:"navProfile"
+    };
+
+    Object.entries(ids).forEach(([key,id]) => {
+      $(id).classList.toggle("active",key === name);
+      if (key === name) $(id).setAttribute("aria-current","page");
+      else $(id).removeAttribute("aria-current");
+    });
+  }
+
+  function syncDozNav() {
+    const hidden = currentView.startsWith("doz-");
+    const nav = $("bottomNav");
+
+    if (hidden && nav.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+
+    document.body.classList.toggle("doz-nav-hidden",hidden);
+
+    const navHidden = hidden || document.body.classList.contains("keyboard-open");
+    nav.inert = navHidden || $("notifOverlay").classList.contains("show");
+
+    if (navHidden) nav.setAttribute("aria-hidden","true");
+    else nav.removeAttribute("aria-hidden");
+
+    keyboard.update();
+  }
+
+  let pageMotion = null;
+  function playEnter(element,offset) {
+    pageMotion?.cancel();
+    if (reduceMotion.matches || !foreground() || !element.animate) return;
+    pageMotion = element.animate([
+      {opacity:.75,transform:`translateX(${offset}px)`},
+      {opacity:1,transform:"none"}
+    ],{duration:180,easing:"ease-out"});
+  }
+
+  function paint(html) {
+    panel.innerHTML = html;
+    keyboard.update();
+  }
+
+  function stopClock() {
+    clearTimeout(clockTimer);
+    clockTimer = null;
+  }
+
+  function syncClock() {
+    stopClock();
+    if (!foreground()) return;
+    let ticking = false;
+    if (currentView === "home") {
+      updatePendingClocks();
+      ticking = state.pending_withdrawals.some(item => !item.processing && pendingSeconds(item) > 0);
+    } else if (currentView === "game" && $("playGameBtn")) {
+      updateGameControls();
+      ticking = !$("gameCountdown").hidden;
+    } else if (currentView === "doz-intro" && $("dozCountdown") && dozState?.remaining_seconds > 0) {
+      const seconds = dozSeconds();
+      setText($("dozCountdown"),formatCountdown(seconds));
+      if (!seconds) {
+        if (canRead()) viewDozIntro();
+        return;
+      }
+      ticking = true;
+    }
+    if (ticking) clockTimer = setTimeout(syncClock,1000);
+  }
+
+  function stopGameVisual() {
+    if (activeGameAnimation) {
+      activeGameAnimation.stop();
+      activeGameAnimation = null;
+    }
+  }
+
+  function clearBankTimers() {
+    clearTimeout(bankScreenTimer);
+    clearTimeout(bankNoticeTimer);
+    bankScreenTimer = bankNoticeTimer = null;
+  }
+
+  function closeDozFinale() {
+    clearTimeout(dozResultTimer);
+    dozResultTimer = null;
+
+    const finale = $("dozFinale");
+
+    if (finale) {
+      if (finale.open) finale.close();
+      finale.remove();
+    }
+
+    dozCelebrating = false;
+  }
+
+  function leaveDoz() {
+    closeDozRps();
+    closeDozFinale();
+  }
+
+  function showHome() {
+    keyboard.blur();
+    stopClock();
+    stopGameVisual();
+    clearBankTimers();
+    leaveDoz();
+
+    currentView = "home";
+    viewVersion++;
+    $("skeletonSection").style.display = "none";
+    $("homeSection").style.display = "block";
+    $("viewSection").style.display = "none";
+    showHomeTitle();
+    $("backArrow").style.display = "none";
+    app.classList.remove("view-active");
+    panel.classList.remove("withdraw-panel","game-panel","doz-panel");
+
+    syncDozNav();
+    setActiveNav("home");
+    panel.replaceChildren();
+    renderWithdrawDashboard();
+    playEnter($("homeSection"),-5);
+    keyboard.update();
+  }
+
+  function showView(name,title) {
+    keyboard.blur();
+    stopClock();
+    stopGameVisual();
+    clearBankTimers();
+    leaveDoz();
+
+    currentView = name;
+    viewVersion++;
+    $("skeletonSection").style.display = "none";
+    $("homeSection").style.display = "none";
+    $("viewSection").style.display = "block";
+    homeTitle.hidden = true;
+    pageTitle.textContent = title;
+    pageTitle.hidden = false;
+    $("backArrow").style.display = "flex";
+    app.classList.add("view-active");
+    panel.classList.toggle("withdraw-panel",name === "withdraw-hub");
+    panel.classList.toggle("game-panel",name === "game");
+    panel.classList.toggle("doz-panel",name === "games" || name.startsWith("doz-"));
+
+    const navName = name === "games" || name.startsWith("doz-")
+      ? "game"
+      : ["theme","game","profile"].includes(name)
+        ? name
+        : (/^(withdraw|bank|receipt)/.test(name) ? "withdraw" : "home");
+
+    syncDozNav();
+    setActiveNav(navName);
+    playEnter($("viewSection"),5);
+    keyboard.update();
+
+    return viewVersion;
+  }
+
+  /* ================= Balance ================= */
+
+  function setBalance(value,source) {
+    const target = amount(value);
+    const sequence = responseOrder.get(source);
+    if (target === null || sequence === undefined || sequence < balanceOrder) return;
+    balanceOrder = sequence;
+    if (state.balance === target) return;
+    state.balance = target;
+    setText($("balanceValue"),fmt(target));
+    setText($("profileBalance"),`${fmt(target)} Mio`);
+    setText($("formBalance"),`${fmt(target)} میو`);
+    syncWithdrawHub();
+    if (currentView === "game") syncClock();
+  }
+
+  /* ================= Withdrawal tab ================= */
+
+  function viewWithdrawHub() {
+    showView("withdraw-hub","برداشت میو");
+
+    paint(`
+      <section class="withdraw-hub">
+        <div class="withdraw-hero">
+          <div class="withdraw-hero-top">
+            <span class="withdraw-chip"><span></span> کیف پول میویی</span>
+            <span class="withdraw-emblem" aria-hidden="true">${icon("bank")}</span>
+          </div>
+          <p class="withdraw-eyebrow">موجودی شما</p>
+          <div class="withdraw-total">
+            <strong id="hubBalance">—</strong><span>میو</span>
+          </div>
+          <div class="withdraw-hero-bottom">
+            <div><small>برداشت‌شده امروز</small><strong id="hubToday">—</strong></div>
+            <span class="withdraw-today-icon" aria-hidden="true">${icon("check")}</span>
+          </div>
+        </div>
+        <div class="withdraw-section-label"><h2>روش برداشت</h2></div>
+        <div class="withdraw-methods">
+          <button type="button" class="withdraw-method bank-method" id="hubBankBtn">
+            <span class="withdraw-method-icon">${icon("bank")}</span>
+            <span class="withdraw-method-copy">
+              <strong>برداشت با بانک میویی</strong><small>واریز به شماره کارت میویی</small>
+            </span>
+            <span class="withdraw-method-arrow">${icon("chevron")}</span>
+          </button>
+          <button type="button" class="withdraw-method id-method" id="hubIdBtn">
+            <span class="withdraw-method-icon">${icon("withdraw")}</span>
+            <span class="withdraw-method-copy">
+              <strong>برداشت با آیدی</strong><small>واریز با آیدی تلگرام</small>
+            </span>
+            <span class="withdraw-method-arrow">${icon("chevron")}</span>
+          </button>
+        </div>
+        <button type="button" class="withdraw-home-link" id="hubPendingBtn">
+          <span class="withdraw-pending-dot"></span>
+          <span id="hubPendingText">پیگیری برداشت‌ها در خانه</span>
+          ${icon("chevron")}
+        </button>
+      </section>
+    `);
+
+    $("hubBankBtn").onclick = viewBankWithdrawCardInput;
+    $("hubIdBtn").onclick = viewWithdrawForm;
+    $("hubPendingBtn").onclick = showHome;
+    syncWithdrawHub();
+  }
+
+  function syncWithdrawHub() {
+    if (currentView !== "withdraw-hub") return;
+    setText($("hubBalance"),hasUserData ? fmt(state.balance) : "—");
+    setText($("hubToday"),hasUserData ? `${fmt(state.withdrawn_today)} میو` : "—");
+    setText($("hubPendingText"),state.pending_withdrawals.length
+      ? `${state.pending_withdrawals.length} برداشت در انتظار؛ مشاهده در خانه`
+      : "پیگیری برداشت‌ها در خانه");
+  }
+
+  /* ================= Stable pending cards ================= */
+
+  const pendingNodes = new Map();
+
+  function normalizeWithdrawal(value,previous) {
+    const next = {...previous};
+    if (validId(value.withdraw_id)) next.withdraw_id = value.withdraw_id;
+    if (value.withdraw_type === "card" || value.withdraw_type === "id") next.withdraw_type = value.withdraw_type;
+    next.method = next.withdraw_type ? (next.withdraw_type === "card" ? "bank" : "id")
+      : (value.method ?? next.method) === "bank" ? "bank" : "id";
+    if (amount(value.amount) !== null) next.amount = Number(value.amount);
+    if (amount(value.position) !== null) next.position = Number(value.position);
+    if (typeof value.wait_text === "string") next.wait_text = value.wait_text;
+    if (value.processing !== undefined) next.processing = value.processing === true || value.processing === 1;
+
+    if (amount(value.wait_seconds) !== null) {
+      const estimate = performance.now()+Math.max(0,Number(value.wait_seconds))*1000;
+      const oldDeadline = previous?.etaDeadline;
+      next.etaDeadline = Number.isFinite(oldDeadline) && Math.abs(estimate-oldDeadline) < 1500
+        ? oldDeadline : estimate;
+    } else if (!Number.isFinite(next.etaDeadline)) {
+      next.etaDeadline = null;
+    }
+    return next;
+  }
+
+  function recoverCandidate(user) {
+    if (validId(user.pending_withdrawal?.withdraw_id)) return user.pending_withdrawal;
+    return Array.isArray(user.pending_withdrawals) && user.pending_withdrawals.length === 1
+      ? user.pending_withdrawals[0] : null;
+  }
+
+  function pendingSeconds(item) {
+    return Number.isFinite(item?.etaDeadline)
+      ? Math.max(0,Math.ceil((item.etaDeadline-performance.now())/1000)) : null;
+  }
+
+  function pendingClockText(item) {
+    if (item.processing) return "در حال پردازش واریز";
+    const seconds = pendingSeconds(item);
+    if (seconds === null) return item.wait_text || "در انتظار بروزرسانی زمان";
+    return seconds > 0
+      ? `حدود ${humanDuration(seconds)} تا نوبت پردازش`
+      : "نوبت پردازش نزدیک است؛ در انتظار بروزرسانی";
+  }
+
+  function createPendingCard(key) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "pending-item";
+    button.dataset.withdrawId = key;
+
+    button.innerHTML = `
+      <span class="pending-head">
+        <strong data-part="method"></strong><b data-part="amount"></b>
+      </span>
+      <span class="pending-meta">
+        <span data-part="status"></span><span data-part="position"></span>
+      </span>
+      <span class="pending-clock" data-part="clock"></span>
+      <small class="pending-hint">
+        برای دیدن جزئیات بزن؛ نیازی به ماندن در صفحهٔ صف نیست.
+      </small>
+    `;
+
+    const parts = Object.fromEntries(
+      [...button.querySelectorAll("[data-part]")].map(element => [element.dataset.part,element])
+    );
+
+    button.onclick = () => {
+      const item = state.pending_withdrawals.find(value => String(value.withdraw_id) === key);
+      if (!item) return;
+
+      if (activeWithdrawal?.phase === "submitting") return viewActiveWithdrawal();
+      if (!activeWithdrawal || String(activeWithdrawal.withdraw_id) !== key) {
+        cancelPollTimer();
+        activeWithdrawal = {...item,phase:"pending"};
+      }
+
+      lastWithdrawMethod = activeWithdrawal.method;
+      viewActiveWithdrawal();
+    };
+
+    return {button,parts};
+  }
+
+  function renderWithdrawDashboard() {
+    if (currentView !== "home") {
+      syncWithdrawHub();
+      return;
+    }
+    setText($("withdrawnTodayValue"),hasUserData ? fmt(state.withdrawn_today) : "—");
+
+    const total = state.queueKnown && state.pending_withdrawals.every(item => amount(item.amount) !== null)
+      ? state.pending_withdrawals.reduce((sum,item) => sum+Number(item.amount),0) : null;
+
+    setText($("pendingTotalValue"),hasUserData ? fmt(total) : "—");
+    setText($("pendingCountText"),`${state.queueKnown ? state.pending_withdrawals.length : "—"} درخواست در صف`);
+
+    const list = $("pendingList");
+    const keys = new Set(state.pending_withdrawals.map(item => String(item.withdraw_id)));
+
+    for (const [key,node] of pendingNodes) {
+      if (!keys.has(key)) {
+        node.button.remove();
+        pendingNodes.delete(key);
+      }
+    }
+
+    state.pending_withdrawals.forEach((item,index) => {
+      const key = String(item.withdraw_id);
+      let node = pendingNodes.get(key);
+
+      if (!node) {
+        node = createPendingCard(key);
+        pendingNodes.set(key,node);
+      }
+
+      const current = list.children[index];
+      if (current !== node.button) list.insertBefore(node.button,current || null);
+
+      setText(node.parts.method,item.method === "bank" ? "🏦 بانک میویی" : "📤 برداشت با آیدی");
+      setText(node.parts.amount,`${fmt(item.amount)} میو`);
+      setText(node.parts.status,item.processing ? "در حال برداشت" : "در صف برداشت");
+      setText(node.parts.position,Number(item.position) > 0
+        ? `نفر ${item.position} در صف` : "در حال بررسی");
+      setText(node.parts.clock,pendingClockText(item));
+    });
+
+    $("homeReceiptBtn").hidden = !state.notifications.some(item => item.type === "success");
+    syncClock();
+  }
+
+  function updatePendingClocks() {
+    for (const item of state.pending_withdrawals) {
+      const node = pendingNodes.get(String(item.withdraw_id));
+      if (node) setText(node.parts.clock,pendingClockText(item));
+    }
+  }
+
+  function upsertPendingWithdrawal(value) {
+    if (!validId(value.withdraw_id) || finishedWithdrawals.has(String(value.withdraw_id))) return;
+    const index = state.pending_withdrawals.findIndex(
+      item => String(item.withdraw_id) === String(value.withdraw_id)
+    );
+    const next = {...value};
+
+    if (index >= 0) state.pending_withdrawals[index] = next;
+    else state.pending_withdrawals.push(next);
+
+    if (activeWithdrawal && String(activeWithdrawal.withdraw_id) === String(next.withdraw_id)) {
+      Object.assign(activeWithdrawal,next,{phase:"pending"});
+    }
+
+    renderWithdrawDashboard();
+  }
+
+  function removePendingWithdrawal(id) {
+    finishedWithdrawals.add(String(id));
+
+    if (finishedWithdrawals.size > 100) {
+      finishedWithdrawals.delete(finishedWithdrawals.values().next().value);
+    }
+
+    state.pending_withdrawals = state.pending_withdrawals.filter(
+      item => String(item.withdraw_id) !== String(id)
+    );
+
+    renderWithdrawDashboard();
+  }
+
+  /* ================= Notifications ================= */
+
+  const LAST_SEEN_KEY = `mio_last_seen_notif_${TG_USER_ID}`;
+  let seenMemory = "";
+  let previousFocus = null;
+  let previousOverflow = "";
+
+  function notificationKey(notification) {
+    return String(notification?.id || notification?.time || "");
+  }
+
+  function getSeen() {
+    try { return localStorage.getItem(LAST_SEEN_KEY) || seenMemory; }
+    catch { return seenMemory; }
+  }
+
+  function setSeen(value) {
+    seenMemory = value;
+    try { localStorage.setItem(LAST_SEEN_KEY,value); } catch {}
+  }
+
+  let notificationSignature;
+  function renderNotifications() {
+    const signature = JSON.stringify(state.notifications.map(n => [n.type,n.text,n.time]));
+    if (signature === notificationSignature) return;
+    notificationSignature = signature;
+    const list = $("notifList");
+    list.replaceChildren();
+
+    if (!state.notifications.length) {
+      const empty = document.createElement("div");
+      empty.className = "notif-empty";
+      empty.textContent = "هنوز اعلانی نداری";
+      list.append(empty);
+      return;
+    }
+
+    state.notifications.forEach(notification => {
+      const item = document.createElement("div");
+      item.className = "notif-item " + (notification.type === "fail" ? "fail" : "success");
+
+      const text = document.createElement("div");
+      const time = document.createElement("div");
+      text.textContent = String(notification.text || "");
+      time.textContent = String(notification.time || "");
+      time.className = "t";
+      item.append(text,time);
+      list.append(item);
+    });
+  }
+
+  function updateBellDot() {
+    const newest = notificationKey(state.notifications[0]);
+    $("bellDot").classList.toggle("show",Boolean(newest && newest !== getSeen()));
+  }
+
+  function openNotifications() {
+    if ($("notifOverlay").classList.contains("show")) return;
+    previousFocus = document.activeElement;
+    previousOverflow = document.body.style.overflow;
+    keyboard.blur();
+    renderNotifications();
+
+    $("notifOverlay").inert = false;
+    $("notifOverlay").setAttribute("aria-hidden","false");
+    $("notifOverlay").classList.toggle("meteors-paused",document.hidden);
+    $("notifOverlay").classList.add("show");
+    $("bellBtn").setAttribute("aria-expanded","true");
+    document.body.style.overflow = "hidden";
+    $("closeNotifBtn").focus({preventScroll:true});
+    app.inert = true;
+    $("bottomNav").inert = true;
+    setSeen(notificationKey(state.notifications[0]));
+    updateBellDot();
+    keyboard.update();
+  }
+
+  function closeNotifications() {
+    if (!$("notifOverlay").classList.contains("show")) return;
+    app.inert = false;
+    document.body.style.overflow = previousOverflow;
+    $("bellBtn").setAttribute("aria-expanded","false");
+
+    if (previousFocus?.isConnected) previousFocus.focus({preventScroll:true});
+
+    previousFocus = null;
+    $("notifOverlay").classList.remove("show");
+    $("notifOverlay").setAttribute("aria-hidden","true");
+    $("notifOverlay").inert = true;
+    $("bottomNav").inert =
+      document.body.classList.contains("keyboard-open") ||
+      document.body.classList.contains("doz-nav-hidden");
+
+    keyboard.update();
+  }
+
+  /* ================= Profile / invite ================= */
+
+  function viewProfile() {
+    const user = tg?.initDataUnsafe?.user || {};
+    const name = [user.first_name,user.last_name].filter(Boolean).join(" ") || "کاربر Mio";
+    const username = user.username ? `@${user.username}` : "بدون یوزرنیم";
+    const photo = typeof user.photo_url === "string" && user.photo_url.startsWith("https://")
+      ? user.photo_url : "";
+
+    showView("profile","👤 پروفایل");
+
+    paint(`
+      <div class="profile-box">
+        <div class="profile-avatar">
+          ${photo ? `<img src="${escapeText(photo)}" alt="">` : escapeText((user.first_name || "M").slice(0,1))}
+        </div>
+        <div><strong>${escapeText(name)}</strong><small>${escapeText(username)}</small></div>
+      </div>
+      <div class="profile-list">
+        <div class="profile-row"><span>User ID</span><b>${escapeText(user.id || "—")}</b></div>
+        <div class="profile-row">
+          <span>وضعیت حساب</span>
+          <b id="profileStatus">${!hasUserData ? "در حال دریافت…" : state.not_started ? "نیاز به Start" : "فعال ✅"}</b>
+        </div>
+        <div class="profile-row">
+          <span>موجودی</span><b id="profileBalance">${hasUserData ? fmt(state.balance)+" Mio" : "—"}</b>
+        </div>
+        <div class="profile-row"><span>برداشت‌شده امروز</span><b id="profileToday">${fmt(state.withdrawn_today)} Mio</b></div>
+      </div>
+      <button type="button" class="ghost-btn" id="profileRefreshBtn">بروزرسانی اطلاعات</button>
+    `);
+
+    $("profileRefreshBtn").onclick = () => refreshData(true);
+  }
+
+  async function viewInvite() {
+    const version = showView("invite","👥 لینک دعوت");
+
+    paint(`
+      <p>اگر دوستت با لینک دعوت تو ربات را استارت کند،
+        <b class="gold-text">۴۰۰,۰۰۰ میو</b> به حساب شما واریز خواهد شد.</p>
+      <div class="link-box">
+        <span id="inviteLinkText">در حال دریافت لینک…</span>
+        <button type="button" class="copy-btn" id="copyBtn" disabled>کپی</button>
+      </div>
+    `);
+
+    const result = await api("/invite-link");
+    if (version !== viewVersion) return;
+    const link = result.ok !== false && typeof result.link === "string" ? result.link : "";
+    $("inviteLinkText").textContent = link || "خطا در دریافت لینک";
+    $("copyBtn").disabled = !link;
+    $("copyBtn").onclick = () => copyText(link,$("copyBtn"));
+    if (!link) showToast(errorText(result.error));
+  }
+
+  /* ================= Withdraw forms ================= */
+
+  function viewWithdrawForm() {
+    if (activeWithdrawal) return viewActiveWithdrawal();
+    if (!ensureUserData()) return;
+
+    lastWithdrawMethod = "id";
+    showView("withdraw-form","📤 برداشت با آیدی");
+
+    paint(`
+      <p>موجودی قابل برداشت شما:
+        <b class="gold-text" id="formBalance">${fmt(state.balance)} میو</b></p>
+      <p>آیدی تلگرام خود را وارد کنید و تأیید را بزنید.</p>
+      <form id="withdrawForm" novalidate>
+        <label class="field-label" for="withdrawIdInput">آیدی تلگرام</label>
+        <input class="id-input" id="withdrawIdInput"
+          type="text" placeholder="@username" autocomplete="off"
+          autocapitalize="off" spellcheck="false" enterkeyhint="done"
+          aria-describedby="withdrawError">
+        <div class="field-error" id="withdrawError" role="alert"></div>
+        <button type="submit" class="primary-btn rgb-btn">${confirmLabel()}</button>
+      </form>
+    `);
+
+    $("withdrawForm").onsubmit = event => {
+      event.preventDefault();
+      if (!ensureUserData()) return;
+      const target = $("withdrawIdInput").value.trim();
+
+      if (!/^@[A-Za-z0-9_]{1,32}$/.test(target)) {
+        $("withdrawError").textContent = "آیدی معتبر با @ وارد کن.";
+        return;
+      }
+      if (state.balance <= 0) {
+        $("withdrawError").textContent = "موجودی شما صفر است.";
+        return;
+      }
+
+      keyboard.blur();
+      startWithdrawal("id",target);
+    };
+  }
+
+  function viewBankWithdrawConfirm() {
+    if (activeWithdrawal) return viewActiveWithdrawal();
+    if (!ensureUserData()) return;
+
+    lastWithdrawMethod = "bank";
+    showView("bank-confirm","🏦 بانک میویی");
+
+    paint(`
+      <p>شما می‌توانید <b class="gold-text" id="formBalance">${fmt(state.balance)} میو</b>
+        با بانک میویی برداشت کنید.</p>
+      <p>برای ادامه روی تأیید بزنید.</p>
+      <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">${confirmLabel()}</button>
+      <button type="button" class="ghost-btn" id="bankCancelBtn">لغو</button>
+    `);
+
+    $("bankConfirmBtn").onclick = viewBankWithdrawCardInput;
+    $("bankCancelBtn").onclick = showHome;
+  }
+
+  function viewBankWithdrawCardInput() {
+    if (activeWithdrawal) return viewActiveWithdrawal();
+    if (!ensureUserData()) return;
+
+    lastWithdrawMethod = "bank";
+    showView("bank-form","🏦 بانک میویی");
+
+    paint(`
+      <p>شماره کارت میویی خود را وارد کنید:</p>
+      <form id="bankCardForm" novalidate>
+        <label class="field-label" for="bankCardInput">شماره کارت میویی</label>
+        <input class="id-input" id="bankCardInput"
+          type="text" placeholder="مثلاً 232491826963"
+          inputmode="numeric" autocomplete="off" enterkeyhint="done"
+          aria-describedby="bankCardError">
+        <div class="field-error" id="bankCardError" role="alert"></div>
+        <button type="submit" class="primary-btn rgb-btn">${confirmLabel()}</button>
+        <button type="button" class="ghost-btn" id="bankCardBackBtn">برگشت</button>
+      </form>
+    `);
+
+    $("bankCardBackBtn").onclick = viewBankWithdrawConfirm;
+
+    $("bankCardForm").onsubmit = event => {
+      event.preventDefault();
+      if (!ensureUserData()) return;
+      const card = englishDigits($("bankCardInput").value.trim());
+
+      if (!/^[0-9]{10,20}$/.test(card)) {
+        $("bankCardError").textContent = "شماره کارت باید بین ۱۰ تا ۲۰ رقم باشد.";
+        return;
+      }
+      if (state.balance <= 0) {
+        $("bankCardError").textContent = "موجودی شما صفر است.";
+        return;
+      }
+
+      keyboard.blur();
+      startWithdrawal("bank",card);
+    };
+  }
+
+  /* ================= Withdrawal tracking ================= */
+
+  function isWithdrawalView() {
+    return ["withdraw-waiting","withdraw-unknown","bank-queued-notice"].includes(currentView);
+  }
+
+  function armBankAutoReturn() {
+    clearTimeout(bankScreenTimer);
+    const job = activeWithdrawal;
+
+    if (!job || job.method !== "bank" || job.phase !== "pending" ||
+        !job.withdraw_id || currentView !== "withdraw-waiting") return;
+
+    bankScreenTimer = setTimeout(() => {
+      if (activeWithdrawal === job && currentView === "withdraw-waiting") {
+        viewBankQueuedNotice(job);
+      }
+    },BANK_QUEUE_SCREEN_MS);
+  }
+
+  function viewWithdrawWaiting() {
+    const bank = activeWithdrawal?.method === "bank";
+    showView("withdraw-waiting",bank ? "🏦 بانک میویی" : "📤 برداشت");
+
+    paint(`
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="muted-center" role="status">⏳ لطفاً منتظر بمانید…</p>
+      <p class="muted-center" id="queuePositionText"></p>
+      <p class="muted-center" id="queueWaitText"></p>
+      ${bank ? `
+        <p class="muted-center">پس از ۲۰ ثانیه به خانه برمی‌گردی؛ برداشتت در صف باقی می‌ماند.</p>
+        <button type="button" class="ghost-btn" id="waitingHomeBtn">رفتن به خانه</button>
+      ` : ""}
+    `);
+
+    if ($("waitingHomeBtn")) $("waitingHomeBtn").onclick = showHome;
+    updateWaitingInfo(activeWithdrawal || {});
+    armBankAutoReturn();
+  }
+
+  function updateWaitingInfo(result) {
+    setText($("queuePositionText"),result.processing ? "در حال پردازش برداشت"
+      : result.position ? `👤 شما نفر ${result.position} در صف هستید` : "");
+    setText($("queueWaitText"),result.wait_text ? `⏱ ${result.wait_text}` : "");
+  }
+
+  function viewBankQueuedNotice(job) {
+    const version = showView("bank-queued-notice","🏦 برداشت ثبت شد");
+    const seconds = pendingSeconds(job);
+
+    paint(`
+      <div class="result-icon">⏳</div>
+      <p class="muted-center"><b>درخواستت در صف برداشت است.</b></p>
+      <p class="muted-center" id="bankReturnInfo"></p>
+      <p class="muted-center">
+        نیازی به ماندن در این صفحه نیست؛ مبلغ و زمان باقی‌مانده
+        در خانه نمایش داده می‌شود و نتیجه را بهت اطلاع می‌دهیم.
+      </p>
+      <button type="button" class="primary-btn" id="bankReturnHomeBtn">رفتن به خانه</button>
+    `);
+
+    $("bankReturnInfo").textContent = job.processing
+      ? "برداشتت در حال پردازش است."
+      : seconds > 0
+        ? `حدود ${humanDuration(seconds)} تا نوبت پردازش باقی مانده است.`
+        : "در انتظار نوبت پردازش هستی.";
+
+    $("bankReturnHomeBtn").onclick = showHome;
+    bankNoticeTimer = setTimeout(() => {
+      if (version === viewVersion && currentView === "bank-queued-notice") showHome();
+    },BANK_NOTICE_MS);
+  }
+
+  function viewActiveWithdrawal() {
+    if (activeWithdrawal?.phase === "unknown") return viewWithdrawUnknown();
+    viewWithdrawWaiting();
+
+    if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
+      pollWithdrawStatus();
+    }
+  }
+
+  async function startWithdrawal(method,value) {
+    if (activeWithdrawal) return viewActiveWithdrawal();
+
+    if (!canSubmit()) return;
+    const job = {
+      method,phase:"submitting",withdraw_id:null,
+      amount:null,withdraw_type:method === "bank" ? "card" : "id"
+    };
+
+    activeWithdrawal = job;
+    lastWithdrawMethod = method;
+    viewWithdrawWaiting();
+
+    const result = await post(
+      method === "bank" ? "/withdraw-bank" : "/withdraw",
+      method === "bank" ? {card:value} : {target:value}
+    );
+
+    if (activeWithdrawal !== job) return;
+
+    if (result.ok === true || (result.error === "already_pending" && result.http_status < 500)) {
+      queueOrder = Math.max(queueOrder,responseOrder.get(result) || 0);
+      Object.assign(job,normalizeWithdrawal(result,job),{phase:"pending"});
+      if (!validId(job.withdraw_id)) job.withdraw_id = null;
+      upsertPendingWithdrawal(job);
+      if (currentView === "withdraw-waiting") {
+        updateWaitingInfo(job);
+        armBankAutoReturn();
+      }
+      pollWithdrawStatus();
+      return;
+    }
+
+    if (result.ok !== false || !result.error || (result.http_status >= 500) ||
+        ["network","invalid_response","database_unavailable","server"].includes(result.error)) {
+      job.phase = "unknown";
+      if (isWithdrawalView()) viewWithdrawUnknown();
+      else showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
+      return;
+    }
+
+    activeWithdrawal = null;
+    if (isWithdrawalView()) viewWithdrawFailed(errorText(result.error));
+    else showToast(errorText(result.error));
+  }
+
+  function cancelPollTimer() {
+    clearTimeout(pollTimer);
+    pollTimer = null;
+  }
+
+  function pollWithdrawStatus() {
+    if (pollTimer !== null || pollingWithdrawal || !canRead() || activeWithdrawal?.phase !== "pending") return;
+    const job = activeWithdrawal;
+    pollTimer = setTimeout(() => {
+      pollTimer = null;
+      if (canRead() && activeWithdrawal === job && job.phase === "pending") checkWithdrawal(job);
+      else pollWithdrawStatus();
+    },3000);
+  }
+
+  async function checkWithdrawal(job) {
+    pollingWithdrawal = true;
+    try {
+      if (!validId(job.withdraw_id)) {
+        const user = await api("/user");
+        if (activeWithdrawal !== job) return;
+        const candidate = recoverCandidate(user);
+        if (user.ok !== false && !user.error && validId(candidate?.withdraw_id)) {
+          Object.assign(job,normalizeWithdrawal(candidate,job),{phase:"pending"});
+          queueOrder = Math.max(queueOrder,responseOrder.get(user));
+          upsertPendingWithdrawal(job);
+          if (currentView === "withdraw-waiting") armBankAutoReturn();
+        } else if (!user.error || user.error === "unauthorized") {
+          job.phase = "unknown";
+          if (isWithdrawalView()) viewWithdrawUnknown();
+          if (user.error) showToast(errorText(user.error));
+          return;
+        } else return;
+      }
+
+      const result = await api("/withdraw-status?withdraw_id="+encodeURIComponent(job.withdraw_id));
+      if (activeWithdrawal !== job || (result.withdraw_id != null &&
+          String(result.withdraw_id) !== String(job.withdraw_id))) return;
+      if (result.ok !== false && (result.status === "success" || result.status === "failed")) {
+        const success = result.status === "success";
+        activeWithdrawal = null;
+        queueOrder = Math.max(queueOrder,responseOrder.get(result));
+        removePendingWithdrawal(job.withdraw_id);
+        clearBankTimers();
+
+        if (isWithdrawalView()) {
+          success ? viewWithdrawSuccess() : viewWithdrawFailed();
+        } else {
+          showToast(success
+            ? `🎉 برداشت ${fmt(result.amount ?? job.amount)} میو با موفقیت انجام شد.`
+            : "برداشت ناموفق بود.");
+        }
+        await refreshData(false,false);
+      } else if (result.ok !== false && result.status === "pending") {
+        if (responseOrder.get(result) < queueOrder) return;
+        queueOrder = responseOrder.get(result);
+        Object.assign(job,normalizeWithdrawal(result,job),{phase:"pending"});
+        upsertPendingWithdrawal(job);
+        if (currentView === "withdraw-waiting") updateWaitingInfo(job);
+      } else if (result.error === "unauthorized" || (result.ok !== false && result.status === "none")) {
+        job.phase = "unknown";
+        if (isWithdrawalView()) viewWithdrawUnknown();
+        if (result.error) showToast(errorText(result.error));
+      } else if (currentView === "withdraw-waiting") {
+        setText($("queueWaitText"),"ارتباط موقتاً قطع شده؛ در حال بررسی دوباره…");
+      }
+    } finally {
+      pollingWithdrawal = false;
+      pollWithdrawStatus();
+    }
+  }
+
+  function viewWithdrawUnknown() {
+    showView("withdraw-unknown","📤 وضعیت برداشت");
+
+    paint(`
+      <div class="result-icon">⏳</div>
+      <p class="muted-center"><b>نتیجهٔ برداشت هنوز مشخص نشده است.</b></p>
+      <p class="muted-center">آخرین وضعیت و موجودی را بررسی کن؛ ممکن است نتیجه در اعلان‌ها ثبت شده باشد.</p>
+      <button type="button" class="primary-btn" id="checkWithdrawBtn">بررسی دوباره</button>
+      <button type="button" class="ghost-btn" id="withdrawHomeBtn">بازگشت به خانه</button>
+    `);
+
+    $("checkWithdrawBtn").onclick = async () => {
+      const version = viewVersion;
+      $("checkWithdrawBtn").disabled = true;
+      await refreshData(false,false);
+      if (version !== viewVersion) return;
+      if (!activeWithdrawal) return showHome();
+      if (!canRead() || !hasUserData) {
+        $("checkWithdrawBtn").disabled = false;
+        showToast(errorText(canRead() ? "unauthorized" : "network"));
+        return;
+      }
+
+      activeWithdrawal.phase = "pending";
+      viewWithdrawWaiting();
+      pollWithdrawStatus();
+    };
+
+    $("withdrawHomeBtn").onclick = showHome;
+  }
+
+  function viewWithdrawFailed(message = "لطفاً دوباره تلاش کنید.") {
+    showView("withdraw-failed","📤 برداشت");
+
+    paint(`
+      <div class="result-icon">❌</div>
+      <p class="muted-center"><b>برداشت ناموفق بود</b></p>
+      <p class="muted-center" id="withdrawFailMessage"></p>
+      <button type="button" class="primary-btn" id="retryBtn">تلاش دوباره</button>
+    `);
+
+    $("withdrawFailMessage").textContent = message;
+    $("retryBtn").onclick = () => {
+      if (lastWithdrawMethod === "bank") viewBankWithdrawCardInput();
+      else viewWithdrawForm();
+    };
+  }
+
+  function viewWithdrawSuccess() {
+    showView("withdraw-success","📤 برداشت");
+
+    paint(`
+      <div class="result-icon">🎉</div>
+      <p class="muted-center"><b>میوهای شما با موفقیت واریز شد</b></p>
+      <p class="muted-center">آیا مایل به دریافت رسید هستید؟</p>
+      <button type="button" class="primary-btn" id="receiptYesBtn">تأیید، رسید می‌خواهم</button>
+      <button type="button" class="ghost-btn" id="receiptNoBtn">فعلاً نه</button>
+    `);
+
+    $("receiptYesBtn").onclick = requestReceipt;
+    $("receiptNoBtn").onclick = showHome;
+  }
+
+  /* ================= Receipt ================= */
+
+  async function requestReceipt() {
+    if (receiptBusy) return showToast(errorText("operation_busy"));
+    if (!canSubmit()) return;
+    receiptBusy = true;
+    const version = showView("receipt-loading","📨 رسید");
+    paint(`<div class="spinner" aria-hidden="true"></div>
+      <p class="muted-center" role="status">در حال ثبت درخواست…</p>`);
+
+    const result = await post("/receipt");
+    receiptBusy = false;
+
+    if (version !== viewVersion) {
+      showToast(result.ok ? "درخواست رسید ثبت شد." : errorText(result.error));
+      return;
+    }
+
+    if (!result.ok) {
+      paint(`
+        <p class="muted-center">ثبت درخواست رسید انجام نشد.</p>
+        <button type="button" class="primary-btn" id="receiptRetryBtn">تلاش دوباره</button>
+      `);
+      $("receiptRetryBtn").onclick = requestReceipt;
+      return;
+    }
+
+    showView("receipt","📨 رسید");
+
+    paint(`
+      <div class="result-icon">📨</div>
+      <p class="muted-center"><b>درخواست رسید ثبت شد.</b></p>
+      <p class="muted-center">به اکانت زیر پیام بده:</p>
+      <div class="link-box">
+        <span style="text-align:center">@freemewBank</span>
+        <button type="button" class="copy-btn" id="copyAccountBtn">کپی</button>
+      </div>
+      <p class="muted-center">و بنویس:</p>
+      <p class="muted-center"><b class="gold-text">رسیدم رو بده</b></p>
+      <p class="muted-center">🤖 رسید به صورت خودکار برات ارسال می‌شود.</p>
+    `);
+
+    $("copyAccountBtn").onclick = () => copyText("@freemewBank",$("copyAccountBtn"));
+  }
+
+  /* ================= Daily ================= */
+
+  function viewDaily() {
+    if (!ensureUserData()) return;
+    showView("daily","🎁 میو روزانه");
+
+    if (state.daily_enabled) {
+      paint(`
+        <div class="toggle-row"><span class="status-text">روشن است ✅</span></div>
+        <p>هر روز منتظر واریز ۳۴۰,۰۰۰ میو باشید.</p>
+      `);
+      return;
+    }
+
+    paint(`
+      <p>با روشن کردن این قابلیت، هر روز
+        <b class="gold-text">۳۴۰,۰۰۰ میو</b> دریافت می‌کنید.</p>
+      <button type="button" class="primary-btn" id="enableDailyBtn"
+        ${enablingDaily ? "disabled" : ""}>
+        ${enablingDaily ? "در حال فعال‌سازی…" : "✅ فعال کن"}
+      </button>
+    `);
+
+    $("enableDailyBtn").onclick = async () => {
+      if (enablingDaily || !canSubmit()) return;
+      enablingDaily = true;
+      $("enableDailyBtn").disabled = true;
+      $("enableDailyBtn").textContent = "در حال فعال‌سازی…";
+
+      const result = await post("/daily/enable");
+      enablingDaily = false;
+
+      if (result.ok) {
+        state.daily_enabled = true;
+        setBalance(result.balance,result);
+      } else {
+        showToast(errorText(result.error));
+      }
+
+      if (currentView === "daily") viewDaily();
+    };
+  }
+
+  /* ================= Casino state / recovery ================= */
+
+  const GAME_PENDING_KEY = `mio_game_pending_${TG_USER_ID}`;
+  let pendingGameMemory = "";
+  try { pendingGameMemory = localStorage.getItem(GAME_PENDING_KEY) || ""; } catch {}
+  window.addEventListener("storage",event => {
+    if (event.key === GAME_PENDING_KEY || event.key === null) {
+      pendingGameMemory = event.newValue || "";
+      if (currentView === "game") syncClock();
+    }
+  });
+
+  function getPendingGame() {
+    return pendingGameMemory;
+  }
+
+  function savePendingGame(id) {
+    pendingGameMemory = id;
+    try { localStorage.setItem(GAME_PENDING_KEY,id); } catch {}
+  }
+
+  function clearPendingGame(id) {
+    if (pendingGameMemory === id) pendingGameMemory = "";
+    try {
+      if (localStorage.getItem(GAME_PENDING_KEY) === id) localStorage.removeItem(GAME_PENDING_KEY);
+    } catch {}
+  }
+
+  function makeRequestId() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    bytes[6] = (bytes[6]&15)|64;
+    bytes[8] = (bytes[8]&63)|128;
+    const hex = [...bytes].map(value => value.toString(16).padStart(2,"0"));
+    return [hex.slice(0,4),hex.slice(4,6),hex.slice(6,8),hex.slice(8,10),hex.slice(10)]
+      .map(part => part.join("")).join("-");
+  }
+
+  function acceptGameState(data) {
+    gameState = {
+      ...gameState,...data,
+      deadline:amount(data.remaining_seconds) !== null
+        ? performance.now()+Number(data.remaining_seconds)*1000 : gameState?.deadline ?? Infinity
+    };
+    if (validSlotRound(data.round)) gameState.last_round = data.round;
+    if (gameState.last_round && !validSlotRound(gameState.last_round)) gameState.last_round = null;
+  }
+
+  function remainingGameSeconds() {
+    return gameState ? Math.max(0,Math.ceil((gameState.deadline-performance.now())/1000)) : 0;
+  }
+
+  function formatCountdown(seconds) {
+    return [Math.floor(seconds/3600),Math.floor(seconds%3600/60),seconds%60]
+      .map(value => String(value).padStart(2,"0")).join(":");
+  }
+
+  function gameBalanceCap() {
+    const cap = Number(gameState?.balance_cap);
+    return Number.isFinite(cap) && cap > 0 ? cap : DEFAULT_BALANCE_CAP;
+  }
+
+  function gameBalanceLimitReached() {
+    return Number(state.balance) >= gameBalanceCap();
+  }
+
+  function canStartGame() {
+    return Boolean(gameState?.enabled && !gameState.withdrawal_pending &&
+      !gameBalanceLimitReached() && remainingGameSeconds() === 0);
+  }
+
+  function validGameSymbols(symbols) {
+    return Array.isArray(symbols) && symbols.length === 3 &&
+      symbols.every(symbol => SYMBOL_KEYS.includes(symbol));
+  }
+
+  function validSlotRound(round) {
+    return round && validGameSymbols(round.symbols) && amount(round.reward) !== null;
+  }
+
+  function lastGameSymbols() {
+    const symbols = gameState?.last_round?.symbols;
+    return validGameSymbols(symbols) ? symbols : ["seven","grape","lemon"];
+  }
+
+  function symbolHTML(symbol) {
+    const key = SYMBOL_KEYS.includes(symbol) ? symbol : "blank";
+    return `<span class="slot-symbol symbol-${key}">${GAME_SYMBOLS[key]}</span>`;
+  }
+
+  function reelCell(symbol,height) {
+    const size = Number.isFinite(height) && height > 0 ? ` style="height:${height}px"` : "";
+    return `<span class="reel-cell"${size}>${symbolHTML(symbol)}</span>`;
+  }
+
+  async function viewGame() {
+    if (!ensureUserData()) return;
+    const inPlace = currentView === "game" && Boolean($("playGameBtn"));
+    const version = inPlace ? viewVersion : showView("game","کازینو میویی");
+
+    if (gameBusy && gameState) {
+      if (!inPlace) renderGame();
+      return;
+    }
+
+    if (!inPlace) paint(`<div class="spinner" aria-hidden="true"></div>
+      <p class="muted-center" role="status">در حال دریافت وضعیت بازی…</p>`);
+
+    const writeEpoch = epoch;
+    const readVersion = ++statusReadVersion;
+    const result = await api("/game/status");
+    if (version !== viewVersion || readVersion !== statusReadVersion ||
+        (!foreground() && result.error === "state_changed") ||
+        (inPlace && (gameBusy || writeEpoch !== epoch))) return;
+
+    if (!result.ok || ![true,false,0,1].includes(result.enabled) || amount(result.remaining_seconds) === null ||
+        (result.last_round && !validSlotRound(result.last_round))) {
+      if (inPlace) return showToast(errorText(result.error || "invalid_response"));
+      paint(`
+        <p class="muted-center" id="gameLoadError"></p>
+        <button type="button" class="primary-btn" id="reloadGameBtn">تلاش دوباره</button>
+      `);
+      $("gameLoadError").textContent = errorText(result.error || "invalid_response");
+      $("reloadGameBtn").onclick = viewGame;
+      return;
+    }
+
+    const previousPayouts = gameState?.payouts;
+    acceptGameState(result);
+    setBalance(result.balance,result);
+    if (inPlace && JSON.stringify(previousPayouts) === JSON.stringify(gameState.payouts)) {
+      syncGamePresentation();
+      syncClock();
+    } else renderGame();
+  }
+
+  /* ================= Casino presentation ================= */
+
+  function renderGame() {
+    if (currentView !== "game" || !gameState) return;
+    stopClock();
+    stopGameVisual();
+
+    const symbols = lastGameSymbols();
+    const payouts = gameState.payouts || DEFAULT_PAYOUTS;
+    const rows = SYMBOL_KEYS.map(key => {
+      const values = payouts[key] || DEFAULT_PAYOUTS[key];
+      return `<tr>
+        <td aria-label="${SYMBOL_NAMES[key]}"><span aria-hidden="true">${symbolHTML(key)}</span></td>
+        <td>${fmt(values[1])}</td><td>${fmt(values[2])}</td><td>${fmt(values[3])}</td>
+      </tr>`;
+    }).join("");
+
+    paint(`
+      <section class="casino">
+        <div class="game-intro">
+          <span class="game-badge">یک بازی رایگان، هر ۴۸ ساعت</span>
+          <h2>نوبت شانس توئه</h2>
+        </div>
+        <div class="machine-stage">
+          <div class="slot-machine" id="slotMachine">
+            <div class="machine-cabinet">
+              <div class="machine-marquee"><strong>MIO LUCK</strong><small>THE LUCKY THREE</small></div>
+              <div class="machine-lights" aria-hidden="true">
+                ${Array.from({length:11},() => "<i></i>").join("")}
+              </div>
+              <button type="button" class="reel-trigger" id="slotStartBtn" aria-label="شروع بازی میویی" disabled>
+                <span class="reel-trim">
+                  <span class="reels" aria-hidden="true">
+                    ${symbols.map((symbol,index) => `
+                      <span class="reel-window" id="reel${index}">
+                        <span class="reel-track" id="reelTrack${index}" data-symbol="${symbol}">
+                          ${reelCell(symbol)}
+                        </span>
+                      </span>
+                    `).join("")}
+                  </span>
+                </span>
+              </button>
+              <div class="machine-bottom" aria-hidden="true">
+                <small>MIO POINT</small><span class="coin-slot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="machine-base" aria-hidden="true"></div>
+          <button type="button" class="slot-lever" id="slotLever" aria-label="کشیدن دسته و شروع بازی" disabled>
+            <span class="lever-socket" aria-hidden="true"></span>
+            <span class="lever-arm" id="leverArm" aria-hidden="true"><span class="lever-knob"></span></span>
+          </button>
+        </div>
+        <button type="button" class="primary-btn casino-spin-btn" id="playGameBtn" disabled>
+          ${icon("game")}<span id="playGameLabel">تأیید و شروع بازی</span>
+        </button>
+        <div class="game-status" id="gameStatus">
+          <span id="gameStatusText" role="status"></span>
+          <b id="gameCountdown" aria-label="زمان باقی‌مانده تا بازی بعدی" hidden></b>
+        </div>
+        <div class="game-result" id="gameResult" role="status" hidden>
+          <small>آخرین نتیجهٔ ثبت‌شده</small>
+          <strong id="gameReward"></strong><p id="gameRewardNote"></p>
+        </div>
+        <table class="prize-table">
+          <caption>جدول جایزه‌ها — به میو</caption>
+          <thead><tr>
+            <th scope="col">نماد</th><th scope="col">یک عدد</th>
+            <th scope="col">دو عدد</th><th scope="col">سه عدد</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <button type="button" class="ghost-btn" id="gameRefreshBtn">بروزرسانی وضعیت بازی</button>
+      </section>
+    `);
+
+    $("slotStartBtn").onclick = playGame;
+    $("slotLever").onclick = playGame;
+    $("playGameBtn").onclick = playGame;
+    $("gameRefreshBtn").onclick = viewGame;
+    syncGamePresentation();
+
+    if (gameBusy && !document.hidden && !gameBalanceLimitReached()) {
+      activeGameAnimation = startReelAnimation(false);
+    }
+
+    syncClock();
+  }
+
+  function syncGamePresentation(reveal = false) {
+    if (currentView !== "game" || !$("gameResult")) return;
+    const round = gameState?.last_round;
+    const resultBox = $("gameResult");
+    resultBox.hidden = !round || gameBusy;
+
+    if (round && !gameBusy) {
+      setText($("gameReward"),`${fmt(round.reward)} میو`);
+      setText($("gameRewardNote"),round.reward_capped
+        ? `به‌دلیل سقف ${fmt(gameBalanceCap())} میو، فقط ${fmt(round.reward)} میو به موجودیت اضافه شد.`
+        : Number(round.reward) > 0
+          ? "این جایزه به موجودی قابل برداشتت اضافه شده 🎉"
+          : "این بار جایزه‌ای نداشتی؛ بازی بعدی منتظرته 🍀");
+
+      if (reveal) {
+        resultBox.classList.remove("reveal");
+        void resultBox.offsetWidth;
+        resultBox.classList.add("reveal");
+      }
+    }
+
+    if (!gameBusy) {
+      lastGameSymbols().forEach((symbol,index) => {
+        const track = $("reelTrack"+index);
+        const box = $("reel"+index);
+        if (!track || !box) return;
+
+        if (track.dataset.symbol !== symbol || track.children.length !== 1) {
+          track.innerHTML = reelCell(symbol,box.clientHeight);
+        }
+
+        track.dataset.symbol = symbol;
+        track.style.transform = "";
+        box.classList.remove("rolling");
+      });
+
+      $("slotMachine")?.classList.toggle("winner",Boolean(round && Number(round.reward) > 0));
+    }
+  }
+
+  function updateGameControls() {
+    if (currentView !== "game" || !$("playGameBtn") || !gameState) return;
+    const pending = getPendingGame();
+    const canPlay = !gameBusy && (Boolean(pending) || canStartGame());
+
+    for (const id of ["playGameBtn","slotStartBtn","slotLever"]) {
+      if ($(id).disabled === canPlay) $(id).disabled = !canPlay;
+    }
+    if ($("gameRefreshBtn").disabled !== gameBusy) $("gameRefreshBtn").disabled = gameBusy;
+    if ($("slotMachine").getAttribute("aria-busy") !== String(gameBusy))
+      $("slotMachine").setAttribute("aria-busy",String(gameBusy));
+    const showCountdown = !gameBusy && !pending && gameState.enabled && !gameBalanceLimitReached() &&
+      !gameState.withdrawal_pending && remainingGameSeconds() > 0;
+    if ($("gameCountdown").hidden === showCountdown) $("gameCountdown").hidden = !showCountdown;
+
+    if (gameBusy) {
+      setText($("playGameLabel"),"در حال دریافت نتیجه…");
+      setText($("gameStatusText"),"چند لحظه صبر کن؛ نتیجه در حال دریافت است.");
+      return;
+    }
+    if (pending) {
+      setText($("playGameLabel"),"بازیابی نتیجه");
+      setText($("gameStatusText"),"پاسخ بازی قبلی کامل نرسیده؛ برای دریافت همان نتیجه بزن.");
+      return;
+    }
+
+    setText($("playGameLabel"),"تأیید و شروع بازی");
+
+    if (!gameState.enabled) {
+      setText($("gameStatusText"),"بازی فعلاً غیرفعال است.");
+      return;
+    }
+    if (gameBalanceLimitReached()) {
+      setText($("playGameLabel"),"سقف موجودی تکمیل است");
+      setText($("gameStatusText"),`موجودیت به سقف ${fmt(gameBalanceCap())} میو رسیده؛ برای بازی ابتدا برداشت کن.`);
+      return;
+    }
+    if (gameState.withdrawal_pending) {
+      setText($("gameStatusText"),"برداشتت در حال پردازش است؛ بعد از پایان آن وضعیت بازی را بروزرسانی کن.");
+      return;
+    }
+
+    const remaining = remainingGameSeconds();
+    if (remaining > 0) {
+      setText($("gameStatusText"),"بازی بعدی");
+      setText($("gameCountdown"),formatCountdown(remaining));
+
+    } else {
+      setText($("gameStatusText"),"شانست آماده‌ست؛ بازی کاملاً رایگانه ✨");
+    }
+  }
+
+  /* ================= Reel / lever animation ================= */
+
+  function startReelAnimation(pullLever = true) {
+    const machine = $("slotMachine");
+    const lever = $("leverArm");
+    const started = performance.now();
+    let releaseSpin = null;
+    let disposed = false;
+    let leverAnimation = null;
+
+    const reels = [0,1,2].map(index => {
+      const box = $("reel"+index);
+      const track = $("reelTrack"+index);
+      const initial = SYMBOL_KEYS.includes(track?.dataset.symbol)
+        ? track.dataset.symbol : SYMBOL_KEYS[index];
+      const first = SYMBOL_KEYS.indexOf(initial);
+      const cycle = SYMBOL_KEYS.map((_,offset) => SYMBOL_KEYS[(first+offset)%SYMBOL_KEYS.length]);
+
+      return {
+        box,track,initial,cycle,height:box?.clientHeight || 104,
+        duration:440+index*85,animation:null,settled:false
+      };
+    });
+
+    const supportsAnimation = typeof reels[0]?.track?.animate === "function";
+    machine?.classList.remove("winner");
+    machine?.classList.add("is-spinning");
+
+    if (!reduceMotion.matches && supportsAnimation) {
+      reels.forEach(reel => {
+        if (!reel.track) return;
+        const sequence = [...reel.cycle,reel.cycle[0],reel.cycle[1]];
+        reel.track.innerHTML = sequence.map(symbol => reelCell(symbol,reel.height)).join("");
+        reel.box?.classList.add("rolling");
+
+        reel.animation = reel.track.animate([
+          {transform:"translate3d(0,0,0)"},
+          {transform:`translate3d(0,${-reel.cycle.length*reel.height}px,0)`}
+        ],{duration:reel.duration,iterations:Infinity,easing:"linear"});
+      });
+
+      if (pullLever && lever?.animate) {
+        leverAnimation = lever.animate([
+          {transform:"rotate(8deg) scaleY(1)",offset:0},
+          {transform:"rotate(18deg) scaleY(.43)",offset:.4},
+          {transform:"rotate(18deg) scaleY(.43)",offset:.56},
+          {transform:"rotate(4deg) scaleY(1.02)",offset:.9},
+          {transform:"rotate(8deg) scaleY(1)",offset:1}
+        ],{duration:760,easing:"cubic-bezier(.4,0,.2,1)"});
+      }
+    }
+
+    function staticSymbol(reel,symbol) {
+      if (!reel.track) return;
+      reel.animation?.cancel();
+      reel.animation = null;
+      reel.track.innerHTML = reelCell(symbol,reel.height);
+      reel.track.style.transform = "";
+      reel.track.dataset.symbol = symbol;
+      reel.box?.classList.remove("rolling");
+      reel.settled = true;
+    }
+
+    function stop() {
+      if (disposed) return;
+      disposed = true;
+      releaseSpin?.();
+      leverAnimation?.cancel();
+
+      reels.forEach(reel => {
+        reel.animation?.cancel();
+        reel.animation = null;
+        if (!reel.settled) staticSymbol(reel,reel.initial);
+        reel.box?.classList.remove("rolling");
+      });
+
+      machine?.classList.remove("is-spinning");
+    }
+
+    async function finishOne(reel,index,finalSymbol) {
+      if (disposed || !reel.track?.isConnected) return;
+      if (reduceMotion.matches || !supportsAnimation) {
+        staticSymbol(reel,finalSymbol);
+        return;
+      }
+
+      const currentTime = Number(reel.animation?.currentTime) || 0;
+      const progress = ((currentTime%reel.duration)+reel.duration)%reel.duration/reel.duration;
+      const offset = progress*reel.cycle.length*reel.height;
+      const whole = Math.floor(offset/reel.height);
+      const fractional = offset/reel.height-whole;
+      const landingIndex = 12+index*3;
+      const sequence = [];
+
+      for (let row=0;row<landingIndex;row++) {
+        sequence.push(reel.cycle[(whole+row)%reel.cycle.length]);
+      }
+
+      sequence.push(finalSymbol);
+      sequence.push(reel.cycle[(whole+landingIndex+1)%reel.cycle.length]);
+      reel.animation?.cancel();
+      reel.track.innerHTML = sequence.map(symbol => reelCell(symbol,reel.height)).join("");
+
+      reel.animation = reel.track.animate([
+        {transform:`translate3d(0,${-fractional*reel.height}px,0)`},
+        {transform:`translate3d(0,${-landingIndex*reel.height}px,0)`}
+      ],{
+        duration:1050+index*290,
+        easing:"cubic-bezier(.12,.72,.15,1)",
+        fill:"forwards"
+      });
+
+      try { await reel.animation.finished; } catch { return; }
+      if (disposed || !reel.track.isConnected) return;
+      staticSymbol(reel,finalSymbol);
+      tinyHaptic();
+    }
+
+    async function finish(symbols) {
+      if (disposed || !validGameSymbols(symbols)) return;
+      const remaining = 1100-(performance.now()-started);
+      if (!reduceMotion.matches && supportsAnimation && remaining > 0) {
+        await new Promise(resolve => {
+          const timer = setTimeout(resolve,remaining);
+          releaseSpin = () => { clearTimeout(timer); resolve(); };
+        });
+        releaseSpin = null;
+      }
+      if (disposed) return;
+      await Promise.all(reels.map((reel,index) => finishOne(reel,index,symbols[index])));
+      if (!disposed) machine?.classList.remove("is-spinning");
+    }
+
+    return {stop,finish};
+  }
+
+  async function playGame() {
+    if (gameBusy || !canSubmit()) return;
+    let id = getPendingGame();
+
+    if (!id && gameBalanceLimitReached()) {
+      updateGameControls();
+      showToast(errorText("balance_limit_reached"));
+      return;
+    }
+    if (!id && !canStartGame()) return;
+
+    if (!id) {
+      try { id = makeRequestId(); }
+      catch {
+        showToast("برای بازی، مینی‌اپ را داخل تلگرام باز کن.");
+        return;
+      }
+      savePendingGame(id);
+    }
+
+    gameBusy = true;
+    let completed = false;
+    syncGamePresentation();
+    updateGameControls();
+    stopGameVisual();
+
+    if (currentView === "game" && !document.hidden && !gameBalanceLimitReached()) {
+      activeGameAnimation = startReelAnimation(true);
+    }
+
+    tinyHaptic();
+
+    try {
+      const result = await post("/game/play",{request_id:id});
+
+      if (result.ok && validSlotRound(result.round) && amount(result.balance) !== null) {
+        acceptGameState(result);
+        setBalance(result.balance,result);
+        clearPendingGame(id);
+        const animation = activeGameAnimation;
+
+        if (animation && currentView === "game" && !document.hidden) {
+          try { await animation.finish(result.round.symbols); }
+          catch { animation.stop(); }
+        }
+
+        completed = true;
+        const reward = Number(result.round.reward);
+
+        showToast(result.replayed
+          ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
+          : result.round.reward_capped
+            ? `🎉 ${fmt(reward)} میو واریز شد؛ موجودیت به سقف ${fmt(gameBalanceCap())} رسید.`
+            : reward > 0
+              ? `🎉 ${fmt(reward)} میو به موجودیت اضافه شد!`
+              : "این بار پوچ شد؛ دفعهٔ بعد دوباره امتحان کن 🍀");
+        return;
+      }
+
+      if (result.http_status < 500 && ["cooldown","withdrawal_pending","game_disabled","balance_limit_reached",
+           "not_started","invalid_request_id"].includes(result.error)) {
+        clearPendingGame(id);
+      }
+
+      if (result.http_status < 500 && result.ok === false && ["cooldown","withdrawal_pending","balance_limit_reached","game_disabled"].includes(result.error) && amount(result.remaining_seconds) !== null) {
+        acceptGameState(result);
+        setBalance(result.balance,result);
+      }
+
+      showToast(errorText(result.ok ? "invalid_response" : result.error));
+    } finally {
+      stopGameVisual();
+      gameBusy = false;
+      if (currentView === "game") {
+        syncGamePresentation(completed);
+        syncClock();
+      }
+    }
+  }
+
+  /* ================= Games selection ================= */
+
+  function viewGamesHub() {
+    if (!ensureUserData()) return;
+    showView("games","بازی میویی");
+
+    paint(`
+      <section class="doz-root">
+        <div class="doz-lead">
+          <span class="doz-kicker">MIO PLAYROOM</span>
+          <h2>کدوم بازی؟</h2>
+          <p>بازی دلخواهت رو انتخاب کن و میو جایزه بگیر.</p>
+        </div>
+        <div class="doz-game-list">
+          <button type="button" class="doz-game-card casino-choice" id="chooseCasino">
+            <span class="doz-choice-icon">${icon("game")}</span>
+            <span class="doz-choice-copy">
+              <strong>کازینو</strong><small>سه خانه، یک شانس؛ هر ۴۸ ساعت</small>
+            </span>
+            ${icon("chevron")}
+          </button>
+          <button type="button" class="doz-game-card" id="chooseDoz">
+            <span class="doz-choice-icon" aria-hidden="true">○×</span>
+            <span class="doz-choice-copy">
+              <strong>بازی دوز</strong><small>شما و هوش مصنوعی؛ پنج دست در هر سری</small>
+            </span>
+            ${icon("chevron")}
+          </button>
+        </div>
+      </section>
+    `);
+
+    $("chooseCasino").onclick = viewGame;
+    $("chooseDoz").onclick = viewDozIntro;
+  }
+
+  /* ================= Doz state / recovery ================= */
+
+  function getPendingDoz() {
+    try { return localStorage.getItem(DOZ_PENDING_KEY) || dozStartMemory; }
+    catch { return dozStartMemory; }
+  }
+
+  function savePendingDoz(id) {
+    dozStartMemory = id;
+    try { localStorage.setItem(DOZ_PENDING_KEY,id); } catch {}
+  }
+
+  function clearPendingDoz() {
+    dozStartMemory = "";
+    try { localStorage.removeItem(DOZ_PENDING_KEY); } catch {}
+  }
+
+  function validDozRound(round) {
+    if (!round || !validId(round.id) || !["rps","playing","finished"].includes(round.phase) ||
+        !Array.isArray(round.board) || round.board.length !== 9 ||
+        !round.board.every(mark => mark === null || mark === "X" || mark === "O")) return false;
+    return round.phase !== "finished" || (amount(round.reward) !== null &&
+      ["human","ai","draw","tie"].includes(round.outcome) &&
+      (!round.reward_capped || amount(round.nominal_reward) !== null));
+  }
+
+  function acceptDozState(result) {
+    if (result?.ok !== true || !Number.isInteger(result.remaining_rounds) ||
+        result.remaining_rounds < 0 || (result.remaining_seconds != null && amount(result.remaining_seconds) === null) ||
+        (result.round && !validDozRound(result.round))) return false;
+    dozState = result;
+    dozDeadline = performance.now()+Math.max(0,Number(result.remaining_seconds)||0)*1000;
+    setBalance(result.balance,result);
+
+    if (result.round?.id === getPendingDoz()) clearPendingDoz();
+    return true;
+  }
+
+  function hasActiveDoz() {
+    return Boolean(dozState?.round && dozState.round.phase !== "finished");
+  }
+
+  function dozSeconds() {
+    return Math.max(0,Math.ceil((dozDeadline-performance.now())/1000));
+  }
+
+  function dozLobbyMessage() {
+    if (hasActiveDoz()) return "بازی نیمه‌تمامت ذخیره شده؛ از همان‌جا ادامه بده.";
+    if (!dozState.reward_configured) return "بازی دوز هنوز فعال نشده است.";
+    if (dozState.withdrawal_pending) return "پس از پایان برداشت فعلی می‌توانی بازی کنی.";
+    if (Number(dozState.balance) >= Number(dozState.balance_cap)) return "موجودیت به سقف رسیده؛ ابتدا برداشت کن.";
+    if (dozState.remaining_rounds === 0) return "این سری تمام شد؛ پس از پایان تایمر پنج فرصت تازه داری.";
+    return "برای شروع بازی روی دکمهٔ شروع بزن.";
+  }
+
+  async function loadDoz(kind) {
+    if (!ensureUserData()) return;
+    const name = kind === "intro" ? "doz-intro" : "doz-board";
+    const inPlace = currentView === name && Boolean($(kind === "intro" ? "dozEnter" : "dozBoard"));
+    if (inPlace && (dozBusy || dozCelebrating || $("dozRpsDialog"))) return;
+    const version = inPlace ? viewVersion : showView(name,"بازی دوز");
+
+    if (!inPlace) paint(`<section class="doz-root">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="muted-center" role="status">در حال دریافت وضعیت دوز…</p>
+    </section>`);
+
+    const writeEpoch = epoch;
+    const readVersion = ++statusReadVersion;
+    const result = await api("/doz/status");
+    if (version !== viewVersion || readVersion !== statusReadVersion ||
+        (!foreground() && result.error === "state_changed") ||
+        (inPlace && (writeEpoch !== epoch || dozBusy || dozCelebrating || $("dozRpsDialog")))) return;
+
+    if (!result.ok || !acceptDozState(result)) {
+      if (inPlace) return showToast(errorText(result.error || "invalid_response"));
+      paint(`<section class="doz-root">
+        <p class="muted-center" id="dozLoadError"></p>
+        <button type="button" class="primary-btn" id="dozReload">تلاش دوباره</button>
+        <button type="button" class="ghost-btn" id="dozLoadBack">بازگشت به بازی‌ها</button>
+      </section>`);
+      $("dozLoadError").textContent = errorText(result.error || "invalid_response");
+      $("dozReload").onclick = () => loadDoz(kind);
+      $("dozLoadBack").onclick = viewGamesHub;
+      return;
+    }
+
+    const recovered = dozUncertain;
+    dozUncertain = false;
+    if (inPlace && kind === "intro") return syncDozIntro();
+    if (inPlace && !recovered && kind === "board" && result.remaining_rounds > 0 &&
+        JSON.stringify(dozRound) === JSON.stringify(result.round ?? null)) {
+      syncDozArena();
+      return;
+    }
+
+    if (kind === "intro") return renderDozIntro();
+
+    if (dozState.round?.phase === "finished" &&
+        !dozCelebrated.has(dozState.round.id)) {
+      renderDozArena(dozState.round);
+      finishDozRound(dozState.round);
+      return;
+    }
+
+    if (!hasActiveDoz() && dozState.remaining_rounds === 0) {
+      showView("doz-intro","بازی دوز");
+      return renderDozIntro();
+    }
+
+    renderDozArena(hasActiveDoz() ? dozState.round : null);
+  }
+
+  function viewDozIntro() {
+    return loadDoz("intro");
+  }
+
+  function viewDozArena() {
+    return loadDoz("board");
+  }
+
+  function syncDozIntro() {
+    const resume = hasActiveDoz();
+    setText($("dozWinText"),dozState.reward_configured ? `${fmt(dozState.win_reward)} میو` : "به‌زودی");
+    setText($("dozIntroQuota"),`${dozState.remaining_rounds} از ۵`);
+    setText($("dozLobbyMessage"),dozLobbyMessage());
+    setText($("dozCap"),fmt(dozState.balance_cap));
+    setText($("dozEnter"),resume ? "ادامهٔ بازی" : "شروع");
+    $("dozEnter").disabled = !(resume || dozState.can_start);
+    $("dozCountdownBox").hidden = !(dozState.remaining_seconds > 0);
+    syncClock();
+  }
+
+  function renderDozIntro() {
+    const sky = document.querySelector("#notifOverlay .meteor-sky").outerHTML;
+
+    paint(`
+      <section class="doz-root doz-lobby ${document.hidden ? "meteors-paused" : ""}">
+        ${sky}
+        <div class="doz-orbit" aria-hidden="true"><span>○</span><span>×</span></div>
+        <div class="doz-lead">
+          <p>شما با هوش مصنوعی بازی می‌کنید.</p>
+        </div>
+        <div class="doz-rules">
+          <div class="doz-rule">🏆 جایزهٔ برد: <strong id="dozWinText"></strong></div>
+          <div class="doz-rule">🤝 اگر مساوی شوید، <strong>۵٬۰۰۰ میو</strong> به موجودی شما اضافه می‌شود.</div>
+          <div class="doz-rule">
+            🎮 در هر سری <strong>۵ دست</strong> بازی داری.
+            پس از پایان دست پنجم باید <strong>۲۴ ساعت</strong> برای سری بعد صبر کنی.
+          </div>
+        </div>
+        <div class="doz-quota">
+          <span>فرصت‌های شروع باقی‌مانده</span><b id="dozIntroQuota"></b>
+        </div>
+        <div class="doz-countdown-box" id="dozCountdownBox" hidden>
+          <span>تا پنج فرصت بعدی</span>
+          <b id="dozCountdown" aria-label="زمان باقی‌مانده تا سری بعد">${formatCountdown(dozSeconds())}</b>
+        </div>
+        <p class="muted-center" id="dozLobbyMessage"></p>
+        <button type="button" class="primary-btn" id="dozEnter" disabled></button>
+        <button type="button" class="ghost-btn" id="dozIntroRefresh">بروزرسانی وضعیت</button>
+        <button type="button" class="ghost-btn" id="dozIntroBack">بازگشت به بازی‌ها</button>
+        <p class="doz-fineprint">جایزه‌ها تا سقف موجودی <span id="dozCap"></span> میو واریز می‌شوند.</p>
+      </section>
+    `);
+
+    $("dozEnter").onclick = viewDozArena;
+    $("dozIntroRefresh").onclick = viewDozIntro;
+    $("dozIntroBack").onclick = viewGamesHub;
+    syncDozIntro();
+  }
+
+  /* ================= Doz board ================= */
+
+  function dozMark(mark) {
+    return mark === "O"
+      ? `<svg class="doz-mark" viewBox="0 0 80 80" aria-hidden="true">
+          <circle class="doz-stroke" cx="40" cy="40" r="25" pathLength="1"></circle>
+        </svg>`
+      : `<svg class="doz-mark" viewBox="0 0 80 80" aria-hidden="true">
+          <path class="doz-stroke" d="M19 19L61 61" pathLength="1"></path>
+          <path class="doz-stroke second" d="M61 19L19 61" pathLength="1"></path>
+        </svg>`;
+  }
+
+  function setDozCell(index,mark) {
+    const cell = $("dozCell"+index);
+    if (!cell || !mark || cell.dataset.mark === mark) return;
+    cell.dataset.mark = mark;
+    cell.innerHTML = dozMark(mark);
+    cell.setAttribute("aria-label",
+      `ردیف ${Math.floor(index/3)+1}، ستون ${index%3+1}، `+
+      (mark === "O" ? "دایرهٔ شما" : "ضربدر هوش مصنوعی"));
+  }
+
+  function drawDozWinningLine(round) {
+    const overlay = $("dozWinningLine");
+    const line = round?.winning_line;
+    if (!overlay) return;
+
+    if (!Array.isArray(line) || line.length !== 3 || !line.every(i => Number.isInteger(i) && i >= 0 && i < 9)) {
+      overlay.replaceChildren();
+      return;
+    }
+
+    if (overlay.dataset.roundId === round.id) return;
+
+    const board = $("dozBoard").getBoundingClientRect();
+    const first = $("dozCell"+line[0]).getBoundingClientRect();
+    const last = $("dozCell"+line[2]).getBoundingClientRect();
+    if (!board.width || !board.height) return;
+
+    const x1 = (first.left+first.width/2-board.left)/board.width*100;
+    const y1 = (first.top+first.height/2-board.top)/board.height*100;
+    const x2 = (last.left+last.width/2-board.left)/board.width*100;
+    const y2 = (last.top+last.height/2-board.top)/board.height*100;
+
+    overlay.dataset.roundId = round.id;
+    overlay.innerHTML = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" pathLength="1"></line>`;
+  }
+
+  function dozResultTitle(round) {
+    return round.outcome === "human" ? "بردی! 🎉" : round.outcome === "ai" ? "باختی 😔" : "مساوی شد! 🤝";
+  }
+
+  function dozRewardNote(round) {
+    if (round.reward_capped) {
+      return `به‌دلیل سقف موجودی، ${fmt(round.reward)} میو از جایزهٔ ${fmt(round.nominal_reward)} میویی واریز شد.`;
+    }
+    if (round.reward > 0) return "جایزه به موجودی قابل برداشتت اضافه شد.";
+    return round.outcome === "ai" ? "این دست جایزه‌ای نداشت." : "نتیجهٔ این دست ثبت شد.";
+  }
+
+  function renderDozArena(round) {
+    dozRound = round;
+
+    paint(`
+      <section class="doz-root doz-arena">
+        <span class="doz-kicker">MIO • DUEL</span>
+        <div class="doz-players">
+          <div class="doz-player">
+            <b aria-hidden="true">○</b><div><strong>شما</strong><small>همیشه دایره</small></div>
+          </div>
+          <div class="doz-player ai">
+            <b aria-hidden="true">×</b><div><strong>هوش مصنوعی</strong><small>همیشه ضربدر</small></div>
+          </div>
+        </div>
+        <div class="doz-turn" id="dozTurn" role="status" aria-live="polite"></div>
+        <div class="doz-board-shell">
+          <div class="doz-board" id="dozBoard" role="group" aria-label="صفحهٔ دوز سه در سه">
+            ${Array.from({length:9},(_,index) => `
+              <button type="button" class="doz-cell" id="dozCell${index}"
+                aria-label="ردیف ${Math.floor(index/3)+1}، ستون ${index%3+1}، خالی" disabled></button>
+            `).join("")}
+          </div>
+          <svg class="doz-win-overlay" id="dozWinningLine"
+            viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
+        <div class="doz-reward" id="dozRewardBox" hidden>
+          <strong id="dozRewardAmount"></strong><p id="dozRewardNote"></p>
+        </div>
+        <div class="doz-quota">
+          <span>فرصت‌های شروع باقی‌مانده</span><b id="dozQuota"></b>
+        </div>
+        <button type="button" class="primary-btn" id="dozStart">شروع</button>
+        <button type="button" class="primary-btn" id="dozAgain" hidden>بازی دوباره</button>
+        <button type="button" class="ghost-btn" id="dozArenaRefresh">بروزرسانی و بازیابی بازی</button>
+        <button type="button" class="ghost-btn" id="dozArenaBack">بازگشت به صفحهٔ دوز</button>
+      </section>
+    `);
+
+    for (let index=0;index<9;index++) {
+      $("dozCell"+index).onclick = () => playDozCell(index);
+    }
+
+    $("dozStart").onclick = () => {
+      if (dozRound?.phase === "rps") openDozRps();
+      else startDozRound();
+    };
+
+    $("dozAgain").onclick = () => {
+      if (dozState.remaining_rounds > 0) renderDozArena(null);
+      else viewDozIntro();
+    };
+
+    $("dozArenaRefresh").onclick = viewDozArena;
+    $("dozArenaBack").onclick = viewDozIntro;
+
+    if (round) {
+      round.board.forEach((mark,index) => setDozCell(index,mark));
+      drawDozWinningLine(round);
+    }
+
+    syncDozArena();
+  }
+
+  function syncDozArena() {
+    if (currentView !== "doz-board" || !$("dozBoard")) return;
+    const round = dozRound;
+    const playing = round?.phase === "playing";
+    const finished = round?.phase === "finished";
+    const rps = round?.phase === "rps";
+    const blocked = dozBusy || dozUncertain || dozCelebrating ||
+      Boolean(dozState.withdrawal_pending);
+
+    setText($("dozQuota"),`${dozState.remaining_rounds} از ۵`);
+    $("dozBoard").setAttribute("aria-busy",String(dozBusy));
+
+    for (let index=0;index<9;index++) {
+      $("dozCell"+index).disabled = blocked || !playing || Boolean(round?.board[index]);
+    }
+
+    $("dozStart").hidden = Boolean(playing || finished);
+    $("dozStart").disabled = blocked || (!rps && !dozState.can_start);
+    setText($("dozStart"),rps ? "ادامهٔ سنگ‌کاغذ‌قیچی" : "شروع");
+
+    $("dozAgain").hidden = !finished;
+    $("dozAgain").disabled = dozBusy || dozCelebrating || dozUncertain;
+    setText($("dozAgain"),dozState.remaining_rounds > 0
+      ? `بازی دوباره • ${dozState.remaining_rounds} فرصت`
+      : "مشاهدهٔ زمان سری بعد");
+
+    $("dozArenaRefresh").disabled = dozBusy || dozCelebrating;
+    $("dozRewardBox").hidden = !finished;
+
+    if ($("dozResultConfirm")) {
+      $("dozResultConfirm").disabled = dozBusy;
+    }
+
+    if (dozUncertain) {
+      setText($("dozTurn"),"وضعیت حرکت نیاز به بررسی دارد؛ بازیابی بازی را بزن.");
+    } else if (finished) {
+      setText($("dozTurn"),dozResultTitle(round));
+      setText($("dozRewardAmount"),`${fmt(round.reward)} میو`);
+      setText($("dozRewardNote"),dozRewardNote(round));
+    } else if (dozBusy) {
+      setText($("dozTurn"),"در حال بررسی حرکت…");
+    } else if (dozState.withdrawal_pending) {
+      setText($("dozTurn"),"بازی ذخیره شده؛ پس از پایان برداشت ادامه بده.");
+    } else if (!round) {
+      setText($("dozTurn"),dozState.can_start
+        ? "روی دکمهٔ شروع بزن تا بازی شروع شود!" : dozLobbyMessage());
+    } else if (rps) {
+      setText($("dozTurn"),"شروع‌کننده را با سنگ‌کاغذ‌قیچی مشخص کن.");
+    } else {
+      setText($("dozTurn"),"نوبت شماست؛ یک خانه را انتخاب کن.");
+    }
+
+    syncDozRps();
+  }
+
+  async function runDozAction(action,payload,onSuccess) {
+    if (dozBusy || dozUncertain || !canSubmit()) return;
+
+    const version = viewVersion;
+    dozBusy = true;
+    syncDozArena();
+
+    try {
+      const result = await post("/doz/"+action,payload);
+
+      const round = result.round;
+      const validAction = round && (action === "start" || round.id === payload.round_id) &&
+        (action !== "rps" || (round.rps && Object.hasOwn(RPS,round.rps.human) && Object.hasOwn(RPS,round.rps.ai)));
+      const accepted = validAction && acceptDozState(result);
+      if (version !== viewVersion) {
+        if (accepted && action === "start") clearPendingDoz();
+        if (currentView.startsWith("doz-")) dozUncertain = true;
+        return;
+      }
+
+      if (!result.ok || !accepted || !result.round) {
+        const definiteStartError = result.http_status < 500 && [
+          "doz_old_request","invalid_request_id","not_started",
+          "balance_limit_reached","withdrawal_pending",
+          "doz_reward_unconfigured","doz_cooldown"
+        ].includes(result.error);
+
+        if (action === "start" && definiteStartError) clearPendingDoz();
+
+        dozUncertain = !definiteStartError;
+        closeDozRps();
+        showToast(errorText(result.error || "invalid_response"));
+        return;
+      }
+
+      if (action === "start") clearPendingDoz();
+      await onSuccess(result,version);
+    } catch {
+      if (version === viewVersion) {
+        dozUncertain = true;
+        closeDozRps();
+        showToast("برای بررسی نتیجه، بازیابی بازی را بزن.");
+      }
+    } finally {
+      dozBusy = false;
+      if (currentView === "doz-board") {
+        panel.querySelectorAll(".doz-cell.pending").forEach(cell => cell.classList.remove("pending"));
+        syncDozArena();
+
+        if ($("dozFinale")?.open) {
+          $("dozResultConfirm")?.focus({preventScroll:true});
+        }
+      }
+    }
+  }
+
+  async function startDozRound() {
+    if (dozBusy || dozUncertain || !canSubmit()) return;
+    let id = getPendingDoz();
+
+    if (!id) {
+      try { id = makeRequestId(); }
+      catch {
+        showToast("مینی‌اپ را داخل تلگرام باز کن.");
+        return;
+      }
+      savePendingDoz(id);
+    }
+
+    await runDozAction("start",{request_id:id},async result => {
+      renderDozArena(result.round);
+      if (result.round?.phase === "rps") openDozRps();
+      else if (result.round?.phase === "finished") finishDozRound(result.round);
+    });
+  }
+
+  /* ================= Rock / paper / scissors ================= */
+
+  function closeDozRps() {
+    if (dozRpsCountdownCancel) dozRpsCountdownCancel();
+
+    const dialog = $("dozRpsDialog");
+    if (!dialog) return;
+
+    if (dialog.open) dialog.close();
+    dialog.remove();
+  }
+
+  function waitDozRpsResult(dialog,version) {
+    if (dozRpsCountdownCancel) dozRpsCountdownCancel();
+
+    return new Promise(resolve => {
+      let remaining = DOZ_RPS_RESULT_MS;
+      let started = foreground() ? performance.now() : null;
+      let timer = null;
+
+      function finish(completed) {
+        clearTimeout(timer);
+        document.removeEventListener("visibilitychange",onVisibility);
+        window.removeEventListener("pagehide",onVisibility);
+        window.removeEventListener("pageshow",onVisibility);
+        if (dozRpsCountdownCancel === cancel) dozRpsCountdownCancel = null;
+        resolve(completed);
+      }
+
+      function cancel() { finish(false); }
+
+      function tick() {
+        clearTimeout(timer);
+        if (version !== viewVersion || !dialog.isConnected || !dialog.open) return finish(false);
+        const now = performance.now();
+        if (started !== null) remaining = Math.max(0,remaining-(now-started));
+        started = foreground() ? now : null;
+        const seconds = Math.ceil(remaining/1000);
+        setText($("dozRpsCountdown"),seconds.toLocaleString("fa-IR"));
+        if (started === null) return;
+        if (!remaining) return finish(true);
+        timer = setTimeout(tick,Math.max(1,remaining-(seconds-1)*1000));
+      }
+
+      function onVisibility() { tick(); }
+
+      dozRpsCountdownCancel = cancel;
+      document.addEventListener("visibilitychange",onVisibility);
+      window.addEventListener("pagehide",onVisibility);
+      window.addEventListener("pageshow",onVisibility);
+      tick();
+    });
+  }
+
+  function syncDozRps() {
+    const dialog = $("dozRpsDialog");
+    if (!dialog) return;
+
+    const resultShown = dialog.dataset.result === "true";
+    dialog.querySelectorAll("[data-rps]").forEach(button => {
+      button.disabled = dozBusy || resultShown;
+    });
+
+    $("dozRpsConfirm").disabled = dozBusy || resultShown ||
+      !dialog.dataset.choice || dozUncertain || Boolean(dozState.withdrawal_pending);
+    $("dozRpsCancel").disabled = dozBusy || resultShown;
+  }
+
+  function openDozRps() {
+    if (dozRound?.phase !== "rps") return;
+    closeDozRps();
+
+    const dialog = document.createElement("dialog");
+    dialog.id = "dozRpsDialog";
+    dialog.className = "doz-dialog";
+    dialog.dir = "rtl";
+    dialog.setAttribute("aria-labelledby","dozRpsTitle");
+
+    dialog.innerHTML = `
+      <h2 id="dozRpsTitle">سنگ، کاغذ، قیچی</h2>
+      <p>هرکس برنده شود، دوز را شروع می‌کند. یکی را انتخاب کن و تأیید را بزن.</p>
+      <div class="doz-rps-options" role="group" aria-label="انتخاب سنگ‌کاغذ‌قیچی">
+        ${Object.entries(RPS).map(([key,value]) => `
+          <button type="button" class="doz-rps-option" data-rps="${key}" aria-pressed="false">
+            <span aria-hidden="true">${value.emoji}</span>${value.label}
+          </button>
+        `).join("")}
+      </div>
+      <div class="doz-rps-result" id="dozRpsResult" role="status" hidden></div>
+      <div class="doz-rps-countdown" id="dozRpsCountdownBox" hidden>
+        <span>ورود به بازی تا</span>
+        <b id="dozRpsCountdown" role="timer" aria-live="off">۵</b>
+        <span>ثانیه</span>
+      </div>
+      <button type="button" class="primary-btn" id="dozRpsConfirm" disabled>تأیید انتخاب</button>
+      <button type="button" class="ghost-btn" id="dozRpsCancel">فعلاً برگرد</button>
+    `;
+
+    document.body.append(dialog);
+
+    dialog.querySelectorAll("[data-rps]").forEach(button => {
+      button.onclick = () => {
+        if (dozBusy || dialog.dataset.result === "true") return;
+        dialog.dataset.choice = button.dataset.rps;
+        dialog.querySelectorAll("[data-rps]").forEach(item => {
+          item.setAttribute("aria-pressed",String(item === button));
+        });
+        tinyHaptic();
+        syncDozRps();
+      };
+    });
+
+    $("dozRpsConfirm").onclick = async () => {
+      const choice = dialog.dataset.choice;
+      if (!Object.hasOwn(RPS,choice)) return;
+
+      await runDozAction("rps",{round_id:dozRound.id,choice},async (result,version) => {
+        if (!dialog.isConnected) return;
+
+        const round = result.round;
+        const rps = round.rps;
+        dialog.dataset.result = "true";
+        syncDozRps();
+
+        const headline = rps.winner === "human"
+          ? "برنده شدی؛ تو شروع می‌کنی."
+          : rps.winner === "ai"
+            ? "هوش مصنوعی برنده شد و شروع می‌کند."
+            : rps.starter === "O"
+              ? "مساوی شد؛ قرعهٔ شروع به شما رسید."
+              : "مساوی شد؛ قرعهٔ شروع به هوش مصنوعی رسید.";
+
+        $("dozRpsResult").hidden = false;
+        $("dozRpsResult").innerHTML = `
+          شما: ${RPS[rps.human].emoji} ${RPS[rps.human].label}<br>
+          هوش مصنوعی: ${RPS[rps.ai].emoji} ${RPS[rps.ai].label}<br>
+          <strong>${headline}</strong>
+        `;
+
+        $("dozRpsCountdownBox").hidden = false;
+        $("dozRpsConfirm").hidden = true;
+        $("dozRpsCancel").hidden = true;
+
+        requestAnimationFrame(() => {
+          if (!dialog.isConnected) return;
+          $("dozRpsResult")?.scrollIntoView({block:"nearest",behavior:"auto"});
+        });
+
+        const completed = await waitDozRpsResult(dialog,version);
+        if (!completed || version !== viewVersion) return;
+
+        closeDozRps();
+        await animateDozRound(round,version);
+      });
+    };
+
+    $("dozRpsCancel").onclick = () => {
+      if (!dozBusy && dialog.dataset.result !== "true") closeDozRps();
+    };
+
+    dialog.addEventListener("cancel",event => {
+      if (dozBusy || dialog.dataset.result === "true") event.preventDefault();
+    });
+
+    dialog.addEventListener("close",() => {
+      if (dialog.isConnected && dozRpsCountdownCancel) dozRpsCountdownCancel();
+      dialog.remove();
+    });
+
+    dialog.showModal();
+    syncDozRps();
+  }
+
+  async function playDozCell(index) {
+    if (dozBusy || dozUncertain || dozCelebrating || dozState.withdrawal_pending || !canSubmit() ||
+        dozRound?.phase !== "playing" ||
+        dozRound.board[index] !== null) return;
+
+    $("dozCell"+index).classList.add("pending");
+
+    await runDozAction("move",{
+      round_id:dozRound.id,index,version:dozRound.version
+    },async (result,version) => {
+      await animateDozRound(result.round,version);
+    });
+  }
+
+  async function animateDozRound(round,version) {
+    for (const move of Array.isArray(round.moves) ? round.moves : []) {
+      if (!move || !Number.isInteger(move.index) || move.index < 0 || move.index > 8 ||
+          !["O","X"].includes(move.player)) continue;
+      if (version !== viewVersion) return;
+      const cell = $("dozCell"+move.index);
+      if (!cell || cell.dataset.mark === move.player) continue;
+
+      if (move.player === "X") {
+        setText($("dozTurn"),"هوش مصنوعی در حال انتخاب است…");
+        if (foreground() && !reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,550));
+        if (version !== viewVersion) return;
+      }
+
+      setDozCell(move.index,move.player);
+      cell.classList.remove("pending");
+      tinyHaptic();
+      if (foreground() && !reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,260));
+    }
+
+    if (version !== viewVersion) return;
+    dozRound = round;
+    round.board.forEach((mark,index) => setDozCell(index,mark));
+    drawDozWinningLine(round);
+    if (round.phase === "finished") finishDozRound(round);
+    syncDozArena();
+  }
+
+  function finishDozRound(round) {
+    if (currentView !== "doz-board" || round?.phase !== "finished") return;
+
+    if (dozCelebrated.has(round.id)) {
+      syncDozArena();
+      return;
+    }
+
+    if ($("dozFinale")?.dataset.roundId === round.id) return;
+
+    closeDozFinale();
+    dozCelebrating = true;
+
+    const version = viewVersion;
+    const finale = document.createElement("dialog");
+    finale.className = "doz-finale";
+    finale.id = "dozFinale";
+    finale.dir = "rtl";
+    finale.dataset.roundId = round.id;
+    finale.setAttribute("aria-labelledby","dozFinaleTitle");
+    finale.setAttribute("aria-describedby","dozFinaleNote");
+
+    const emoji = round.outcome === "human" ? "🎉" : round.outcome === "ai" ? "😔" : "🤝";
+
+    finale.innerHTML = `
+      <div class="doz-finale-card">
+        <span aria-hidden="true">${emoji}</span>
+        <strong id="dozFinaleTitle">${dozResultTitle(round)}</strong>
+        <small id="dozFinaleNote">${round.reward > 0
+          ? `${fmt(round.reward)} میو به موجودیت اضافه شد.`
+          : dozRewardNote(round)}</small>
+        <button type="button" class="primary-btn" id="dozResultConfirm"
+          ${dozBusy ? "disabled" : ""}>
+          تأیید
+        </button>
+      </div>
+    `;
+
+    if (round.outcome === "human" && foreground() && !reduceMotion.matches) {
+      const colors = ["#9e8aff","#77e4df","#ffd680","#ff99bd","#a5bcff"];
+      for (let index=0;index<22;index++) {
+        const confetti = document.createElement("i");
+        confetti.className = "doz-confetti";
+        confetti.setAttribute("aria-hidden","true");
+        confetti.style.setProperty("--left",`${Math.random()*100}%`);
+        confetti.style.setProperty("--color",colors[index%colors.length]);
+        confetti.style.setProperty("--duration",`${2.1+Math.random()*1.5}s`);
+        confetti.style.setProperty("--delay",`${Math.random()*.65}s`);
+        confetti.style.setProperty("--drift",`${Math.random()*180-90}px`);
+        finale.append(confetti);
+      }
+    }
+
+    finale.addEventListener("cancel",event => {
+      event.preventDefault();
+    });
+
+    document.body.append(finale);
+
+    $("dozResultConfirm").onclick = () => {
+      if (dozBusy || version !== viewVersion) return;
+
+      dozCelebrated.add(round.id);
+
+      if (dozCelebrated.size > 100) {
+        dozCelebrated.delete(dozCelebrated.values().next().value);
+      }
+
+      tinyHaptic();
+      closeDozFinale();
+
+      if (dozState.remaining_rounds === 0) {
+        viewDozIntro();
+      } else {
+        syncDozArena();
+        $("dozAgain")?.focus({preventScroll:true});
+      }
+    };
+
+    finale.showModal();
+
+    if (!dozBusy) {
+      $("dozResultConfirm").focus({preventScroll:true});
+    }
+
+    syncDozArena();
+
+    if (finale.querySelector(".doz-confetti")) dozResultTimer = setTimeout(() => {
+      finale.querySelectorAll(".doz-confetti").forEach(item => item.remove());
+      dozResultTimer = null;
+    },4000);
+  }
+
+  /* ================= User data / refresh ================= */
+
+  function applyUserData(user) {
+    if (!user || user.ok === false || user.error || amount(user.balance) === null) return false;
+    const dailyChanged = state.daily_enabled !== Boolean(user.daily_enabled);
+    hasUserData = true;
+    state.not_started = Boolean(user.not_started);
+    state.daily_enabled = Boolean(user.daily_enabled);
+    state.withdrawn_today = amount(user.withdrawn_today);
+    state.notifications = Array.isArray(user.notifications)
+      ? user.notifications.filter(item => item && typeof item === "object") : [];
+
+    const sequence = responseOrder.get(user);
+    const pending = Array.isArray(user.pending_withdrawals) ? user.pending_withdrawals
+      : user.pending_withdrawal === null ? []
+      : validId(user.pending_withdrawal?.withdraw_id) ? [user.pending_withdrawal] : null;
+    const validQueue = pending && pending.every(item => validId(item?.withdraw_id)) &&
+      new Set(pending.map(item => String(item.withdraw_id))).size === pending.length;
+    if (pending && !validQueue && sequence >= queueOrder) state.queueKnown = false;
+    if (validQueue && sequence >= queueOrder) {
+      state.queueKnown = true;
+      const previous = new Map(state.pending_withdrawals.map(item => [String(item.withdraw_id),item]));
+      state.pending_withdrawals = pending
+        .filter(item => !finishedWithdrawals.has(String(item.withdraw_id)))
+        .map(item => normalizeWithdrawal(item,previous.get(String(item.withdraw_id))));
+      queueOrder = sequence;
+      if (activeWithdrawal && activeWithdrawal.phase !== "submitting") {
+        const id = activeWithdrawal.withdraw_id ?? recoverCandidate(user)?.withdraw_id;
+        const match = state.pending_withdrawals.find(item => String(item.withdraw_id) === String(id));
+        if (match) Object.assign(activeWithdrawal,match,{phase:"pending"});
+      } else if (!activeWithdrawal && state.pending_withdrawals.length) {
+        activeWithdrawal = {...state.pending_withdrawals[0],phase:"pending"};
+        lastWithdrawMethod = activeWithdrawal.method;
+      }
+    }
+
+    setBalance(user.balance,user);
+    renderWithdrawDashboard();
+    if (currentView === "daily" && dailyChanged && !enablingDaily) viewDaily();
+    if (currentView === "profile") {
+      setText($("profileStatus"),state.not_started ? "نیاز به Start" : "فعال ✅");
+      setText($("profileToday"),`${fmt(state.withdrawn_today)} Mio`);
+    }
+    if ($("notifOverlay").classList.contains("show")) {
+      renderNotifications();
+      setSeen(notificationKey(state.notifications[0]));
+    }
+    updateBellDot();
+    pollWithdrawStatus();
+    return true;
+  }
+
+  async function refreshData(showError = true,refreshView = true) {
+    if (!canRead()) {
+      if (showError) showToast(errorText("network"));
+      return;
+    }
+    const screen = viewVersion;
+    const requestVersion = ++userRequestVersion;
+    refreshBtn.classList.add("spinning");
+    refreshBtn.disabled = true;
+    refreshBtn.setAttribute("aria-busy","true");
+
+    try {
+      const user = await api("/user");
+      if (requestVersion !== userRequestVersion) return;
+
+      if (!applyUserData(user)) {
+        if (user.error === "unauthorized" || user.error === "not_started") {
+          hasUserData = false;
+          state.balance = state.withdrawn_today = null;
+          state.not_started = user.error === "not_started";
+          state.queueKnown = false;
+          setText($("formBalance"),"—");
+          setText($("profileBalance"),"—");
+          setText($("profileStatus"),errorText(user.error));
+          setText($("profileToday"),"—");
+          renderWithdrawDashboard();
+          syncWithdrawHub();
+        }
+        if (!hasUserData) setText($("balanceValue"),"—");
+        if (showError && user.error !== "state_changed") showToast(errorText(user.error || "invalid_response"));
+        return;
+      }
+
+      if (!refreshView || screen !== viewVersion || !canRead()) return;
+      if (currentView === "game" && !gameBusy) await viewGame();
+      else if (currentView === "doz-intro" && !dozBusy) await viewDozIntro();
+      else if (currentView === "doz-board" && !dozBusy &&
+               !dozCelebrating && !$("dozRpsDialog")) await viewDozArena();
+    } finally {
+      if (requestVersion === userRequestVersion) {
+        refreshBtn.classList.remove("spinning");
+        refreshBtn.disabled = false;
+        refreshBtn.setAttribute("aria-busy","false");
+      }
+    }
+  }
+
+  /* ================= Wiring ================= */
+
+  $("backArrow").onclick = () => {
+    if (currentView === "doz-board") viewDozIntro();
+    else if (currentView === "doz-intro" || currentView === "game") viewGamesHub();
+    else showHome();
+  };
+
+  $("bellBtn").onclick = openNotifications;
+  $("closeNotifBtn").onclick = closeNotifications;
+
+  $("notifOverlay").onclick = event => {
+    if (event.target === $("notifOverlay")) closeNotifications();
+  };
+
+  $("notifSheet").addEventListener("keydown",event => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeNotifications();
+    }
+    if (event.key === "Tab") {
+      event.preventDefault();
+      $("closeNotifBtn").focus();
+    }
+  });
+
+  $("btnInvite").onclick = viewInvite;
+  $("btnWithdraw").onclick = viewWithdrawForm;
+  $("btnBankWithdraw").onclick = viewBankWithdrawCardInput;
+  $("btnDaily").onclick = viewDaily;
+  $("btnGame").onclick = viewGamesHub;
+  $("homeReceiptBtn").onclick = requestReceipt;
+
+  [
+    ["navHome",showHome],
+    ["navTheme",viewThemeSettings],
+    ["navWithdraw",viewWithdrawHub],
+    ["navGame",viewGamesHub],
+    ["navProfile",viewProfile]
+  ].forEach(([id,view]) => {
+    $(id).onclick = () => {
+      tinyHaptic();
+      view();
+    };
+  });
+
+  refreshBtn.onclick = () => refreshData(true);
+
+  document.addEventListener("click",event => {
+    if (!(event.target instanceof Element)) return;
+    const button = event.target.closest(".menu-btn,.primary-btn,.copy-btn,.withdraw-method");
+    if (!button || button.disabled || reduceMotion.matches) return;
+
+    const rect = button.getBoundingClientRect();
+    const size = Math.hypot(rect.width,rect.height)*2;
+    const x = event.detail ? event.clientX-rect.left : rect.width/2;
+    const y = event.detail ? event.clientY-rect.top : rect.height/2;
+    const ripple = document.createElement("span");
+    ripple.className = "ripple";
+    ripple.setAttribute("aria-hidden","true");
+
+    Object.assign(ripple.style,{
+      width:`${size}px`,height:`${size}px`,
+      left:`${x-size/2}px`,top:`${y-size/2}px`
+    });
+
+    button.querySelector(".ripple")?.remove();
+    button.append(ripple);
+    const removeRipple = () => ripple.remove();
+    ripple.addEventListener("animationend",removeRipple,{once:true});
+    ripple.addEventListener("animationcancel",removeRipple,{once:true});
+  },true);
+
+  let wasReadable = canRead();
+  function syncLifecycle() {
+    const readable = canRead();
+    const resumed = !wasReadable && readable;
+    if (wasReadable && !readable) {
+      ++epoch;
+      for (const entry of pendingReads.values()) {
+        if (entry.path !== "/invite-link") entry.controller.abort();
+      }
+    }
+    wasReadable = readable;
+    const paused = !foreground();
+    document.documentElement.classList.toggle("app-paused",paused);
+    $("connectionNote").hidden = navigator.onLine !== false;
+    $("notifOverlay").classList.toggle("meteors-paused",paused);
+    document.querySelector(".doz-lobby")?.classList.toggle("meteors-paused",paused);
+    if (!readable) cancelPollTimer();
+    if (paused) {
+      stopGameVisual();
+      pageMotion?.cancel();
+      stopClock();
+      return;
+    }
+    keyboard.update();
+    if (!(resumed && currentView === "doz-intro" && dozSeconds() === 0)) syncClock();
+    if (resumed) {
+      // The foreground read waits for a submitted operation; it never replays it.
+      refreshData(false);
+      pollWithdrawStatus();
+    }
+    if (currentView === "game") {
+      if (gameBusy && !activeGameAnimation && $("reelTrack0") && !gameBalanceLimitReached()) {
+        activeGameAnimation = startReelAnimation(false);
+      } else if (!gameBusy) syncGamePresentation();
+    }
+  }
+
+  document.addEventListener("visibilitychange",syncLifecycle);
+  window.addEventListener("offline",syncLifecycle);
+  window.addEventListener("online",syncLifecycle);
+  window.addEventListener("pagehide",() => { pageSuspended = true; syncLifecycle(); });
+  window.addEventListener("pageshow",() => { pageSuspended = false; syncLifecycle(); });
+
+  function onMotionPreferenceChange() {
+    if (reduceMotion.matches) {
+      pageMotion?.cancel();
+      stopGameVisual();
+      if (!gameBusy) syncGamePresentation();
+    }
+  }
+
+  if (reduceMotion.addEventListener) {
+    reduceMotion.addEventListener("change",onMotionPreferenceChange);
+  } else {
+    reduceMotion.addListener(onMotionPreferenceChange);
+  }
+
+  window.addEventListener("resize",() => {
+    if (currentView !== "doz-board" || !dozRound?.winning_line?.length) return;
+    const overlay = $("dozWinningLine");
+    if (!overlay) return;
+    delete overlay.dataset.roundId;
+    drawDozWinningLine(dozRound);
+  },{passive:true});
+
+  applyTheme();
+  showHome();
+  syncLifecycle();
+  if (canRead()) refreshData(true,false);
+},{once:true});
+</script>
+
+</body>
+</html>
