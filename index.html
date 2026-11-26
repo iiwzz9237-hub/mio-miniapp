@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#0d1016">
 <title>Free meowie</title>
 
-<script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link id="fontSheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400..800&amp;display=swap" rel="stylesheet" media="print">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -45,7 +45,7 @@ body{
   padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
   background:var(--user-bg);
   color:var(--text);
-  font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;
+  font-family:"Vazirmatn",sans-serif;
   overscroll-behavior:none;
   -webkit-font-smoothing:antialiased;
 }
@@ -78,7 +78,7 @@ button:focus-visible,input:focus-visible{
   max-width:480px;
   margin:auto;
   padding:20px 20px 122px;
-  
+  animation:fade-in .65s var(--ease) backwards;
 }
 
 /* ===== Top bar ===== */
@@ -137,6 +137,14 @@ button:focus-visible,input:focus-visible{
   font-weight:400;
   letter-spacing:.015em;
 }
+.home-brand-letter{
+  display:inline-block;
+  animation:home-brand-appear .26s ease-out both;
+}
+@keyframes home-brand-appear{
+  from{opacity:0;filter:blur(3px);transform:translateY(4px)}
+  to{opacity:1;filter:blur(0);transform:translateY(0)}
+}
 .back-arrow{position:absolute;right:0;display:none}
 .view-active .title-row{padding-inline:49px}
 .view-active .title{font-size:clamp(19px,5.8vw,28px);line-height:1.6}
@@ -156,7 +164,7 @@ button:focus-visible,input:focus-visible{
     radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.075),transparent 72%),
     linear-gradient(135deg,var(--user-card),var(--card-end));
   box-shadow:0 18px 44px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
-
+  animation:rise .7s .04s var(--ease) backwards;
 }
 .balance-card::before{
   content:"";
@@ -258,8 +266,13 @@ button:focus-visible,input:focus-visible{
   font-weight:600;
   line-height:1.7;
   transition:transform .25s var(--ease),border-color .25s ease,box-shadow .25s ease;
-  animation:none;
+  animation:rise .65s var(--delay,.1s) var(--ease) backwards;
 }
+.menu-btn:nth-child(1){--delay:.10s}
+.menu-btn:nth-child(2){--delay:.16s}
+.menu-btn:nth-child(3){--delay:.22s}
+.menu-btn:nth-child(4){--delay:.28s}
+.menu-btn:nth-child(5){--delay:.34s}
 .menu-icon{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:16px;background:rgba(255,255,255,.10);color:#d6edff;transition:transform .3s var(--ease)}
 #btnInvite .menu-icon{background:rgba(141,174,246,.16);color:#d8e7ff}
 #btnBankWithdraw .menu-icon{background:rgba(136,213,181,.14);color:#a8ead0}
@@ -281,8 +294,7 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
 /* ===== Panels / fields ===== */
 
 .panel{min-height:140px;padding:25px 21px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(145deg,rgba(var(--wash),.06),rgba(var(--wash),.022))}
-#homeSection>.panel{min-height:0;padding:9px 16px;background:transparent;border-style:dashed}
-#homeSection>.panel p{padding:3px 0;margin:0;font-size:12px}
+#homeSection>.panel{animation:rise .65s .4s var(--ease) backwards}
 .panel h2{margin:0 0 12px;font-size:19px}
 .panel p{margin:0 0 10px;color:var(--dim);font-size:14px;line-height:2}
 .muted-center{text-align:center;padding:10px 0 4px}
@@ -328,7 +340,7 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
   background-size:350% 350%;
   color:#fff;
   box-shadow:0 8px 25px rgba(109,80,230,.20);
-  animation:rgb-flow 2.4s ease-out 1;
+  animation:rgb-flow 7s ease-in-out infinite;
 }
 .rgb-btn .btn-label{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;padding:7px 20px;border:1px solid rgba(255,255,255,.20);border-radius:11px;background:#111625;color:#fff;font-size:15px;font-weight:800;line-height:1.6;pointer-events:none}
 .btn-label .icon{width:18px;height:18px;stroke-width:2.2}
@@ -383,7 +395,7 @@ body[data-bright="true"] #btnGame .menu-icon{color:var(--text);background:rgba(0
   pointer-events:none;
   background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.055) 49%,transparent 68%);
   background-size:250% 100%;
-  animation:wallet-sheen 2s ease-out 1;
+  animation:wallet-sheen 9s ease-in-out infinite;
 }
 .withdraw-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
 .withdraw-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid rgba(164,185,255,.18);border-radius:999px;background:rgba(255,255,255,.045);font-size:10px;color:#dce6ff}
@@ -848,7 +860,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 .doz-reward{margin:15px 0;padding:17px 13px;border:1px solid rgba(169,186,247,.15);border-radius:18px;background:rgba(255,255,255,.035);text-align:center}
 .doz-reward strong{display:block;margin-bottom:9px;color:#aee8d8;font-size:24px}
 .doz-reward p{margin:0;font-size:11px;line-height:2}
-.doz-dialog{width:min(390px,calc(100vw - 30px));max-height:calc(100dvh - 40px);overflow-y:auto;padding:23px 18px;border:1px solid rgba(177,190,255,.25);border-radius:25px;background:linear-gradient(145deg,#202740,#111727);box-shadow:0 28px 90px rgba(0,0,0,.55);text-align:center;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif}
+.doz-dialog{width:min(390px,calc(100vw - 30px));max-height:calc(100dvh - 40px);overflow-y:auto;padding:23px 18px;border:1px solid rgba(177,190,255,.25);border-radius:25px;background:linear-gradient(145deg,#202740,#111727);box-shadow:0 28px 90px rgba(0,0,0,.55);text-align:center;font-family:"Vazirmatn",sans-serif}
 .doz-dialog::backdrop{background:rgba(3,7,17,.8);backdrop-filter:blur(7px)}
 .doz-dialog h2{margin:0 0 10px;color:#f4f6ff;font-size:20px}
 .doz-dialog p{color:#b1bdd9;font-size:12px;line-height:2}
@@ -904,7 +916,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   border:0;
   background:transparent;
   color:#fff;
-  font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;
+  font-family:"Vazirmatn",sans-serif;
   color-scheme:dark;
 }
 .doz-finale[open]{display:flex}
@@ -926,6 +938,9 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 .toast{position:fixed;z-index:100;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);left:50%;width:max-content;max-width:calc(100vw - 40px);padding:12px 18px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:#0a3a83;color:#fff;box-shadow:0 12px 36px rgba(0,0,0,.3);text-align:center;font-size:13px;line-height:1.9;opacity:0;visibility:hidden;transform:translate(-50%,14px);pointer-events:none;transition:opacity .25s,transform .3s var(--ease),visibility .25s}
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .ripple{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;animation:ripple-out .6s var(--ease) forwards}
+.anim-in-right{animation:forward-in .4s var(--ease) backwards}
+.anim-in-left{animation:back-in .4s var(--ease) backwards}
+.anim-pop{animation:rise .35s var(--ease) backwards}
 
 @media(hover:hover) and (pointer:fine){
   .menu-btn:hover{transform:translateY(-4px);border-color:var(--highlight);box-shadow:0 12px 28px rgba(0,0,0,.12)}
@@ -941,7 +956,7 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
   .panel{padding-inline:16px}
   .menu-btn.game-menu{padding:16px;gap:12px}
   .bottom-nav{width:calc(100vw - 14px);gap:1px;padding-inline:4px}
-  .bottom-nav button{font-size:9px}
+  .bottom-nav button{font-size:8.5px}
   .withdraw-hero{padding:21px}
   .withdraw-method{padding:17px 12px;gap:10px}
   .withdraw-method-copy strong{font-size:12px}
@@ -964,66 +979,16 @@ body.layout-list .menu-icon,body.layout-list .game-menu .menu-icon{width:46px;he
 @keyframes rgb-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes forward-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes back-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
 @keyframes pop-in{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
 @keyframes ripple-out{from{opacity:.16;transform:scale(0)}to{opacity:0;transform:scale(1)}}
 @keyframes wallet-sheen{0%,20%{background-position:140% 0}70%,100%{background-position:-100% 0}}
 @keyframes bulb-pulse{from{opacity:.35;box-shadow:0 0 2px #ffbf65}to{opacity:1;box-shadow:0 0 10px #ffbf65,0 0 17px rgba(255,174,55,.4)}}
 @keyframes result-reveal{from{opacity:.4;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-/* Home and wallet surfaces share the user's three palette colours. */
-body::before{background:radial-gradient(ellipse at 100% 0%,rgba(var(--accent-rgb,79,140,255),.10),transparent 46%),var(--user-bg)}
-.title-row{margin:11px 0 17px}
-.home-brand{font-size:clamp(2rem,8vw,2.6rem);letter-spacing:-.035em}
-.title-row:has(.home-brand:not([hidden]))::before,.title-row:has(.home-brand:not([hidden]))::after{
-  content:"";width:24px;height:1px;margin:0 13px;background:var(--highlight);opacity:.5
-}
-.balance-card{
-  text-align:start;display:flex;flex-direction:column;justify-content:center;
-  min-height:148px;padding:24px;margin-bottom:12px;padding-inline-end:36%;
-  background:radial-gradient(ellipse at 12% 100%,rgba(var(--accent-rgb),.19),transparent 65%),linear-gradient(125deg,var(--card-end),var(--user-card));
-}
-.balance-card::after{width:160px;height:160px;left:-42px;bottom:-66px;border-color:rgba(var(--accent-rgb),.25);box-shadow:0 0 0 13px rgba(var(--accent-rgb),.04),0 0 0 26px rgba(var(--accent-rgb),.035)}
-.balance-card::before{inset:0 6% auto 32%;background:linear-gradient(90deg,transparent,var(--user-accent),transparent)}
-.balance-label{display:flex;align-items:center;gap:7px;margin:0 0 9px;color:var(--card-dim);font-weight:600}
-.balance-value{color:var(--card-text);vertical-align:middle;font-size:clamp(28px,8vw,42px)}
-.balance-unit{display:inline-block;font-size:14px;vertical-align:baseline}
-.float-emoji,.cat-star{display:inline-block;animation:float-soft 5s ease-in-out infinite alternate}
-@keyframes float-soft{from{transform:translate(-2px,1px) scale(.98)}to{transform:translate(2px,-3px) scale(1.04)}}
-.night-window{position:absolute;direction:ltr;left:4%;bottom:14%;width:94px;height:110px;pointer-events:none}
-.cat-moon{position:absolute;top:5px;left:5px;width:24px;height:24px;border-radius:50%;box-shadow:-6px 4px 0 1px #f1cf99;transform:rotate(-19deg)}
-.cat-star{position:absolute;right:11px;top:6px;color:#f3d6a1;font:18px/1 Georgia,serif}
-.cat-body{position:absolute;bottom:2px;right:7px;width:56px;height:46px;border-radius:60% 70% 30% 24%;background:linear-gradient(115deg,#f4d9b4,#ce9c77)}
-.cat-tail{position:absolute;left:-19px;bottom:0;width:48px;height:16px;border-radius:80% 10% 50% 60%;background:repeating-linear-gradient(105deg,#ce9c77 0 8px,#f2d5b1 9px 16px);transform:rotate(6deg)}
-.cat-face{position:absolute;bottom:28px;left:16px;width:57px;height:41px;border-radius:45% 47% 48% 48%;background:radial-gradient(ellipse at 22% 68%,#eab29b 0 4px,transparent 5px),radial-gradient(ellipse at 79% 68%,#eab29b 0 4px,transparent 5px),linear-gradient(115deg,#ffe7c8,#eac59e);transform:rotate(-5deg)}
-.cat-ear{position:absolute;z-index:-1;top:-10px;left:3px;width:20px;height:23px;background:linear-gradient(135deg,#e3b992 48%,#d89f91 50%);border-radius:3px 90% 0 35%;transform:rotate(-7deg)}
-.cat-ear+.cat-ear{left:auto;right:2px;transform:scaleX(-1) rotate(-7deg)}
-.cat-eyes::before,.cat-eyes::after{content:"";position:absolute;top:18px;left:11px;width:10px;height:6px;border-radius:0 0 70% 70%;border-bottom:2px solid #574142}
-.cat-eyes::after{left:36px}
-.cat-nose{position:absolute;top:25px;left:26px;width:6px;height:4px;border-radius:50% 50% 75% 75%;background:#9b6864}
-.cat-whiskers::before,.cat-whiskers::after{content:"";position:absolute;top:25px;left:-5px;width:13px;height:1px;background:#aa8876;box-shadow:0 4px #aa8876;transform:rotate(8deg)}
-.cat-whiskers::after{left:auto;right:-5px;transform:rotate(-8deg)}
-.summary-card{text-align:start;padding:12px 14px;background:rgba(var(--wash),.035)}
-.summary-card>strong{text-align:start;direction:inherit;margin:5px 0 1px}
-.summary-symbol{font-size:12px;font-style:normal}
-.grid{gap:10px}
-.menu-btn{align-items:flex-start;justify-content:space-between;gap:12px;min-height:99px;padding:13px 16px;border-radius:18px;text-align:start;font-size:13px}
-.menu-icon{width:34px;height:34px;border-radius:11px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
-.menu-icon .icon{width:19px;height:19px}
-.menu-btn.game-menu{align-items:center;min-height:77px;padding:13px 16px;background:linear-gradient(120deg,rgba(var(--accent-rgb),.14),rgba(var(--wash),.035))}
-.game-menu .menu-icon{width:43px;height:43px}
-.game-menu .menu-copy small{margin-top:2px}
-body.layout-list .menu-btn{align-items:center}
-body.layout-compact .balance-card{padding-inline-end:35%}
-body.layout-compact .menu-btn{min-height:76px;padding:10px 13px;gap:5px}
-.bottom-nav{background:var(--user-bg);backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:21px;box-shadow:0 7px 25px rgba(0,0,0,.25),inset 0 1px rgba(var(--wash),.05)}
-.bottom-nav button.active{background:rgba(var(--accent-rgb),.13);color:var(--highlight)}
-.nav-withdraw-icon,.bottom-nav .nav-withdraw.active .nav-withdraw-icon{background:var(--user-accent);color:var(--accent-ink);border:0}
-.primary-btn:not(.rgb-btn){box-shadow:inset 0 1px rgba(255,255,255,.16)}
-.connection-note{margin:0 0 12px;padding:9px 13px;border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:12px}
-html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert] *,#app[inert] *::after,#app[inert] *::before{animation-play-state:paused!important}
-@media(max-width:350px){.night-window{left:1%;transform:scale(.82);transform-origin:left bottom}.summary-card{padding:11px}.menu-btn{padding:12px}}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .meteor,.doz-confetti,.ripple{display:none}
+  .meteor,.doz-confetti{display:none}
   .doz-mark .doz-stroke,.doz-win-overlay line{stroke-dashoffset:0}
 }
 </style>
@@ -1104,7 +1069,6 @@ html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert]
     <h1 class="title" id="pageTitle" hidden></h1>
   </div>
 
-  <p class="connection-note" id="connectionNote" role="status" hidden>اتصال اینترنت قطع است. پس از اتصال، وضعیت حساب بررسی می‌شود.</p>
   <div id="skeletonSection" aria-label="در حال دریافت اطلاعات">
     <div class="skel skel-card"></div>
     <div class="skel-grid">
@@ -1119,14 +1083,7 @@ html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert]
 
   <div id="homeSection" style="display:none">
     <div class="balance-card">
-      <div class="night-window" aria-hidden="true">
-        <i class="cat-moon"></i><i class="cat-star">✦</i>
-        <span class="cat-body"><i class="cat-tail"></i></span>
-        <span class="cat-face"><i class="cat-ear"></i><i class="cat-ear"></i>
-          <i class="cat-eyes"></i><i class="cat-nose"></i><i class="cat-whiskers"></i>
-        </span>
-      </div>
-      <div class="balance-label"><span class="float-emoji" aria-hidden="true">💎</span> موجودی شما</div>
+      <div class="balance-label">💎 موجودی شما</div>
       <div>
         <span class="balance-value" id="balanceValue">…</span>
         <span class="balance-unit">میو</span>
@@ -1135,14 +1092,14 @@ html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert]
 
     <div class="withdraw-summary">
       <div class="summary-card">
-        <span><i class="summary-symbol" aria-hidden="true">✅</i> برداشت‌شده امروز</span>
+        <span>✅ برداشت‌شده امروز</span>
         <strong id="withdrawnTodayValue">—</strong>
         <small>میو</small>
       </div>
       <div class="summary-card">
-        <span><i class="summary-symbol" aria-hidden="true">⏳</i> در انتظار برداشت</span>
+        <span>⏳ در انتظار برداشت</span>
         <strong id="pendingTotalValue">—</strong>
-        <small>میو · <span id="pendingCountText">— درخواست در صف</span></small>
+        <small>میو · <span id="pendingCountText">0 درخواست در صف</span></small>
       </div>
     </div>
 
@@ -1255,7 +1212,7 @@ html.app-paused *,html.app-paused *::after,html.app-paused *::before,#app[inert]
 </nav>
 
 <script>
-document.addEventListener("DOMContentLoaded",function mioApp() {
+(function mioApp() {
   "use strict";
 
   const API_BASE = "https://mio-backend-1-sus9.onrender.com/api";
@@ -1268,10 +1225,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   try { tg?.ready(); tg?.expand(); } catch {}
 
   const $ = id => document.getElementById(id);
-  const fontSheet = $("fontSheet");
-  if (fontSheet.sheet) fontSheet.media = "all";
-  else fontSheet.addEventListener("load",() => { fontSheet.media = "all"; },{once:true});
-
   const TG_USER_ID = tg?.initDataUnsafe?.user?.id || "guest";
   const TG_FIRST_NAME = tg?.initDataUnsafe?.user?.first_name || "";
 
@@ -1286,25 +1239,40 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   const pageTitle = $("pageTitle");
   const homeTitle = $("homeTitle");
   const homeBrand = homeTitle.textContent;
+  let homeReady = false;
+  let homeTitleShown = false;
+
   function showHomeTitle() {
     pageTitle.hidden = true;
+    if (!homeReady) return;
     homeTitle.hidden = false;
+    if (homeTitleShown) return;
+    homeTitleShown = true;
+    if (reduceMotion.matches) return;
+
+    // Reserve every letter's space before the first one appears.
+    homeTitle.replaceChildren(...Array.from(homeBrand, (letter, index) => {
+      const span = document.createElement("span");
+      span.className = "home-brand-letter";
+      span.setAttribute("aria-hidden","true");
+      span.textContent = letter;
+      span.style.animationDelay = `${450 + index * 165}ms`;
+      return span;
+    }));
   }
 
   const state = {
-    balance:null,
+    balance:0,
     daily_enabled:false,
     notifications:[],
     not_started:false,
-    withdrawn_today:null,
-    queueKnown:false,
+    withdrawn_today:0,
     pending_withdrawals:[]
   };
 
   let hasUserData = false;
   let currentView = "home";
   let viewVersion = 0;
-  let statusReadVersion = 0;
   let userRequestVersion = 0;
   let activeWithdrawal = null;
   let pollingWithdrawal = false;
@@ -1314,7 +1282,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   let bankNoticeTimer = null;
   let gameState = null;
   let gameBusy = false;
-  let clockTimer = null;
+  let gameTimer = null;
   let activeGameAnimation = null;
   let toastTimer;
 
@@ -1341,9 +1309,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   let dozBusy = false;
   let dozUncertain = false;
   let dozDeadline = 0;
-  let pollTimer = null;
-  let receiptBusy = false;
-  let pageSuspended = false;
+  let dozTimer = null;
   let dozResultTimer = null;
   let dozCelebrating = false;
   let dozStartMemory = "";
@@ -1357,64 +1323,29 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     scissors:{label:"قیچی",emoji:"✌️"}
   };
 
-  // Share only in-flight reads. Mutations establish a new snapshot boundary.
-  const pendingReads = new Map();
-  const responseOrder = new WeakMap();
-  let order = 0;
-  let epoch = 0;
-  let pendingWrite = null;
-  let balanceOrder = 0;
-  let queueOrder = 0;
-
-  function amount(value) {
-    if (typeof value !== "number" && (typeof value !== "string" || !value.trim())) return null;
-    const n = Number(value);
-    return Number.isFinite(n) && n >= 0 ? n : null;
-  }
-
-  function validId(id) {
-    return typeof id === "string" ? id.trim().length > 0 : Number.isSafeInteger(id) && id > 0;
-  }
-
-  function foreground() {
-    return !pageSuspended && !document.hidden;
-  }
-
-  function canRead() {
-    return foreground() && navigator.onLine !== false;
-  }
-
-  function canSubmit() {
-    if (!ensureUserData()) return false;
-    if (navigator.onLine === false || pendingWrite) {
-      showToast(errorText(pendingWrite ? "operation_busy" : "network"));
-      return false;
-    }
-    return true;
-  }
-
-  async function request(path,options,sequence,controller = new AbortController()) {
+  async function api(path, options = {}) {
+    const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(),25000);
+
     try {
-      const response = await fetch(API_BASE+path,{
-        ...options,cache:"no-store",signal:controller.signal,
+      const response = await fetch(API_BASE + path,{
+        ...options,
+        signal:controller.signal,
         headers:{
           "Content-Type":"application/json",
-          "Authorization":"tma "+(tg?.initData || "")
+          "Authorization":"tma " + (tg?.initData || "")
         }
       });
-      let data;
-      try { data = await response.json(); }
-      catch { return {ok:false,error:"invalid_response"}; }
-      if (!data || typeof data !== "object" || Array.isArray(data) ||
-          (data.ok !== undefined && typeof data.ok !== "boolean")) {
+
+      const data = await response.json();
+
+      if (!data || typeof data !== "object" || Array.isArray(data)) {
         return {ok:false,error:"invalid_response"};
       }
-      if (!response.ok || data.error) {
-        data = {...data,ok:false,error:data.error || "server",http_status:response.status};
-      }
-      responseOrder.set(data,sequence);
-      return data;
+
+      return response.ok
+        ? data
+        : {...data,ok:false,error:data.error || "server",http_status:response.status};
     } catch {
       return {ok:false,error:"network"};
     } finally {
@@ -1422,32 +1353,13 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     }
   }
 
-  async function api(path) {
-    while (pendingWrite) await pendingWrite;
-    if (!canRead()) return {ok:false,error:"network"};
-    const generation = epoch;
-    const key = generation+" "+path;
-    if (!pendingReads.has(key)) {
-      const controller = new AbortController();
-      const read = request(path,{method:"GET"},++order,controller).then(result =>
-        generation === epoch || path === "/invite-link" ? result : {ok:false,error:"state_changed"}
-      ).finally(() => pendingReads.delete(key));
-      pendingReads.set(key,{read,controller,path});
-    }
-    return pendingReads.get(key).read;
-  }
-
-  function post(path,data = {}) {
-    ++epoch;
-    pendingWrite = request(path,{method:"POST",body:JSON.stringify(data)},++order)
-      .finally(() => { ++epoch; pendingWrite = null; });
-    return pendingWrite;
-  }
+  const post = (path,data = {}) => api(path,{
+    method:"POST",
+    body:JSON.stringify(data)
+  });
 
   function errorText(code) {
     return ({
-      state_changed:"وضعیت حساب تغییر کرد؛ وضعیت تازه را بررسی کن.",
-      operation_busy:"یک درخواست در حال ثبت است. پس از دریافت پاسخ دوباره تلاش کن.",
       unauthorized:"مینی‌اپ را ببند و دوباره از داخل تلگرام باز کن.",
       not_started:"ابتدا ربات را استارت کن، سپس دوباره وارد شو.",
       zero_balance:"موجودی قابل برداشت شما صفر است.",
@@ -1475,10 +1387,8 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     })[code] || "عملیات انجام نشد؛ دوباره تلاش کن.";
   }
 
-  const numberFormat = new Intl.NumberFormat("en-US");
   function fmt(value) {
-    const n = amount(value);
-    return n === null ? "—" : numberFormat.format(n);
+    return Number(value || 0).toLocaleString("en-US");
   }
 
   function escapeText(value) {
@@ -1545,7 +1455,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     try { tg?.HapticFeedback?.impactOccurred("light"); } catch {}
   }
 
-  const copyTimers = new WeakMap();
   async function copyText(text,button) {
     if (!text) return;
     try {
@@ -1555,13 +1464,11 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       button.textContent = "کپی شد ✓";
       button.classList.add("copied");
 
-      clearTimeout(copyTimers.get(button));
-      copyTimers.set(button,setTimeout(() => {
-        copyTimers.delete(button);
+      setTimeout(() => {
         if (!button.isConnected) return;
         button.textContent = "کپی";
         button.classList.remove("copied");
-      },1800));
+      },1800);
     } catch {
       showToast("کپی انجام نشد؛ متن را دستی کپی کن.");
     }
@@ -1577,7 +1484,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     let lastWidth = window.innerWidth;
     let editingSession = false;
     let frame = 0;
-    let settleTimer = null;
 
     function focusedEditor() {
       const element = document.activeElement;
@@ -1663,16 +1569,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       if (!frame) frame = requestAnimationFrame(update);
     }
 
-    function settle() {
-      schedule();
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(schedule,450);
-    }
-
     function blur() {
       const editor = focusedEditor();
       if (editor) editor.blur();
       schedule();
+      setTimeout(schedule,250);
+      setTimeout(schedule,500);
     }
 
     document.addEventListener("focusin",() => {
@@ -1681,9 +1583,16 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       document.body.classList.add("keyboard-open");
       nav.inert = true;
       nav.setAttribute("aria-hidden","true");
-      settle();
+      schedule();
+      setTimeout(schedule,180);
+      setTimeout(schedule,400);
     });
-    document.addEventListener("focusout",() => { if (editingSession) settle(); });
+
+    document.addEventListener("focusout",() => {
+      schedule();
+      setTimeout(schedule,250);
+      setTimeout(schedule,500);
+    });
 
     window.addEventListener("resize",schedule,{passive:true});
     viewport?.addEventListener("resize",schedule,{passive:true});
@@ -1705,7 +1614,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
   function validHex(value,fallback) {
     return /^#[0-9a-f]{6}$/i.test(String(value || ""))
-      ? String(value).toLowerCase() : fallback;
+      ? value.toLowerCase() : fallback;
   }
 
   function readTheme() {
@@ -1770,7 +1679,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       cardText,
       cardDim:defaults ? "#b6c8e8" : mixHex(card,cardText,.78),
       action,
-      actionInk:inkFor(action),
+      actionInk:defaults ? "#ffffff" : inkFor(action),
       highlight:contrast(bg,accent) >= 4.5 ? accent : text,
       balanceInk:defaults ? accent : (contrast(card,accent) >= 4.5 ? accent : cardText),
       cardEnd:defaults ? bg : mixHex(card,bg,.12),
@@ -1786,8 +1695,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       "--user-bg":p.bg,
       "--user-card":p.card,
       "--user-accent":p.accent,
-      "--accent-rgb":rgb(p.accent).join(","),
-      "--accent-ink":inkFor(p.accent),
       "--text":p.text,
       "--dim":p.dim,
       "--card-text":p.cardText,
@@ -1922,46 +1829,23 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     keyboard.update();
   }
 
-  let pageMotion = null;
-  function playEnter(element,offset) {
-    pageMotion?.cancel();
-    if (reduceMotion.matches || !foreground() || !element.animate) return;
-    pageMotion = element.animate([
-      {opacity:.75,transform:`translateX(${offset}px)`},
-      {opacity:1,transform:"none"}
-    ],{duration:180,easing:"ease-out"});
+  function playEnter(element,className) {
+    element.classList.remove("anim-in-right","anim-in-left");
+    void element.offsetWidth;
+    element.classList.add(className);
   }
 
   function paint(html) {
+    panel.classList.remove("anim-pop");
     panel.innerHTML = html;
+    void panel.offsetWidth;
+    panel.classList.add("anim-pop");
     keyboard.update();
   }
 
-  function stopClock() {
-    clearTimeout(clockTimer);
-    clockTimer = null;
-  }
-
-  function syncClock() {
-    stopClock();
-    if (!foreground()) return;
-    let ticking = false;
-    if (currentView === "home") {
-      updatePendingClocks();
-      ticking = state.pending_withdrawals.some(item => !item.processing && pendingSeconds(item) > 0);
-    } else if (currentView === "game" && $("playGameBtn")) {
-      updateGameControls();
-      ticking = !$("gameCountdown").hidden;
-    } else if (currentView === "doz-intro" && $("dozCountdown") && dozState?.remaining_seconds > 0) {
-      const seconds = dozSeconds();
-      setText($("dozCountdown"),formatCountdown(seconds));
-      if (!seconds) {
-        if (canRead()) viewDozIntro();
-        return;
-      }
-      ticking = true;
-    }
-    if (ticking) clockTimer = setTimeout(syncClock,1000);
+  function clearGameTimer() {
+    clearInterval(gameTimer);
+    gameTimer = null;
   }
 
   function stopGameVisual() {
@@ -1992,13 +1876,15 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   function leaveDoz() {
+    clearInterval(dozTimer);
+    dozTimer = null;
     closeDozRps();
     closeDozFinale();
   }
 
   function showHome() {
     keyboard.blur();
-    stopClock();
+    clearGameTimer();
     stopGameVisual();
     clearBankTimers();
     leaveDoz();
@@ -2015,15 +1901,14 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     syncDozNav();
     setActiveNav("home");
-    panel.replaceChildren();
     renderWithdrawDashboard();
-    playEnter($("homeSection"),-5);
+    playEnter($("homeSection"),"anim-in-left");
     keyboard.update();
   }
 
   function showView(name,title) {
     keyboard.blur();
-    stopClock();
+    clearGameTimer();
     stopGameVisual();
     clearBankTimers();
     leaveDoz();
@@ -2034,6 +1919,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     $("homeSection").style.display = "none";
     $("viewSection").style.display = "block";
     homeTitle.hidden = true;
+    if (homeTitle.childElementCount) homeTitle.textContent = homeBrand;
     pageTitle.textContent = title;
     pageTitle.hidden = false;
     $("backArrow").style.display = "flex";
@@ -2050,7 +1936,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     syncDozNav();
     setActiveNav(navName);
-    playEnter($("viewSection"),5);
+    playEnter($("viewSection"),"anim-in-right");
     keyboard.update();
 
     return viewVersion;
@@ -2058,18 +1944,36 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
   /* ================= Balance ================= */
 
-  function setBalance(value,source) {
-    const target = amount(value);
-    const sequence = responseOrder.get(source);
-    if (target === null || sequence === undefined || sequence < balanceOrder) return;
-    balanceOrder = sequence;
-    if (state.balance === target) return;
+  let balanceFrame = 0;
+  let displayedBalance = 0;
+
+  function setBalance(value) {
+    if (value == null || !Number.isFinite(Number(value))) return;
+    const target = Number(value);
     state.balance = target;
-    setText($("balanceValue"),fmt(target));
-    setText($("profileBalance"),`${fmt(target)} Mio`);
-    setText($("formBalance"),`${fmt(target)} میو`);
+    cancelAnimationFrame(balanceFrame);
     syncWithdrawHub();
-    if (currentView === "game") syncClock();
+    setText($("profileBalance"),`${fmt(target)} Mio`);
+
+    if (currentView === "game") updateGameControls();
+
+    if (reduceMotion.matches || displayedBalance === target) {
+      displayedBalance = target;
+      setText($("balanceValue"),fmt(target));
+      return;
+    }
+
+    const from = displayedBalance;
+    const started = performance.now();
+
+    function tick(now) {
+      const progress = reduceMotion.matches ? 1 : Math.min((now-started)/850,1);
+      displayedBalance = from+(target-from)*(1-Math.pow(1-progress,4));
+      setText($("balanceValue"),fmt(progress === 1 ? target : Math.round(displayedBalance)));
+      if (progress < 1) balanceFrame = requestAnimationFrame(tick);
+    }
+
+    balanceFrame = requestAnimationFrame(tick);
   }
 
   /* ================= Withdrawal tab ================= */
@@ -2138,17 +2042,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   const pendingNodes = new Map();
 
   function normalizeWithdrawal(value,previous) {
-    const next = {...previous};
-    if (validId(value.withdraw_id)) next.withdraw_id = value.withdraw_id;
-    if (value.withdraw_type === "card" || value.withdraw_type === "id") next.withdraw_type = value.withdraw_type;
-    next.method = next.withdraw_type ? (next.withdraw_type === "card" ? "bank" : "id")
-      : (value.method ?? next.method) === "bank" ? "bank" : "id";
-    if (amount(value.amount) !== null) next.amount = Number(value.amount);
-    if (amount(value.position) !== null) next.position = Number(value.position);
-    if (typeof value.wait_text === "string") next.wait_text = value.wait_text;
-    if (value.processing !== undefined) next.processing = value.processing === true || value.processing === 1;
+    const next = {...previous,...value};
+    next.method = next.withdraw_type
+      ? (next.withdraw_type === "card" ? "bank" : "id")
+      : (next.method === "bank" ? "bank" : "id");
 
-    if (amount(value.wait_seconds) !== null) {
+    if (Number.isFinite(Number(value.wait_seconds)) && value.wait_seconds !== null) {
       const estimate = performance.now()+Math.max(0,Number(value.wait_seconds))*1000;
       const oldDeadline = previous?.etaDeadline;
       next.etaDeadline = Number.isFinite(oldDeadline) && Math.abs(estimate-oldDeadline) < 1500
@@ -2157,12 +2056,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       next.etaDeadline = null;
     }
     return next;
-  }
-
-  function recoverCandidate(user) {
-    if (validId(user.pending_withdrawal?.withdraw_id)) return user.pending_withdrawal;
-    return Array.isArray(user.pending_withdrawals) && user.pending_withdrawals.length === 1
-      ? user.pending_withdrawals[0] : null;
   }
 
   function pendingSeconds(item) {
@@ -2206,9 +2099,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       const item = state.pending_withdrawals.find(value => String(value.withdraw_id) === key);
       if (!item) return;
 
-      if (activeWithdrawal?.phase === "submitting") return viewActiveWithdrawal();
       if (!activeWithdrawal || String(activeWithdrawal.withdraw_id) !== key) {
-        cancelPollTimer();
         activeWithdrawal = {...item,phase:"pending"};
       }
 
@@ -2220,17 +2111,14 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   function renderWithdrawDashboard() {
-    if (currentView !== "home") {
-      syncWithdrawHub();
-      return;
-    }
     setText($("withdrawnTodayValue"),hasUserData ? fmt(state.withdrawn_today) : "—");
 
-    const total = state.queueKnown && state.pending_withdrawals.every(item => amount(item.amount) !== null)
-      ? state.pending_withdrawals.reduce((sum,item) => sum+Number(item.amount),0) : null;
+    const total = state.pending_withdrawals.reduce(
+      (sum,item) => sum+(Number(item.amount)||0),0
+    );
 
     setText($("pendingTotalValue"),hasUserData ? fmt(total) : "—");
-    setText($("pendingCountText"),`${state.queueKnown ? state.pending_withdrawals.length : "—"} درخواست در صف`);
+    setText($("pendingCountText"),`${state.pending_withdrawals.length} درخواست در صف`);
 
     const list = $("pendingList");
     const keys = new Set(state.pending_withdrawals.map(item => String(item.withdraw_id)));
@@ -2263,7 +2151,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     });
 
     $("homeReceiptBtn").hidden = !state.notifications.some(item => item.type === "success");
-    syncClock();
+    syncWithdrawHub();
   }
 
   function updatePendingClocks() {
@@ -2274,11 +2162,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   function upsertPendingWithdrawal(value) {
-    if (!validId(value.withdraw_id) || finishedWithdrawals.has(String(value.withdraw_id))) return;
+    if (!value.withdraw_id || finishedWithdrawals.has(String(value.withdraw_id))) return;
     const index = state.pending_withdrawals.findIndex(
       item => String(item.withdraw_id) === String(value.withdraw_id)
     );
-    const next = {...value};
+    const previous = index >= 0 ? state.pending_withdrawals[index] : activeWithdrawal;
+    const next = normalizeWithdrawal(value,previous);
 
     if (index >= 0) state.pending_withdrawals[index] = next;
     else state.pending_withdrawals.push(next);
@@ -2325,11 +2214,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     try { localStorage.setItem(LAST_SEEN_KEY,value); } catch {}
   }
 
-  let notificationSignature;
   function renderNotifications() {
-    const signature = JSON.stringify(state.notifications.map(n => [n.type,n.text,n.time]));
-    if (signature === notificationSignature) return;
-    notificationSignature = signature;
     const list = $("notifList");
     list.replaceChildren();
 
@@ -2389,7 +2274,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     if (previousFocus?.isConnected) previousFocus.focus({preventScroll:true});
 
-    previousFocus = null;
     $("notifOverlay").classList.remove("show");
     $("notifOverlay").setAttribute("aria-hidden","true");
     $("notifOverlay").inert = true;
@@ -2422,12 +2306,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
         <div class="profile-row"><span>User ID</span><b>${escapeText(user.id || "—")}</b></div>
         <div class="profile-row">
           <span>وضعیت حساب</span>
-          <b id="profileStatus">${!hasUserData ? "در حال دریافت…" : state.not_started ? "نیاز به Start" : "فعال ✅"}</b>
+          <b>${!hasUserData ? "در حال دریافت…" : state.not_started ? "نیاز به Start" : "فعال ✅"}</b>
         </div>
         <div class="profile-row">
           <span>موجودی</span><b id="profileBalance">${hasUserData ? fmt(state.balance)+" Mio" : "—"}</b>
         </div>
-        <div class="profile-row"><span>برداشت‌شده امروز</span><b id="profileToday">${fmt(state.withdrawn_today)} Mio</b></div>
+        <div class="profile-row"><span>برداشت‌شده امروز</span><b>${fmt(state.withdrawn_today)} Mio</b></div>
       </div>
       <button type="button" class="ghost-btn" id="profileRefreshBtn">بروزرسانی اطلاعات</button>
     `);
@@ -2449,7 +2333,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     const result = await api("/invite-link");
     if (version !== viewVersion) return;
-    const link = result.ok !== false && typeof result.link === "string" ? result.link : "";
+    const link = typeof result.link === "string" ? result.link : "";
     $("inviteLinkText").textContent = link || "خطا در دریافت لینک";
     $("copyBtn").disabled = !link;
     $("copyBtn").onclick = () => copyText(link,$("copyBtn"));
@@ -2467,7 +2351,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     paint(`
       <p>موجودی قابل برداشت شما:
-        <b class="gold-text" id="formBalance">${fmt(state.balance)} میو</b></p>
+        <b class="gold-text">${fmt(state.balance)} میو</b></p>
       <p>آیدی تلگرام خود را وارد کنید و تأیید را بزنید.</p>
       <form id="withdrawForm" novalidate>
         <label class="field-label" for="withdrawIdInput">آیدی تلگرام</label>
@@ -2482,7 +2366,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     $("withdrawForm").onsubmit = event => {
       event.preventDefault();
-      if (!ensureUserData()) return;
       const target = $("withdrawIdInput").value.trim();
 
       if (!/^@[A-Za-z0-9_]{1,32}$/.test(target)) {
@@ -2507,7 +2390,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     showView("bank-confirm","🏦 بانک میویی");
 
     paint(`
-      <p>شما می‌توانید <b class="gold-text" id="formBalance">${fmt(state.balance)} میو</b>
+      <p>شما می‌توانید <b class="gold-text">${fmt(state.balance)} میو</b>
         با بانک میویی برداشت کنید.</p>
       <p>برای ادامه روی تأیید بزنید.</p>
       <button type="button" class="primary-btn rgb-btn" id="bankConfirmBtn">${confirmLabel()}</button>
@@ -2543,7 +2426,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     $("bankCardForm").onsubmit = event => {
       event.preventDefault();
-      if (!ensureUserData()) return;
       const card = englishDigits($("bankCardInput").value.trim());
 
       if (!/^[0-9]{10,20}$/.test(card)) {
@@ -2645,10 +2527,9 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   async function startWithdrawal(method,value) {
     if (activeWithdrawal) return viewActiveWithdrawal();
 
-    if (!canSubmit()) return;
     const job = {
       method,phase:"submitting",withdraw_id:null,
-      amount:null,withdraw_type:method === "bank" ? "card" : "id"
+      amount:state.balance,withdraw_type:method === "bank" ? "card" : "id"
     };
 
     activeWithdrawal = job;
@@ -2662,10 +2543,8 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     if (activeWithdrawal !== job) return;
 
-    if (result.ok === true || (result.error === "already_pending" && result.http_status < 500)) {
-      queueOrder = Math.max(queueOrder,responseOrder.get(result) || 0);
+    if (result.ok || result.error === "already_pending") {
       Object.assign(job,normalizeWithdrawal(result,job),{phase:"pending"});
-      if (!validId(job.withdraw_id)) job.withdraw_id = null;
       upsertPendingWithdrawal(job);
       if (currentView === "withdraw-waiting") {
         updateWaitingInfo(job);
@@ -2675,8 +2554,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       return;
     }
 
-    if (result.ok !== false || !result.error || (result.http_status >= 500) ||
-        ["network","invalid_response","database_unavailable","server"].includes(result.error)) {
+    if (["network","invalid_response","database_unavailable","server"].includes(result.error)) {
       job.phase = "unknown";
       if (isWithdrawalView()) viewWithdrawUnknown();
       else showToast("وضعیت برداشت مشخص نشد؛ دوباره بررسی کن.");
@@ -2688,75 +2566,77 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     else showToast(errorText(result.error));
   }
 
-  function cancelPollTimer() {
-    clearTimeout(pollTimer);
-    pollTimer = null;
-  }
-
-  function pollWithdrawStatus() {
-    if (pollTimer !== null || pollingWithdrawal || !canRead() || activeWithdrawal?.phase !== "pending") return;
+  async function pollWithdrawStatus() {
+    if (pollingWithdrawal || !activeWithdrawal) return;
     const job = activeWithdrawal;
-    pollTimer = setTimeout(() => {
-      pollTimer = null;
-      if (canRead() && activeWithdrawal === job && job.phase === "pending") checkWithdrawal(job);
-      else pollWithdrawStatus();
-    },3000);
-  }
-
-  async function checkWithdrawal(job) {
     pollingWithdrawal = true;
+    job.phase = "pending";
+
     try {
-      if (!validId(job.withdraw_id)) {
-        const user = await api("/user");
+      while (activeWithdrawal === job) {
+        await new Promise(resolve => setTimeout(resolve,3000));
         if (activeWithdrawal !== job) return;
-        const candidate = recoverCandidate(user);
-        if (user.ok !== false && !user.error && validId(candidate?.withdraw_id)) {
-          Object.assign(job,normalizeWithdrawal(candidate,job),{phase:"pending"});
-          queueOrder = Math.max(queueOrder,responseOrder.get(user));
+
+        if (!job.withdraw_id) {
+          const user = await api("/user");
+          if (activeWithdrawal !== job) return;
+
+          if (user.pending_withdrawal?.withdraw_id) {
+            Object.assign(job,normalizeWithdrawal(user.pending_withdrawal,job),{phase:"pending"});
+            upsertPendingWithdrawal(job);
+            if (currentView === "withdraw-waiting") armBankAutoReturn();
+          } else if (user.error && user.error !== "unauthorized") {
+            continue;
+          } else {
+            job.phase = "unknown";
+            if (isWithdrawalView()) viewWithdrawUnknown();
+            if (user.error) showToast(errorText(user.error));
+            return;
+          }
+        }
+
+        const result = await api(
+          "/withdraw-status?withdraw_id="+encodeURIComponent(job.withdraw_id)
+        );
+
+        if (activeWithdrawal !== job) return;
+
+        if (result.status === "success" || result.status === "failed") {
+          const success = result.status === "success";
+          activeWithdrawal = null;
+          removePendingWithdrawal(job.withdraw_id);
+          clearBankTimers();
+
+          if (isWithdrawalView()) {
+            success ? viewWithdrawSuccess() : viewWithdrawFailed();
+          } else {
+            showToast(success
+              ? `🎉 برداشت ${fmt(job.amount)} میو با موفقیت انجام شد.`
+              : "برداشت ناموفق بود.");
+          }
+
+          await refreshData(false);
+          return;
+        }
+
+        if (result.status === "pending") {
+          Object.assign(job,normalizeWithdrawal(result,job),{phase:"pending"});
           upsertPendingWithdrawal(job);
-          if (currentView === "withdraw-waiting") armBankAutoReturn();
-        } else if (!user.error || user.error === "unauthorized") {
+          if (currentView === "withdraw-waiting") updateWaitingInfo(job);
+        } else if (result.error === "unauthorized" || result.status === "none") {
           job.phase = "unknown";
           if (isWithdrawalView()) viewWithdrawUnknown();
-          if (user.error) showToast(errorText(user.error));
+          if (result.error) showToast(errorText(result.error));
           return;
-        } else return;
-      }
-
-      const result = await api("/withdraw-status?withdraw_id="+encodeURIComponent(job.withdraw_id));
-      if (activeWithdrawal !== job || (result.withdraw_id != null &&
-          String(result.withdraw_id) !== String(job.withdraw_id))) return;
-      if (result.ok !== false && (result.status === "success" || result.status === "failed")) {
-        const success = result.status === "success";
-        activeWithdrawal = null;
-        queueOrder = Math.max(queueOrder,responseOrder.get(result));
-        removePendingWithdrawal(job.withdraw_id);
-        clearBankTimers();
-
-        if (isWithdrawalView()) {
-          success ? viewWithdrawSuccess() : viewWithdrawFailed();
-        } else {
-          showToast(success
-            ? `🎉 برداشت ${fmt(result.amount ?? job.amount)} میو با موفقیت انجام شد.`
-            : "برداشت ناموفق بود.");
+        } else if (currentView === "withdraw-waiting") {
+          setText($("queueWaitText"),"ارتباط موقتاً قطع شده؛ در حال بررسی دوباره…");
         }
-        await refreshData(false,false);
-      } else if (result.ok !== false && result.status === "pending") {
-        if (responseOrder.get(result) < queueOrder) return;
-        queueOrder = responseOrder.get(result);
-        Object.assign(job,normalizeWithdrawal(result,job),{phase:"pending"});
-        upsertPendingWithdrawal(job);
-        if (currentView === "withdraw-waiting") updateWaitingInfo(job);
-      } else if (result.error === "unauthorized" || (result.ok !== false && result.status === "none")) {
-        job.phase = "unknown";
-        if (isWithdrawalView()) viewWithdrawUnknown();
-        if (result.error) showToast(errorText(result.error));
-      } else if (currentView === "withdraw-waiting") {
-        setText($("queueWaitText"),"ارتباط موقتاً قطع شده؛ در حال بررسی دوباره…");
       }
     } finally {
       pollingWithdrawal = false;
-      pollWithdrawStatus();
+      if (activeWithdrawal && activeWithdrawal !== job && activeWithdrawal.phase === "pending") {
+        pollWithdrawStatus();
+      }
     }
   }
 
@@ -2774,14 +2654,9 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     $("checkWithdrawBtn").onclick = async () => {
       const version = viewVersion;
       $("checkWithdrawBtn").disabled = true;
-      await refreshData(false,false);
+      await refreshData(false);
       if (version !== viewVersion) return;
       if (!activeWithdrawal) return showHome();
-      if (!canRead() || !hasUserData) {
-        $("checkWithdrawBtn").disabled = false;
-        showToast(errorText(canRead() ? "unauthorized" : "network"));
-        return;
-      }
 
       activeWithdrawal.phase = "pending";
       viewWithdrawWaiting();
@@ -2826,15 +2701,11 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   /* ================= Receipt ================= */
 
   async function requestReceipt() {
-    if (receiptBusy) return showToast(errorText("operation_busy"));
-    if (!canSubmit()) return;
-    receiptBusy = true;
     const version = showView("receipt-loading","📨 رسید");
     paint(`<div class="spinner" aria-hidden="true"></div>
       <p class="muted-center" role="status">در حال ثبت درخواست…</p>`);
 
     const result = await post("/receipt");
-    receiptBusy = false;
 
     if (version !== viewVersion) {
       showToast(result.ok ? "درخواست رسید ثبت شد." : errorText(result.error));
@@ -2892,7 +2763,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     `);
 
     $("enableDailyBtn").onclick = async () => {
-      if (enablingDaily || !canSubmit()) return;
+      if (enablingDaily) return;
       enablingDaily = true;
       $("enableDailyBtn").disabled = true;
       $("enableDailyBtn").textContent = "در حال فعال‌سازی…";
@@ -2902,7 +2773,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
       if (result.ok) {
         state.daily_enabled = true;
-        setBalance(result.balance,result);
+        setBalance(result.balance);
       } else {
         showToast(errorText(result.error));
       }
@@ -2915,16 +2786,10 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
   const GAME_PENDING_KEY = `mio_game_pending_${TG_USER_ID}`;
   let pendingGameMemory = "";
-  try { pendingGameMemory = localStorage.getItem(GAME_PENDING_KEY) || ""; } catch {}
-  window.addEventListener("storage",event => {
-    if (event.key === GAME_PENDING_KEY || event.key === null) {
-      pendingGameMemory = event.newValue || "";
-      if (currentView === "game") syncClock();
-    }
-  });
 
   function getPendingGame() {
-    return pendingGameMemory;
+    try { return localStorage.getItem(GAME_PENDING_KEY) || pendingGameMemory; }
+    catch { return pendingGameMemory; }
   }
 
   function savePendingGame(id) {
@@ -2952,11 +2817,9 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   function acceptGameState(data) {
     gameState = {
       ...gameState,...data,
-      deadline:amount(data.remaining_seconds) !== null
-        ? performance.now()+Number(data.remaining_seconds)*1000 : gameState?.deadline ?? Infinity
+      deadline:performance.now()+Math.max(0,Number(data.remaining_seconds)||0)*1000
     };
-    if (validSlotRound(data.round)) gameState.last_round = data.round;
-    if (gameState.last_round && !validSlotRound(gameState.last_round)) gameState.last_round = null;
+    if (data.round && !data.last_round) gameState.last_round = data.round;
   }
 
   function remainingGameSeconds() {
@@ -2987,10 +2850,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       symbols.every(symbol => SYMBOL_KEYS.includes(symbol));
   }
 
-  function validSlotRound(round) {
-    return round && validGameSymbols(round.symbols) && amount(round.reward) !== null;
-  }
-
   function lastGameSymbols() {
     const symbols = gameState?.last_round?.symbols;
     return validGameSymbols(symbols) ? symbols : ["seven","grape","lemon"];
@@ -3008,50 +2867,39 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
   async function viewGame() {
     if (!ensureUserData()) return;
-    const inPlace = currentView === "game" && Boolean($("playGameBtn"));
-    const version = inPlace ? viewVersion : showView("game","کازینو میویی");
+    const version = showView("game","کازینو میویی");
 
     if (gameBusy && gameState) {
-      if (!inPlace) renderGame();
+      renderGame();
       return;
     }
 
-    if (!inPlace) paint(`<div class="spinner" aria-hidden="true"></div>
+    paint(`<div class="spinner" aria-hidden="true"></div>
       <p class="muted-center" role="status">در حال دریافت وضعیت بازی…</p>`);
 
-    const writeEpoch = epoch;
-    const readVersion = ++statusReadVersion;
     const result = await api("/game/status");
-    if (version !== viewVersion || readVersion !== statusReadVersion ||
-        (!foreground() && result.error === "state_changed") ||
-        (inPlace && (gameBusy || writeEpoch !== epoch))) return;
+    if (version !== viewVersion) return;
 
-    if (!result.ok || ![true,false,0,1].includes(result.enabled) || amount(result.remaining_seconds) === null ||
-        (result.last_round && !validSlotRound(result.last_round))) {
-      if (inPlace) return showToast(errorText(result.error || "invalid_response"));
+    if (!result.ok) {
       paint(`
         <p class="muted-center" id="gameLoadError"></p>
         <button type="button" class="primary-btn" id="reloadGameBtn">تلاش دوباره</button>
       `);
-      $("gameLoadError").textContent = errorText(result.error || "invalid_response");
+      $("gameLoadError").textContent = errorText(result.error);
       $("reloadGameBtn").onclick = viewGame;
       return;
     }
 
-    const previousPayouts = gameState?.payouts;
     acceptGameState(result);
-    setBalance(result.balance,result);
-    if (inPlace && JSON.stringify(previousPayouts) === JSON.stringify(gameState.payouts)) {
-      syncGamePresentation();
-      syncClock();
-    } else renderGame();
+    setBalance(result.balance);
+    renderGame();
   }
 
   /* ================= Casino presentation ================= */
 
   function renderGame() {
     if (currentView !== "game" || !gameState) return;
-    stopClock();
+    clearGameTimer();
     stopGameVisual();
 
     const symbols = lastGameSymbols();
@@ -3129,12 +2977,13 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     $("playGameBtn").onclick = playGame;
     $("gameRefreshBtn").onclick = viewGame;
     syncGamePresentation();
+    updateGameControls();
 
     if (gameBusy && !document.hidden && !gameBalanceLimitReached()) {
       activeGameAnimation = startReelAnimation(false);
     }
 
-    syncClock();
+    gameTimer = setInterval(updateGameControls,1000);
   }
 
   function syncGamePresentation(reveal = false) {
@@ -3182,15 +3031,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     const pending = getPendingGame();
     const canPlay = !gameBusy && (Boolean(pending) || canStartGame());
 
-    for (const id of ["playGameBtn","slotStartBtn","slotLever"]) {
-      if ($(id).disabled === canPlay) $(id).disabled = !canPlay;
-    }
-    if ($("gameRefreshBtn").disabled !== gameBusy) $("gameRefreshBtn").disabled = gameBusy;
-    if ($("slotMachine").getAttribute("aria-busy") !== String(gameBusy))
-      $("slotMachine").setAttribute("aria-busy",String(gameBusy));
-    const showCountdown = !gameBusy && !pending && gameState.enabled && !gameBalanceLimitReached() &&
-      !gameState.withdrawal_pending && remainingGameSeconds() > 0;
-    if ($("gameCountdown").hidden === showCountdown) $("gameCountdown").hidden = !showCountdown;
+    $("playGameBtn").disabled = !canPlay;
+    $("slotStartBtn").disabled = !canPlay;
+    $("slotLever").disabled = !canPlay;
+    $("gameRefreshBtn").disabled = gameBusy;
+    $("slotMachine").setAttribute("aria-busy",String(gameBusy));
+    $("gameCountdown").hidden = true;
 
     if (gameBusy) {
       setText($("playGameLabel"),"در حال دریافت نتیجه…");
@@ -3223,7 +3069,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     if (remaining > 0) {
       setText($("gameStatusText"),"بازی بعدی");
       setText($("gameCountdown"),formatCountdown(remaining));
-
+      $("gameCountdown").hidden = false;
     } else {
       setText($("gameStatusText"),"شانست آماده‌ست؛ بازی کاملاً رایگانه ✨");
     }
@@ -3235,7 +3081,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     const machine = $("slotMachine");
     const lever = $("leverArm");
     const started = performance.now();
-    let releaseSpin = null;
     let disposed = false;
     let leverAnimation = null;
 
@@ -3295,7 +3140,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     function stop() {
       if (disposed) return;
       disposed = true;
-      releaseSpin?.();
       leverAnimation?.cancel();
 
       reels.forEach(reel => {
@@ -3349,15 +3193,12 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     async function finish(symbols) {
       if (disposed || !validGameSymbols(symbols)) return;
-      const remaining = 1100-(performance.now()-started);
-      if (!reduceMotion.matches && supportsAnimation && remaining > 0) {
-        await new Promise(resolve => {
-          const timer = setTimeout(resolve,remaining);
-          releaseSpin = () => { clearTimeout(timer); resolve(); };
-        });
-        releaseSpin = null;
+      if (!reduceMotion.matches && supportsAnimation) {
+        const remaining = 1100-(performance.now()-started);
+        if (remaining > 0) await new Promise(resolve => setTimeout(resolve,remaining));
       }
       if (disposed) return;
+
       await Promise.all(reels.map((reel,index) => finishOne(reel,index,symbols[index])));
       if (!disposed) machine?.classList.remove("is-spinning");
     }
@@ -3366,7 +3207,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   async function playGame() {
-    if (gameBusy || !canSubmit()) return;
+    if (gameBusy) return;
     let id = getPendingGame();
 
     if (!id && gameBalanceLimitReached()) {
@@ -3400,10 +3241,8 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     try {
       const result = await post("/game/play",{request_id:id});
 
-      if (result.ok && validSlotRound(result.round) && amount(result.balance) !== null) {
+      if (result.ok && result.round && validGameSymbols(result.round.symbols)) {
         acceptGameState(result);
-        setBalance(result.balance,result);
-        clearPendingGame(id);
         const animation = activeGameAnimation;
 
         if (animation && currentView === "game" && !document.hidden) {
@@ -3411,8 +3250,10 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
           catch { animation.stop(); }
         }
 
+        clearPendingGame(id);
+        setBalance(result.balance);
         completed = true;
-        const reward = Number(result.round.reward);
+        const reward = Number(result.round.reward)||0;
 
         showToast(result.replayed
           ? `نتیجهٔ ثبت‌شده بازی: ${fmt(reward)} میو`
@@ -3424,14 +3265,14 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
         return;
       }
 
-      if (result.http_status < 500 && ["cooldown","withdrawal_pending","game_disabled","balance_limit_reached",
+      if (["cooldown","withdrawal_pending","game_disabled","balance_limit_reached",
            "not_started","invalid_request_id"].includes(result.error)) {
         clearPendingGame(id);
       }
 
-      if (result.http_status < 500 && result.ok === false && ["cooldown","withdrawal_pending","balance_limit_reached","game_disabled"].includes(result.error) && amount(result.remaining_seconds) !== null) {
+      if (typeof result.remaining_seconds === "number") {
         acceptGameState(result);
-        setBalance(result.balance,result);
+        setBalance(result.balance);
       }
 
       showToast(errorText(result.ok ? "invalid_response" : result.error));
@@ -3440,7 +3281,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       gameBusy = false;
       if (currentView === "game") {
         syncGamePresentation(completed);
-        syncClock();
+        updateGameControls();
       }
     }
   }
@@ -3498,22 +3339,11 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     try { localStorage.removeItem(DOZ_PENDING_KEY); } catch {}
   }
 
-  function validDozRound(round) {
-    if (!round || !validId(round.id) || !["rps","playing","finished"].includes(round.phase) ||
-        !Array.isArray(round.board) || round.board.length !== 9 ||
-        !round.board.every(mark => mark === null || mark === "X" || mark === "O")) return false;
-    return round.phase !== "finished" || (amount(round.reward) !== null &&
-      ["human","ai","draw","tie"].includes(round.outcome) &&
-      (!round.reward_capped || amount(round.nominal_reward) !== null));
-  }
-
   function acceptDozState(result) {
-    if (result?.ok !== true || !Number.isInteger(result.remaining_rounds) ||
-        result.remaining_rounds < 0 || (result.remaining_seconds != null && amount(result.remaining_seconds) === null) ||
-        (result.round && !validDozRound(result.round))) return false;
+    if (!result || !Number.isInteger(result.remaining_rounds)) return false;
     dozState = result;
     dozDeadline = performance.now()+Math.max(0,Number(result.remaining_seconds)||0)*1000;
-    setBalance(result.balance,result);
+    setBalance(result.balance);
 
     if (result.round?.id === getPendingDoz()) clearPendingDoz();
     return true;
@@ -3538,25 +3368,17 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
   async function loadDoz(kind) {
     if (!ensureUserData()) return;
-    const name = kind === "intro" ? "doz-intro" : "doz-board";
-    const inPlace = currentView === name && Boolean($(kind === "intro" ? "dozEnter" : "dozBoard"));
-    if (inPlace && (dozBusy || dozCelebrating || $("dozRpsDialog"))) return;
-    const version = inPlace ? viewVersion : showView(name,"بازی دوز");
+    const version = showView(kind === "intro" ? "doz-intro" : "doz-board","بازی دوز");
 
-    if (!inPlace) paint(`<section class="doz-root">
+    paint(`<section class="doz-root">
       <div class="spinner" aria-hidden="true"></div>
       <p class="muted-center" role="status">در حال دریافت وضعیت دوز…</p>
     </section>`);
 
-    const writeEpoch = epoch;
-    const readVersion = ++statusReadVersion;
     const result = await api("/doz/status");
-    if (version !== viewVersion || readVersion !== statusReadVersion ||
-        (!foreground() && result.error === "state_changed") ||
-        (inPlace && (writeEpoch !== epoch || dozBusy || dozCelebrating || $("dozRpsDialog")))) return;
+    if (version !== viewVersion) return;
 
     if (!result.ok || !acceptDozState(result)) {
-      if (inPlace) return showToast(errorText(result.error || "invalid_response"));
       paint(`<section class="doz-root">
         <p class="muted-center" id="dozLoadError"></p>
         <button type="button" class="primary-btn" id="dozReload">تلاش دوباره</button>
@@ -3568,14 +3390,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       return;
     }
 
-    const recovered = dozUncertain;
     dozUncertain = false;
-    if (inPlace && kind === "intro") return syncDozIntro();
-    if (inPlace && !recovered && kind === "board" && result.remaining_rounds > 0 &&
-        JSON.stringify(dozRound) === JSON.stringify(result.round ?? null)) {
-      syncDozArena();
-      return;
-    }
 
     if (kind === "intro") return renderDozIntro();
 
@@ -3586,10 +3401,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       return;
     }
 
-    if (!hasActiveDoz() && dozState.remaining_rounds === 0) {
-      showView("doz-intro","بازی دوز");
-      return renderDozIntro();
-    }
+    if (!hasActiveDoz() && dozState.remaining_rounds === 0) return viewDozIntro();
 
     renderDozArena(hasActiveDoz() ? dozState.round : null);
   }
@@ -3602,20 +3414,10 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     return loadDoz("board");
   }
 
-  function syncDozIntro() {
-    const resume = hasActiveDoz();
-    setText($("dozWinText"),dozState.reward_configured ? `${fmt(dozState.win_reward)} میو` : "به‌زودی");
-    setText($("dozIntroQuota"),`${dozState.remaining_rounds} از ۵`);
-    setText($("dozLobbyMessage"),dozLobbyMessage());
-    setText($("dozCap"),fmt(dozState.balance_cap));
-    setText($("dozEnter"),resume ? "ادامهٔ بازی" : "شروع");
-    $("dozEnter").disabled = !(resume || dozState.can_start);
-    $("dozCountdownBox").hidden = !(dozState.remaining_seconds > 0);
-    syncClock();
-  }
-
   function renderDozIntro() {
-    const sky = document.querySelector("#notifOverlay .meteor-sky").outerHTML;
+    const sky = document.querySelector("#notifOverlay .meteor-sky").cloneNode(true).outerHTML;
+    const winText = dozState.reward_configured ? `${fmt(dozState.win_reward)} میو` : "به‌زودی";
+    const resume = hasActiveDoz();
 
     paint(`
       <section class="doz-root doz-lobby ${document.hidden ? "meteors-paused" : ""}">
@@ -3625,7 +3427,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
           <p>شما با هوش مصنوعی بازی می‌کنید.</p>
         </div>
         <div class="doz-rules">
-          <div class="doz-rule">🏆 جایزهٔ برد: <strong id="dozWinText"></strong></div>
+          <div class="doz-rule">🏆 جایزهٔ برد: <strong>${winText}</strong></div>
           <div class="doz-rule">🤝 اگر مساوی شوید، <strong>۵٬۰۰۰ میو</strong> به موجودی شما اضافه می‌شود.</div>
           <div class="doz-rule">
             🎮 در هر سری <strong>۵ دست</strong> بازی داری.
@@ -3633,24 +3435,40 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
           </div>
         </div>
         <div class="doz-quota">
-          <span>فرصت‌های شروع باقی‌مانده</span><b id="dozIntroQuota"></b>
+          <span>فرصت‌های شروع باقی‌مانده</span><b>${dozState.remaining_rounds} از ۵</b>
         </div>
-        <div class="doz-countdown-box" id="dozCountdownBox" hidden>
+        <div class="doz-countdown-box" ${dozState.remaining_seconds > 0 ? "" : "hidden"}>
           <span>تا پنج فرصت بعدی</span>
           <b id="dozCountdown" aria-label="زمان باقی‌مانده تا سری بعد">${formatCountdown(dozSeconds())}</b>
         </div>
-        <p class="muted-center" id="dozLobbyMessage"></p>
-        <button type="button" class="primary-btn" id="dozEnter" disabled></button>
+        <p class="muted-center">${dozLobbyMessage()}</p>
+        <button type="button" class="primary-btn" id="dozEnter"
+          ${resume || dozState.can_start ? "" : "disabled"}>
+          ${resume ? "ادامهٔ بازی" : "شروع"}
+        </button>
         <button type="button" class="ghost-btn" id="dozIntroRefresh">بروزرسانی وضعیت</button>
         <button type="button" class="ghost-btn" id="dozIntroBack">بازگشت به بازی‌ها</button>
-        <p class="doz-fineprint">جایزه‌ها تا سقف موجودی <span id="dozCap"></span> میو واریز می‌شوند.</p>
+        <p class="doz-fineprint">جایزه‌ها تا سقف موجودی ${fmt(dozState.balance_cap)} میو واریز می‌شوند.</p>
       </section>
     `);
 
     $("dozEnter").onclick = viewDozArena;
     $("dozIntroRefresh").onclick = viewDozIntro;
     $("dozIntroBack").onclick = viewGamesHub;
-    syncDozIntro();
+
+    const version = viewVersion;
+    clearInterval(dozTimer);
+
+    dozTimer = setInterval(() => {
+      if (version !== viewVersion) return;
+      const seconds = dozSeconds();
+      setText($("dozCountdown"),formatCountdown(seconds));
+
+      if (dozState.remaining_seconds > 0 && seconds === 0 && !document.hidden) {
+        clearInterval(dozTimer);
+        viewDozIntro();
+      }
+    },1000);
   }
 
   /* ================= Doz board ================= */
@@ -3681,7 +3499,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     const line = round?.winning_line;
     if (!overlay) return;
 
-    if (!Array.isArray(line) || line.length !== 3 || !line.every(i => Number.isInteger(i) && i >= 0 && i < 9)) {
+    if (!Array.isArray(line) || line.length !== 3) {
       overlay.replaceChildren();
       return;
     }
@@ -3833,7 +3651,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   async function runDozAction(action,payload,onSuccess) {
-    if (dozBusy || dozUncertain || !canSubmit()) return;
+    if (dozBusy || dozUncertain) return;
 
     const version = viewVersion;
     dozBusy = true;
@@ -3842,18 +3660,15 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     try {
       const result = await post("/doz/"+action,payload);
 
-      const round = result.round;
-      const validAction = round && (action === "start" || round.id === payload.round_id) &&
-        (action !== "rps" || (round.rps && Object.hasOwn(RPS,round.rps.human) && Object.hasOwn(RPS,round.rps.ai)));
-      const accepted = validAction && acceptDozState(result);
       if (version !== viewVersion) {
-        if (accepted && action === "start") clearPendingDoz();
         if (currentView.startsWith("doz-")) dozUncertain = true;
         return;
       }
 
-      if (!result.ok || !accepted || !result.round) {
-        const definiteStartError = result.http_status < 500 && [
+      const accepted = acceptDozState(result);
+
+      if (!result.ok || !accepted) {
+        const definiteStartError = [
           "doz_old_request","invalid_request_id","not_started",
           "balance_limit_reached","withdrawal_pending",
           "doz_reward_unconfigured","doz_cooldown"
@@ -3889,7 +3704,6 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   async function startDozRound() {
-    if (dozBusy || dozUncertain || !canSubmit()) return;
     let id = getPendingDoz();
 
     if (!id) {
@@ -3925,40 +3739,64 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     return new Promise(resolve => {
       let remaining = DOZ_RPS_RESULT_MS;
-      let started = foreground() ? performance.now() : null;
+      let lastTime = performance.now();
+      let wasVisible = !document.hidden;
+      let settled = false;
       let timer = null;
 
       function finish(completed) {
-        clearTimeout(timer);
+        if (settled) return;
+        settled = true;
+
+        clearInterval(timer);
         document.removeEventListener("visibilitychange",onVisibility);
-        window.removeEventListener("pagehide",onVisibility);
-        window.removeEventListener("pageshow",onVisibility);
-        if (dozRpsCountdownCancel === cancel) dozRpsCountdownCancel = null;
+
+        if (dozRpsCountdownCancel === cancel) {
+          dozRpsCountdownCancel = null;
+        }
+
         resolve(completed);
       }
 
-      function cancel() { finish(false); }
-
-      function tick() {
-        clearTimeout(timer);
-        if (version !== viewVersion || !dialog.isConnected || !dialog.open) return finish(false);
-        const now = performance.now();
-        if (started !== null) remaining = Math.max(0,remaining-(now-started));
-        started = foreground() ? now : null;
-        const seconds = Math.ceil(remaining/1000);
-        setText($("dozRpsCountdown"),seconds.toLocaleString("fa-IR"));
-        if (started === null) return;
-        if (!remaining) return finish(true);
-        timer = setTimeout(tick,Math.max(1,remaining-(seconds-1)*1000));
+      function cancel() {
+        finish(false);
       }
 
-      function onVisibility() { tick(); }
+      function showRemaining() {
+        const seconds = Math.max(0,Math.ceil(remaining/1000));
+        setText($("dozRpsCountdown"),seconds.toLocaleString("fa-IR"));
+      }
+
+      function tick() {
+        if (version !== viewVersion || !dialog.isConnected || !dialog.open) {
+          finish(false);
+          return;
+        }
+
+        const now = performance.now();
+        const visible = !document.hidden;
+
+        if (visible && wasVisible) {
+          remaining = Math.max(0,remaining-(now-lastTime));
+        }
+
+        lastTime = now;
+        wasVisible = visible;
+        showRemaining();
+
+        if (remaining <= 0 && visible) finish(true);
+      }
+
+      function onVisibility() {
+        lastTime = performance.now();
+        wasVisible = !document.hidden;
+      }
 
       dozRpsCountdownCancel = cancel;
+      showRemaining();
+
       document.addEventListener("visibilitychange",onVisibility);
-      window.addEventListener("pagehide",onVisibility);
-      window.addEventListener("pageshow",onVisibility);
-      tick();
+      timer = setInterval(tick,100);
     });
   }
 
@@ -4022,7 +3860,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     $("dozRpsConfirm").onclick = async () => {
       const choice = dialog.dataset.choice;
-      if (!Object.hasOwn(RPS,choice)) return;
+      if (!RPS[choice]) return;
 
       await runDozAction("rps",{round_id:dozRound.id,choice},async (result,version) => {
         if (!dialog.isConnected) return;
@@ -4073,7 +3911,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     });
 
     dialog.addEventListener("close",() => {
-      if (dialog.isConnected && dozRpsCountdownCancel) dozRpsCountdownCancel();
+      if (dozRpsCountdownCancel) dozRpsCountdownCancel();
       dialog.remove();
     });
 
@@ -4082,7 +3920,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   async function playDozCell(index) {
-    if (dozBusy || dozUncertain || dozCelebrating || dozState.withdrawal_pending || !canSubmit() ||
+    if (dozBusy || dozUncertain || dozCelebrating ||
         dozRound?.phase !== "playing" ||
         dozRound.board[index] !== null) return;
 
@@ -4096,28 +3934,25 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   }
 
   async function animateDozRound(round,version) {
-    for (const move of Array.isArray(round.moves) ? round.moves : []) {
-      if (!move || !Number.isInteger(move.index) || move.index < 0 || move.index > 8 ||
-          !["O","X"].includes(move.player)) continue;
+    for (const move of round.moves) {
       if (version !== viewVersion) return;
       const cell = $("dozCell"+move.index);
       if (!cell || cell.dataset.mark === move.player) continue;
 
       if (move.player === "X") {
         setText($("dozTurn"),"هوش مصنوعی در حال انتخاب است…");
-        if (foreground() && !reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,550));
+        if (!reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,550));
         if (version !== viewVersion) return;
       }
 
       setDozCell(move.index,move.player);
       cell.classList.remove("pending");
       tinyHaptic();
-      if (foreground() && !reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,260));
+      if (!reduceMotion.matches) await new Promise(resolve => setTimeout(resolve,260));
     }
 
     if (version !== viewVersion) return;
     dozRound = round;
-    round.board.forEach((mark,index) => setDozCell(index,mark));
     drawDozWinningLine(round);
     if (round.phase === "finished") finishDozRound(round);
     syncDozArena();
@@ -4161,9 +3996,9 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       </div>
     `;
 
-    if (round.outcome === "human" && foreground() && !reduceMotion.matches) {
+    if (round.outcome === "human") {
       const colors = ["#9e8aff","#77e4df","#ffd680","#ff99bd","#a5bcff"];
-      for (let index=0;index<22;index++) {
+      for (let index=0;index<42;index++) {
         const confetti = document.createElement("i");
         confetti.className = "doz-confetti";
         confetti.setAttribute("aria-hidden","true");
@@ -4210,7 +4045,7 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
 
     syncDozArena();
 
-    if (finale.querySelector(".doz-confetti")) dozResultTimer = setTimeout(() => {
+    dozResultTimer = setTimeout(() => {
       finale.querySelectorAll(".doz-confetti").forEach(item => item.remove());
       dozResultTimer = null;
     },4000);
@@ -4219,61 +4054,56 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
   /* ================= User data / refresh ================= */
 
   function applyUserData(user) {
-    if (!user || user.ok === false || user.error || amount(user.balance) === null) return false;
-    const dailyChanged = state.daily_enabled !== Boolean(user.daily_enabled);
+    if (!user || user.ok === false || user.balance == null ||
+        !Number.isFinite(Number(user.balance))) return false;
+
     hasUserData = true;
     state.not_started = Boolean(user.not_started);
     state.daily_enabled = Boolean(user.daily_enabled);
-    state.withdrawn_today = amount(user.withdrawn_today);
+    state.withdrawn_today = Number(user.withdrawn_today)||0;
     state.notifications = Array.isArray(user.notifications)
       ? user.notifications.filter(item => item && typeof item === "object") : [];
 
-    const sequence = responseOrder.get(user);
-    const pending = Array.isArray(user.pending_withdrawals) ? user.pending_withdrawals
-      : user.pending_withdrawal === null ? []
-      : validId(user.pending_withdrawal?.withdraw_id) ? [user.pending_withdrawal] : null;
-    const validQueue = pending && pending.every(item => validId(item?.withdraw_id)) &&
-      new Set(pending.map(item => String(item.withdraw_id))).size === pending.length;
-    if (pending && !validQueue && sequence >= queueOrder) state.queueKnown = false;
-    if (validQueue && sequence >= queueOrder) {
-      state.queueKnown = true;
-      const previous = new Map(state.pending_withdrawals.map(item => [String(item.withdraw_id),item]));
-      state.pending_withdrawals = pending
-        .filter(item => !finishedWithdrawals.has(String(item.withdraw_id)))
-        .map(item => normalizeWithdrawal(item,previous.get(String(item.withdraw_id))));
-      queueOrder = sequence;
-      if (activeWithdrawal && activeWithdrawal.phase !== "submitting") {
-        const id = activeWithdrawal.withdraw_id ?? recoverCandidate(user)?.withdraw_id;
-        const match = state.pending_withdrawals.find(item => String(item.withdraw_id) === String(id));
-        if (match) Object.assign(activeWithdrawal,match,{phase:"pending"});
-      } else if (!activeWithdrawal && state.pending_withdrawals.length) {
-        activeWithdrawal = {...state.pending_withdrawals[0],phase:"pending"};
-        lastWithdrawMethod = activeWithdrawal.method;
-      }
+    const previous = new Map(
+      state.pending_withdrawals.map(item => [String(item.withdraw_id),item])
+    );
+
+    const pending = Array.isArray(user.pending_withdrawals)
+      ? user.pending_withdrawals
+      : user.pending_withdrawal ? [user.pending_withdrawal] : [];
+
+    state.pending_withdrawals = pending
+      .filter(item => item?.withdraw_id && !finishedWithdrawals.has(String(item.withdraw_id)))
+      .map(item => normalizeWithdrawal(item,previous.get(String(item.withdraw_id))));
+
+    if (activeWithdrawal) {
+      const match = state.pending_withdrawals.find(
+        item => String(item.withdraw_id) === String(activeWithdrawal.withdraw_id)
+      );
+      if (match) Object.assign(activeWithdrawal,match);
+    } else if (state.pending_withdrawals.length) {
+      activeWithdrawal = {...state.pending_withdrawals[0],phase:"pending"};
+      lastWithdrawMethod = activeWithdrawal.method;
     }
 
-    setBalance(user.balance,user);
+    setBalance(user.balance);
     renderWithdrawDashboard();
-    if (currentView === "daily" && dailyChanged && !enablingDaily) viewDaily();
-    if (currentView === "profile") {
-      setText($("profileStatus"),state.not_started ? "نیاز به Start" : "فعال ✅");
-      setText($("profileToday"),`${fmt(state.withdrawn_today)} Mio`);
-    }
+
     if ($("notifOverlay").classList.contains("show")) {
       renderNotifications();
       setSeen(notificationKey(state.notifications[0]));
     }
+
     updateBellDot();
-    pollWithdrawStatus();
+
+    if (activeWithdrawal?.phase === "pending" && !pollingWithdrawal) {
+      pollWithdrawStatus();
+    }
+
     return true;
   }
 
-  async function refreshData(showError = true,refreshView = true) {
-    if (!canRead()) {
-      if (showError) showToast(errorText("network"));
-      return;
-    }
-    const screen = viewVersion;
+  async function refreshData(showError = true) {
     const requestVersion = ++userRequestVersion;
     refreshBtn.classList.add("spinning");
     refreshBtn.disabled = true;
@@ -4284,25 +4114,13 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       if (requestVersion !== userRequestVersion) return;
 
       if (!applyUserData(user)) {
-        if (user.error === "unauthorized" || user.error === "not_started") {
-          hasUserData = false;
-          state.balance = state.withdrawn_today = null;
-          state.not_started = user.error === "not_started";
-          state.queueKnown = false;
-          setText($("formBalance"),"—");
-          setText($("profileBalance"),"—");
-          setText($("profileStatus"),errorText(user.error));
-          setText($("profileToday"),"—");
-          renderWithdrawDashboard();
-          syncWithdrawHub();
-        }
-        if (!hasUserData) setText($("balanceValue"),"—");
-        if (showError && user.error !== "state_changed") showToast(errorText(user.error || "invalid_response"));
+        if (showError) showToast(errorText(user.error));
         return;
       }
 
-      if (!refreshView || screen !== viewVersion || !canRead()) return;
-      if (currentView === "game" && !gameBusy) await viewGame();
+      if (currentView === "daily") viewDaily();
+      else if (currentView === "profile") viewProfile();
+      else if (currentView === "game" && !gameBusy) await viewGame();
       else if (currentView === "doz-intro" && !dozBusy) await viewDozIntro();
       else if (currentView === "doz-board" && !dozBusy &&
                !dozCelebrating && !$("dozRpsDialog")) await viewDozArena();
@@ -4381,59 +4199,37 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
       left:`${x-size/2}px`,top:`${y-size/2}px`
     });
 
-    button.querySelector(".ripple")?.remove();
     button.append(ripple);
-    const removeRipple = () => ripple.remove();
-    ripple.addEventListener("animationend",removeRipple,{once:true});
-    ripple.addEventListener("animationcancel",removeRipple,{once:true});
+    setTimeout(() => ripple.remove(),650);
   },true);
 
-  let wasReadable = canRead();
-  function syncLifecycle() {
-    const readable = canRead();
-    const resumed = !wasReadable && readable;
-    if (wasReadable && !readable) {
-      ++epoch;
-      for (const entry of pendingReads.values()) {
-        if (entry.path !== "/invite-link") entry.controller.abort();
-      }
-    }
-    wasReadable = readable;
-    const paused = !foreground();
-    document.documentElement.classList.toggle("app-paused",paused);
-    $("connectionNote").hidden = navigator.onLine !== false;
-    $("notifOverlay").classList.toggle("meteors-paused",paused);
-    document.querySelector(".doz-lobby")?.classList.toggle("meteors-paused",paused);
-    if (!readable) cancelPollTimer();
-    if (paused) {
+  document.addEventListener("visibilitychange",() => {
+    $("notifOverlay").classList.toggle("meteors-paused",document.hidden);
+    document.querySelector(".doz-lobby")?.classList.toggle("meteors-paused",document.hidden);
+
+    if (document.hidden) {
       stopGameVisual();
-      pageMotion?.cancel();
-      stopClock();
       return;
     }
+
     keyboard.update();
-    if (!(resumed && currentView === "doz-intro" && dozSeconds() === 0)) syncClock();
-    if (resumed) {
-      // The foreground read waits for a submitted operation; it never replays it.
-      refreshData(false);
-      pollWithdrawStatus();
-    }
+    updatePendingClocks();
+
     if (currentView === "game") {
+      updateGameControls();
       if (gameBusy && !activeGameAnimation && $("reelTrack0") && !gameBalanceLimitReached()) {
         activeGameAnimation = startReelAnimation(false);
-      } else if (!gameBusy) syncGamePresentation();
+      } else if (!gameBusy) {
+        syncGamePresentation();
+      }
     }
-  }
 
-  document.addEventListener("visibilitychange",syncLifecycle);
-  window.addEventListener("offline",syncLifecycle);
-  window.addEventListener("online",syncLifecycle);
-  window.addEventListener("pagehide",() => { pageSuspended = true; syncLifecycle(); });
-  window.addEventListener("pageshow",() => { pageSuspended = false; syncLifecycle(); });
+    if (hasUserData && !gameBusy && !dozBusy) refreshData(false);
+  });
 
   function onMotionPreferenceChange() {
     if (reduceMotion.matches) {
-      pageMotion?.cancel();
+      if (homeTitle.childElementCount) homeTitle.textContent = homeBrand;
       stopGameVisual();
       if (!gameBusy) syncGamePresentation();
     }
@@ -4453,12 +4249,54 @@ document.addEventListener("DOMContentLoaded",function mioApp() {
     drawDozWinningLine(dozRound);
   },{passive:true});
 
+  setInterval(() => {
+    if (!document.hidden && currentView === "home") updatePendingClocks();
+  },1000);
+
   applyTheme();
-  showHome();
-  syncLifecycle();
-  if (canRead()) refreshData(true,false);
-},{once:true});
+
+  /* ================= Init ================= */
+
+  async function init() {
+    const version = ++userRequestVersion;
+    const started = performance.now();
+    const userPromise = api("/user");
+    let timeoutId;
+
+    const timeout = new Promise(resolve => {
+      timeoutId = setTimeout(() => resolve(null),4000);
+    });
+
+    const first = await Promise.race([userPromise,timeout]);
+    clearTimeout(timeoutId);
+
+    const remaining = 650-(performance.now()-started);
+    if (remaining > 0) await new Promise(resolve => setTimeout(resolve,remaining));
+
+    homeReady = true;
+    $("skeletonSection").style.display = "none";
+    if (currentView === "home") showHome();
+    if (version !== userRequestVersion) return;
+
+    if (first) {
+      if (!applyUserData(first)) {
+        $("balanceValue").textContent = "—";
+        showToast(errorText(first.error));
+      }
+    } else {
+      userPromise.then(user => {
+        if (version !== userRequestVersion) return;
+        if (!applyUserData(user)) {
+          $("balanceValue").textContent = "—";
+          showToast(errorText(user.error));
+        }
+      });
+    }
+  }
+
+  init();
+})();
 </script>
 
 </body>
-</html>
+  </html>
